@@ -13,11 +13,6 @@
 \usepackage{textcomp}
 \usepackage{courier}
 \usepackage{titlesec}
-\usepackage[english]{babel}
-\usepackage{csquotes}
-\usepackage{fancyvrb}
-\usepackage[backend=biber,style=apa]{biblatex}
-\usepackage[titletoc,toc,page]{appendix}
 \usepackage[super,negative]{nth}
 \usepackage{hyperref}
 \usepackage{tabularx}
@@ -37,9 +32,6 @@
 % Set assets folder
 \graphicspath{{assets/}}
 
-% Bibliography%
-\DeclareLanguageMapping{english}{english-apa}
-
 % Clickable Table of Contents
 \hypersetup{
 	colorlinks,
@@ -47,4 +39,29 @@
 	filecolor=black,
 	linkcolor=black,
 	urlcolor=black
+}
+
+\lstset{
+    language=Java,
+    basicstyle=\small\ttfamily\color{lsBasicStyle},
+    tabsize=2,
+    upquote=true,
+    frame=single,
+    extendedchars=true,                                         % Erlaubt erweiterte Zeichen
+    literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1                 % Deutsche Umlaute klein
+             {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1                 % Deutsche Umlaute groß
+             {ß}{{\ss}}1,                                       % ß zu ss
+    % ... (der Rest deiner Optionen wie numbers, breaklines etc.) ...
+    numbers=left,
+    breaklines=true,
+    prebreak=\raisebox{0ex}[0ex][0ex]{
+        \color{lsArrowColor}\ensuremath{\hookleftarrow}
+    },
+    otherkeywords={self,abstractmethod,classmethod,__call__,__import__,__init__, __nonzero__,None,@staticmethod}, % Beachte: das sind Python-Keywords
+    commentstyle=\small\ttfamily\color{lsCommentStyle},
+    keywordstyle=\small\ttfamily\color{lsKeywordStyle},
+    stringstyle=\small\ttfamily\color{lsStringStyle},
+    numberstyle=\small\ttfamily\color{lsNumberStyle},
+    identifierstyle=\small\ttfamily\color{lsIdentifierStyle},
+    rulecolor=\small\ttfamily\color{lsRuleColor}
 }

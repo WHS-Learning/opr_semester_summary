@@ -1,0 +1,20 @@
+\chapter{Klasse Object}
+\label{chap:Klasse Object}
+
+Die klasse Object ist eine besondere Klasse. \textit{jede} Klasse erbt von der Object Klasse. In der Object Klasse sind einige Methoden definiert, welche jede Klasse besitzt. Zu ihnen gehöhren beispielsweise \lstinline{equals} und \lstinline{hashcode}
+
+\subsection{equals und hashcode}
+
+Die \lstinline{equals} und \lstinline{hashcode} Methoden haben einen Vertrag. Wenn eine von beiden überschrieben wird, muss die andere auch überschrieben werden.
+Wenn Objekte im sinne von \lstinline{equals} gleich sind, \textit{müssen} diese auch den selben \lstinline{hashcode} besitzen. Wenn objekte jedoch den selben \lstinline{hashcode} haben, müssen sie nicht zwingend im sinne von \lstinline{equals} gleich sein.
+
+Standardmäßig prüft die \lstinline{equals} methode auf gleichheit der Identität, die \lstinline{hashcode} methode gibt die memory addresse zurück.
+
+\subsection{weitere methoden der Klasse Object}
+
+\begin{itemize}
+    \item \lstinline{toString} Das Objekt wird textuell ausgegeben. Diese Methode wird beispielsweise aufgerufen, wenn ein Objet über ein \lstinline{System.out.println} in die Konsole ausgegeben wird.
+    \item \lstinline{compareTo} Es werden zwei Objekte verglichen. Die Methode gibt 0 zurück, wenn die Objekte gleich sind, einen Positiven wert wenn übergebene Objekt größer negativen wenn es kleienr ist.
+\end{itemize}
+
+Die Klasse Objekt hat noch viele weitere Methoden implementiert, allerdings sind keien weiteren Prüfungsrelevant.

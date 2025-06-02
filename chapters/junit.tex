@@ -11,7 +11,7 @@ Testklassen in JUnit dienen dazu, die Methoden einer Anwendungsklasse systematis
 \subsection{Importe für JUnit}
 Für die Verwendung von JUnit müssen spezifische Annotationen und Assertions-Methoden importiert werden. JUnit ist ein weit verbreitetes Framework für das Testen von Java-Code.
 
-\begin{lstlisting}[language=Java, caption={Grundlegende JUnit 5 Importe}, label=lst:junit_imports, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Grundlegende JUnit 5 Importe}]
 // Annotationen für Test-Setup und Testmethoden
 import org.junit.jupiter.api.BeforeEach; // Wird vor jeder Testmethode ausgeführt
 import org.junit.jupiter.api.AfterEach;  // Wird nach jeder Testmethode ausgeführt (seltener benötigt)
@@ -33,56 +33,56 @@ Hinweis: Die Verwendung von \textit{AfterEach} ist seltener notwendig als \texti
 \label{ssec:junit_klassenkopf}
 Gemäß der Namenskonvention sollte eine Testklasse für eine Klasse `MyClass` den Namen `MyClassTest` tragen. Instanzvariablen in Testklassen sind üblich, um Testobjekte oder Testdaten zu halten, die von mehreren Testmethoden verwendet werden. Um die Unabhängigkeit der Tests zu gewährleisten, sollten diese Instanzvariablen typischerweise in einer mit `@BeforeEach` annotierten Methode `setUp()` vor jeder Testmethode neu initialisiert werden.
 
-\begin{lstlisting}[language=Java, caption={Grundgerüst einer JUnit Testklasse}, label=lst:junit_test_class_structure, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Grundgerüst einer JUnit Testklasse}]
 // Angenommen, wir testen eine Klasse namens "Calculator"
 class CalculatorTest {
 
-    private Calculator calculatorInstance; // Instanzvariable für das Testobjekt
+  private Calculator calculatorInstance; // Instanzvariable für das Testobjekt
 
-    @BeforeEach
-    void setUp() {
-        // Diese Methode wird vor jeder @Test Methode ausgeführt.
-        // Ideal für die Initialisierung von Testobjekten.
-        calculatorInstance = new Calculator();
-        System.out.println("setUp() executed: New Calculator instance created.");
-    }
+  @BeforeEach
+  void setUp() {
+    // Diese Methode wird vor jeder @Test Methode ausgeführt.
+    // Ideal für die Initialisierung von Testobjekten.
+    calculatorInstance = new Calculator();
+    System.out.println("setUp() executed: New Calculator instance created.");
+  }
 
-    @AfterEach
-    void tearDown() {
-        // Diese Methode wird nach jeder @Test Methode ausgeführt.
-        // Nützlich für Aufräumarbeiten, z.B. Schließen von Ressourcen.
-        // In vielen Fällen nicht zwingend notwendig.
-        calculatorInstance = null; // Beispiel: Objekt freigeben
-        System.out.println("tearDown() executed.");
-    }
+  @AfterEach
+  void tearDown() {
+    // Diese Methode wird nach jeder @Test Methode ausgeführt.
+    // Nützlich für Aufräumarbeiten, z.B. Schließen von Ressourcen.
+    // In vielen Fällen nicht zwingend notwendig.
+    calculatorInstance = null; // Beispiel: Objekt freigeben
+    System.out.println("tearDown() executed.");
+  }
 
-    @Test
-    void testAddition() {
-        // Testlogik für die Additionsmethode
-        int result = calculatorInstance.add(5, 3);
-        assertEquals(8, result, "5 + 3 should be 8"); // Assertion mit optionaler Nachricht
-    }
+  @Test
+  void testAddition() {
+    // Testlogik für die Additionsmethode
+    int result = calculatorInstance.add(5, 3);
+    assertEquals(8, result, "5 + 3 should be 8"); // Assertion mit optionaler Nachricht
+  }
 
-    @Test
-    void testSubtraction() {
-        // Testlogik für die Subtraktionsmethode
-        int result = calculatorInstance.subtract(10, 4);
-        assertEquals(6, result, "10 - 4 should be 6");
-    }
+  @Test
+  void testSubtraction() {
+    // Testlogik für die Subtraktionsmethode
+    int result = calculatorInstance.subtract(10, 4);
+    assertEquals(6, result, "10 - 4 should be 6");
+  }
     
-    @Test
-    @Disabled("This test is currently disabled due to ongoing refactoring.")
-    void testMultiplication() {
-        // Ein deaktivierter Test
-        assertEquals(12, calculatorInstance.multiply(3,4));
-    }
+  @Test
+  @Disabled("This test is currently disabled due to ongoing refactoring.")
+  void testMultiplication() {
+    // Ein deaktivierter Test
+    assertEquals(12, calculatorInstance.multiply(3,4));
+  }
 }
 
 // Dummy-Klasse, die getestet wird (normalerweise in einer separaten Datei)
 class Calculator {
-    public int add(int a, int b) { return a + b; }
-    public int subtract(int a, int b) { return a - b; }
-    public int multiply(int a, int b) { return a * b; }
+  public int add(int a, int b) { return a + b; }
+  public int subtract(int a, int b) { return a - b; }
+  public int multiply(int a, int b) { return a * b; }
 }
 \end{lstlisting}
 
@@ -90,34 +90,34 @@ class Calculator {
 \label{ssec:junit_beforeeach}
 Um sicherzustellen, dass jede Testmethode mit einem sauberen und definierten Zustand startet, werden Testdaten und -objekte häufig in einer Methode initialisiert, die mit `@BeforeEach` annotiert ist. Die Namenskonvention für diese Methode ist `setUp()`.
 
-\begin{lstlisting}[language=Java, caption={Verwendung von \texttt{@BeforeEach} zur Initialisierung}, label=lst:junit_beforeeach_example, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Verwendung von \texttt{@BeforeEach} zur Initialisierung}]
 class Book { // Beispielklasse, die getestet wird
-    private String title;
-    private String author;
-    // Weitere Attribute und Konstruktor...
-    public Book(String title, String author) { this.title = title; this.author = author; }
-    public String getAsText() { return title + "; " + author; }
+  private String title;
+  private String author;
+  // Weitere Attribute und Konstruktor...
+  public Book(String title, String author) { this.title = title; this.author = author; }
+  public String getAsText() { return title + "; " + author; }
 }
 
 class BookTest {
-    private Book testBook; // Instanzvariable für das Testobjekt
+  private Book testBook; // Instanzvariable für das Testobjekt
 
-    @BeforeEach
-    void setUp() {
-        // Initialisiert das testBook Objekt vor jedem Test neu
-        testBook = new Book("The Hitchhiker's Guide to the Galaxy", "Douglas Adams");
-    }
+  @BeforeEach
+  void setUp() {
+    // Initialisiert das testBook Objekt vor jedem Test neu
+    testBook = new Book("The Hitchhiker's Guide to the Galaxy", "Douglas Adams");
+  }
 
-    @Test
-    void testBookCreation() {
-        assertNotNull(testBook, "Book should be initialized by setUp()");
-    }
+  @Test
+  void testBookCreation() {
+    assertNotNull(testBook, "Book should be initialized by setUp()");
+  }
 
-    @Test
-    void testGetAsText() {
-        String expectedText = "The Hitchhiker's Guide to the Galaxy; Douglas Adams";
-        assertEquals(expectedText, testBook.getAsText(), "getAsText() should return correct format.");
-    }
+  @Test
+  void testGetAsText() {
+    String expectedText = "The Hitchhiker's Guide to the Galaxy; Douglas Adams";
+    assertEquals(expectedText, testBook.getAsText(), "getAsText() should return correct format.");
+  }
 }
 \end{lstlisting}
 
@@ -125,40 +125,40 @@ class BookTest {
 \label{ssec:junit_aftereach}
 Falls nach der Ausführung jeder Testmethode Aufräumarbeiten notwendig sind (z.B. das Schließen von Dateien, Netzwerkverbindungen oder das Zurücksetzen von globalen Zuständen), kann dies in einer mit `@AfterEach` annotierten Methode geschehen. Die Namenskonvention hierfür ist `tearDown()`. Für die meisten Unit-Tests, die mit einfachen Objekten arbeiten, ist dies nicht erforderlich.
 
-\begin{lstlisting}[language=Java, caption={Verwendung von \texttt{@AfterEach} für Aufräumarbeiten}, label=lst:junit_aftereach_example, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Verwendung von \texttt{@AfterEach} für Aufräumarbeiten}]
 // @AfterEach // Selten benötigt für einfache Unit-Tests
 // void tearDown() {
-//     // Diese Methode wird nach jedem Testfall aufgerufen.
-//     // Beispiel: Schließen einer Datei, Freigeben von Ressourcen.
-//     // System.out.println("tearDown() called.");
+//   // Diese Methode wird nach jedem Testfall aufgerufen.
+//   // Beispiel: Schließen einer Datei, Freigeben von Ressourcen.
+//   // System.out.println("tearDown() called.");
 // }
 \end{lstlisting}
 
 \subsection{Testmethoden und Assertions}
 \label{ssec:junit_testmethoden}
-Testmethoden werden mit `@Test` annotiert. Die Namenskonvention für Testmethoden ist oft `test<MethodenNameDieGetestetWird>[_Szenario]`, z.B. `testAdd_withPositiveNumbers` oder `testAdd_withNegativeNumbers`. Testmethoden haben in der Regel keine Rückgabewerte (`void`) und keine Modifikatoren (package-private Sichtbarkeit ist üblich). Sie sollten prägnant sein und sich auf die Überprüfung eines spezifischen Aspekts konzentrieren.
+Testmethoden werden mit \lstinline{@Test} annotiert. Die Namenskonvention für Testmethoden ist \lstinline{test<MethodenNameDieGetestetWird>[_Szenario]}, z.B. \lstinline{testAdd_withPositiveNumbers} oder \lstinline{testAdd_withNegativeNumbers}. Testmethoden haben in der Regel keine Rückgabewerte (\lstinline{void}) und keine Modifikatoren (package-private Sichtbarkeit ist üblich). Sie sollten prägnant sein und sich auf die Überprüfung eines spezifischen Aspekts konzentrieren.
 
 Innerhalb einer Testmethode werden Assertions verwendet, um das tatsächliche Verhalten des Codes mit dem erwarteten Verhalten zu vergleichen.
-\begin{lstlisting}[language=Java, caption={Beispiel einer Testmethode mit Assertions}, label=lst:junit_testmethod_example, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Beispiel einer Testmethode mit Assertions}]
 // Innerhalb einer Testklasse, z.B. BookTest (siehe oben)
 
 // @BeforeEach
 // void setUp() {
-//     testBook = new Book("Asterix der Gallier", "Uderzo", 1965, 9.8);
+//   testBook = new Book("Asterix der Gallier", "Uderzo", 1965, 9.8);
 // }
 
 // Angenommen, die Book-Klasse hat eine Methode getFormattedString():
 // public String getFormattedString() {
-//     return String.format("%s; %s; %d; %.1f", title, author, year, price);
+//   return String.format("%s; %s; %d; %.1f", title, author, year, price);
 // }
 // Und der Konstruktor ist: public Book(String title, String author, int year, double price)
 
 // @Test
 // void testGetFormattedString_validBook() {
-//     // Annahme: testBook wurde in setUp() initialisiert
-//     // testBook = new Book("Asterix der Gallier", "Uderzo", 1965, 9.8); // Falls kein setUp
-//     String expectedOutput = "Asterix der Gallier; Uderzo; 1965; 9.8";
-//     // assertEquals(expectedOutput, testBook.getFormattedString());
+//   // Annahme: testBook wurde in setUp() initialisiert
+//   // testBook = new Book("Asterix der Gallier", "Uderzo", 1965, 9.8); // Falls kein setUp
+//   String expectedOutput = "Asterix der Gallier; Uderzo; 1965; 9.8";
+//   // assertEquals(expectedOutput, testBook.getFormattedString());
 // }
 \end{lstlisting}
 In diesem Beispiel würde `assertEquals` prüfen, ob der von `book.getFormattedString()` zurückgegebene String dem `expectedOutput` entspricht. Die `equals`-Methode des Vergleichsobjekts wird hierfür herangezogen (für Strings ist dies ein Inhaltsvergleich).
@@ -180,41 +180,41 @@ Die optionale `message` wird angezeigt, wenn die Assertion fehlschlägt, was die
 Um abstrakte Klassen zu testen oder Klassen, die komplexe Abhängigkeiten haben, werden oft Mock-Klassen (oder Mock-Objekte) verwendet. Eine Mock-Klasse ist eine vereinfachte Implementierung einer Abhängigkeit, die speziell für Testzwecke erstellt wird. Sie simuliert das Verhalten der echten Abhängigkeit in einer kontrollierten Weise.
 Die Namenskonvention für eine Mock-Klasse für `AbstractDataProvider` könnte `MockAbstractDataProvider` oder `TestDataProviderImpl` sein.
 
-\begin{lstlisting}[language=Java, caption={Konzept einer Mock-Klasse (vereinfacht)}, label=lst:junit_mock_concept, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Konzept einer Mock-Klasse (vereinfacht)}]
 // Abstrakte Klasse, die getestet werden soll (indirekt)
 abstract class AbstractDataProcessor {
-    protected abstract String fetchData(); // Abhängigkeit, die gemockt werden könnte
+  protected abstract String fetchData(); // Abhängigkeit, die gemockt werden könnte
 
-    public String processData() {
-        String data = fetchData();
-        return "Processed: " + data.toUpperCase();
-    }
+  public String processData() {
+    String data = fetchData();
+    return "Processed: " + data.toUpperCase();
+  }
 }
 
 // Eine konkrete Implementierung der abstrakten Klasse für Testzwecke (eine Art Mock)
 class TestableDataProcessor extends AbstractDataProcessor {
-    private String dataToReturn;
+  private String dataToReturn;
 
-    public TestableDataProcessor(String dataToReturn) {
-        this.dataToReturn = dataToReturn;
-    }
+  public TestableDataProcessor(String dataToReturn) {
+    this.dataToReturn = dataToReturn;
+  }
 
-    @Override
-    protected String fetchData() {
-        // Simuliert das Verhalten der Abhängigkeit
-        return this.dataToReturn;
-    }
+  @Override
+  protected String fetchData() {
+    // Simuliert das Verhalten der Abhängigkeit
+    return this.dataToReturn;
+  }
 }
 
 // Testklasse
 class AbstractDataProcessorTest {
-    @Test
-    void testProcessData_withMockedData() {
-        // Erstellt eine Instanz der Test-Implementierung mit kontrollierten Daten
-        AbstractDataProcessor processor = new TestableDataProcessor("sample data");
-        String result = processor.processData();
-        assertEquals("Processed: SAMPLE DATA", result);
-    }
+  @Test
+  void testProcessData_withMockedData() {
+    // Erstellt eine Instanz der Test-Implementierung mit kontrollierten Daten
+    AbstractDataProcessor processor = new TestableDataProcessor("sample data");
+    String result = processor.processData();
+    assertEquals("Processed: SAMPLE DATA", result);
+  }
 }
 \end{lstlisting}
 Für komplexere Mocking-Szenarien werden oft Mocking-Frameworks wie Mockito oder EasyMock eingesetzt, die das Erstellen und Konfigurieren von Mock-Objekten erheblich vereinfachen. Diese sind jedoch über den Rahmen dieser Einführung hinausgehend.

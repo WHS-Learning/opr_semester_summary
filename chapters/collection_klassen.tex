@@ -1,0 +1,48 @@
+\chapter{Collection Klassen}
+\label{chap:Collection Klassen}
+
+Arrays haben eine Feste größe, welche sich wärend der Laufzeit niemals ändern kann. Dies ist sehr oft ein Problem. Collection klassen helfen. Es gibt einige Collection Klassen, welche alle ihre eigenen Vor- und Nachteile haben.
+
+\section{Arrays}
+Die Arrays sind perse zwar keine CollectionKlasse, jedoch ist es trotzdem sinnvoll diese mit den Collection Klassen zu vergleichen, da sie einen sehr ähnlichen Zweck erfüllt wie die Collection Klassen. 
+
+\subsection{Anwendungen}
+Arrays sollten verwendet werden, wenn mehrere Objekte sortiert gruppiert werden sollen, und sich die Anzahl an Objekten, die gruppiert werden, nicht ändern wird.
+
+\subsection{Vorteile}
+Der Zugriff auf die einzelnen Indizes eines Arrays ist sehr schnell und Effizient.
+
+\subsection{Nachteile}
+Die Größe eines Arrays kann sich in der Laufzeit nicht ändern.
+
+\subsection{Beispiel}
+\begin{lstlisting}[language=Java, caption={Beispiel für Arrays}]
+int[] numbers = new int[5]; // Array der größe 5 erstellen
+numbers[3] = 4; // Index 3 den Wert 4 zuweisen
+System.out.println(numbers[3]); // Index 3 ausgeben
+\end{lstlisting}
+
+\section{ArrayList}
+ArrayLists sind sehr ähnlich zu Arrays, nur dass sie ihre größe wärend der Laufzeit ändern können.
+
+\subsection{Anwendung}
+ArrayLists sollten verwendet werden, wenn mehrere Objekte sortiert gruppiert werden sollen, und sich die Anzahl an Objekten, die gruppiert werden, ändern kann.
+
+\subsection{Vorteile}
+Die größe der Liste kann in der Laufzeit beliebig groß wachsen.
+
+\subsection{Nachteile}
+Im vergleich zum Array ist der Zugriff auf die Indizes sehr langsam.
+
+\subsection{Beispiel}
+\begin{lstlisting}[language=Java, caption={Beispiel für Arrays}]
+ArrayList<Integer> list = new ArrayList<>(); // Neue ArrayList erstellen.
+list.add(3); // 3 in die ArrayList einfügen
+list.get(0); // Das 0-te Element bekommen
+\end{lstlisting}
+
+\section{LinkedList}
+Die LinkedList hat einen Verweis auf das aktuelle Element, auf das Nächste und auf das Vorherige Element.
+
+\subsection{Anwendung}
+LinkedLists sollten verwendet werden, wenn der Ablauf eines Programms auf das \gls{FiFo} Prinzip funktioniert.

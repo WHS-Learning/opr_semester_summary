@@ -13,7 +13,7 @@ und mit dem Schlüsselwort \texttt{extends} realisiert.
 
 \paragraph{Syntax der Vererbung}
 Die grundlegende Syntax zur Definition einer Klasse, die von einer anderen erbt, ist wie folgt:
-\begin{lstlisting}[language=Java, caption={Deklaration einer abgeleiteten Klasse}, label=lst:erben_syntax, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Deklaration einer abgeleiteten Klasse}]
 class Unterklasse extends Oberklasse {
     // Zusätzliche Attribute und Methoden der Unterklasse
     // oder überschriebene Methoden der Oberklasse
@@ -85,39 +85,39 @@ Bei der statischen Bindung wird bereits zur Kompilierzeit festgelegt, welche Met
     \item Aufrufe, bei denen der Compiler den exakten Objekttyp eindeutig bestimmen kann.
 \end{itemize}
 
-\begin{lstlisting}[language=Java, caption={Beispiele für statische Bindung}, label=lst:statische_bindung, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Beispiele für statische Bindung}]
 class Vehicle {
-    public static String getCategorie() {
-        return "Allgemeines Fahrzeug";
-    }
-    public final void startMotor() {
-        System.out.println("Motor gestartet (finale Methode aus Fahrzeug)");
-    }
+  public static String getCategorie() {
+    return "Allgemeines Fahrzeug";
+  }
+  public final void startMotor() {
+    System.out.println("Motor gestartet (finale Methode aus Fahrzeug)");
+  }
 }
 
 class Car extends Vehicle {
-    // Diese Methode verdeckt getCategorie() von Fahrzeug, überschreibt sie aber nicht.
-    public static String getCategorie() {
-        return "Automobil";
-    }
+  // Diese Methode verdeckt getCategorie() von Fahrzeug, überschreibt sie aber nicht.
+  public static String getCategorie() {
+    return "Automobil";
+  }
 }
 
 public class TestBinding {
-    public static void main(String[] args) {
-        // Aufruf statischer Methoden: Immer statische Bindung
-        System.out.println(Vehicle.getCategorie()); // Gibt "Allgemeines Fahrzeug" aus
-        System.out.println(Car.getCategorie());     // Gibt "Automobil" aus
+  public static void main(String[] args) {
+    // Aufruf statischer Methoden: Immer statische Bindung
+    System.out.println(Vehicle.getCategorie()); // Gibt "Allgemeines Fahrzeug" aus
+    System.out.println(Car.getCategorie());     // Gibt "Automobil" aus
 
-        Car meinAuto = new Car();
-        // Aufruf einer finalen Methode: Statische Bindung
-        meinAuto.startMotor(); // Ruft Vehicle.startMotor()
+    Car meinAuto = new Car();
+    // Aufruf einer finalen Methode: Statische Bindung
+    meinAuto.startMotor(); // Ruft Vehicle.startMotor()
 
-        Vehicle meinFahrzeug = new Car();
-        // Obwohl meinFahrzeug auf ein Car-Objekt zeigt, wird bei statischen Methoden
-        // der deklarierte Typ der Referenz (Car) für die Bindung verwendet.
-        // System.out.println(meinFahrzeug.getCategorie()); // Schlechter Stil! Sollte Vehicle.getCategorie() sein.
-                                                      // Würde "Allgemeines Fahrzeug" ausgeben.
-    }
+    Vehicle meinFahrzeug = new Car();
+    // Obwohl meinFahrzeug auf ein Car-Objekt zeigt, wird bei statischen Methoden
+    // der deklarierte Typ der Referenz (Car) für die Bindung verwendet.
+    // System.out.println(meinFahrzeug.getCategorie()); // Schlechter Stil! Sollte Vehicle.getCategorie() sein.
+    // Würde "Allgemeines Fahrzeug" ausgeben.
+  }
 }
 \end{lstlisting}
 
@@ -126,46 +126,45 @@ Bei der dynamischen Bindung wird erst zur Laufzeit entschieden, welche Methodeni
 das Kernprinzip der Polymorphie und tritt bei überschriebenen Instanzmethoden auf. Der Java Virtual Machine (JVM) ermittelt 
 den tatsächlichen Typ des Objekts, auf dem die Methode aufgerufen wird, und wählt die entsprechende Implementierung aus.
 
-\begin{lstlisting}[language=Java, caption={Beispiel für dynamische Bindung}, label=lst:dynamische_bindung, basicstyle=\ttfamily\footnotesize, 
-    breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Beispiel für dynamische Bindung}]
 class Animal {
-    public void say() {
-        System.out.println("Ein Tier gibt einen Laut von sich.");
-    }
+  public void say() {
+    System.out.println("Ein Tier gibt einen Laut von sich.");
+  }
 }
 
 class Dog extends Animal {
-    @Override
-    public void say() {
-        System.out.println("Wuff! Wuff!");
-    }
+  @Override
+  public void say() {
+    System.out.println("Wuff! Wuff!");
+  }
 }
 
 class Cat extends Animal {
-    @Override
-    public void say() {
-        System.out.println("Miau!");
-    }
+  @Override
+  public void say() {
+    System.out.println("Miau!");
+  }
 }
 
 public class Zoo {
-    public static void main(String[] args) {
-        Animal[] tiere = new Animal[3];
-        tiere[0] = new Dog();    // Hund-Objekt
-        tiere[1] = new Cat();   // Katze-Objekt
-        tiere[2] = new Animal();    // Tier-Objekt
+  public static void main(String[] args) {
+    Animal[] tiere = new Animal[3];
+    tiere[0] = new Dog();       // Hund-Objekt
+    tiere[1] = new Cat();       // Katze-Objekt
+    tiere[2] = new Animal();    // Tier-Objekt
 
-        for (Tier aktuellesTier : tiere) {
-            // Dynamische Bindung:
-            // Zur Laufzeit wird die spezifische say()-Methode
-            // des tatsächlichen Objekttyps aufgerufen.
-            aktuellesTier.say();
-        }
-        // Ausgabe:
-        // Wuff! Wuff!
-        // Miau!
-        // Ein Tier gibt einen Laut von sich.
+    for (Tier aktuellesTier : tiere) {
+      // Dynamische Bindung:
+      // Zur Laufzeit wird die spezifische say()-Methode
+      // des tatsächlichen Objekttyps aufgerufen.
+      aktuellesTier.say();
     }
+    // Ausgabe:
+    // Wuff! Wuff!
+    // Miau!
+    // Ein Tier gibt einen Laut von sich.
+  }
 }
 \end{lstlisting}
 Der Compiler prüft lediglich, ob eine Methode \texttt{say()} im deklarierten Typ \texttt{Animal} existiert. Welche konkrete 
@@ -187,44 +186,43 @@ Der Aufruf \texttt{super()} dient dazu, einen Konstruktor der direkten Oberklass
     \item Die Parameterliste von \texttt{super(...)} muss mit der Signatur eines Konstruktors der Oberklasse übereinstimmen.
 \end{itemize}
 
-\begin{lstlisting}[language=Java, caption={Expliziter Aufruf des Oberklassen-Konstruktors via \texttt{super()}}, label=lst:super_konstruktor, 
-    basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Expliziter Aufruf des Oberklassen-Konstruktors via \texttt{super()}}]
 class BaseClass {
-    String name;
-    public BaseClass(String name) {
-        this.name = name;
-        System.out.println("Konstruktor Basisklasse aufgerufen mit: " + name);
-    }
-    public BaseClass() {
-        this.name = "Default";
-        System.out.println("Parameterloser Konstruktor Basisklasse aufgerufen");
-    }
+  String name;
+  public BaseClass(String name) {
+    this.name = name;
+    System.out.println("Konstruktor Basisklasse aufgerufen mit: " + name);
+  }
+  public BaseClass() {
+    this.name = "Default";
+    System.out.println("Parameterloser Konstruktor Basisklasse aufgerufen");
+  }
 }
 
 class ChildClass extends BaseClass {
-    public ChildClass(String spezifischerName) {
-        super(spezifischerName); // Ruft BaseClass(String name) auf
-        System.out.println("Konstruktor ChildClass aufgerufen");
-    }
-    public ChildClass() {
-        super(); // Ruft BaseClass() auf
-        // Alternativ: super("DefaultAbgeleitet");
-        System.out.println("Parameterloser Konstruktor ChildClass aufgerufen");
-    }
+  public ChildClass(String spezifischerName) {
+    super(spezifischerName); // Ruft BaseClass(String name) auf
+    System.out.println("Konstruktor ChildClass aufgerufen");
+  }
+  public ChildClass() {
+    super(); // Ruft BaseClass() auf
+    // Alternativ: super("DefaultAbgeleitet");
+    System.out.println("Parameterloser Konstruktor ChildClass aufgerufen");
+  }
 }
 
 public class TestSuper {
-    public static void main(String[] args) {
-        ChildClass obj = new ChildClass("TestObjekt");
-        // Ausgabe:
-        // Konstruktor BaseClass aufgerufen mit: TestObjekt
-        // Konstruktor ChildClass aufgerufen
+  public static void main(String[] args) {
+    ChildClass obj = new ChildClass("TestObjekt");
+    // Ausgabe:
+    // Konstruktor BaseClass aufgerufen mit: TestObjekt
+    // Konstruktor ChildClass aufgerufen
 
-        ChildClass obj2 = new ChildClass();
-        // Ausgabe:
-        // Parameterloser Konstruktor BaseClass aufgerufen
-        // Parameterloser Konstruktor ChildClass aufgerufen
-    }
+    ChildClass obj2 = new ChildClass();
+    // Ausgabe:
+    // Parameterloser Konstruktor BaseClass aufgerufen
+    // Parameterloser Konstruktor ChildClass aufgerufen
+  }
 }
 \end{lstlisting}
 
@@ -238,26 +236,25 @@ als erste Anweisung steht, fügt der Java-Compiler automatisch einen parameterlo
     ein, der ebenfalls implizit \texttt{super();} aufruft.
 \end{itemize}
 
-\begin{lstlisting}[language=Java, caption={Impliziter Konstruktor und \texttt{super()}-Aufruf durch den Compiler}, label=lst:implizit_super, 
-    basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Impliziter Konstruktor und \texttt{super()}-Aufruf durch den Compiler}]
 class Ober {
-    public Ober() {
-        System.out.println("Konstruktor Ober");
-    }
+  public Ober() {
+    System.out.println("Konstruktor Ober");
+  }
 }
 
 class Unter extends Ober {
-    // Kein expliziter Konstruktor definiert
+  // Kein expliziter Konstruktor definiert
 }
 // Der Compiler generiert für Klasse Unter:
 // public Unter() {
-//     super(); // Impliziter Aufruf des Ober-Konstruktors
+//   super(); // Impliziter Aufruf des Ober-Konstruktors
 // }
 
 public class TestImplizit {
-    public static void main(String[] args) {
-        Unter u = new Unter(); // Führt zu Ausgabe: "Konstruktor Ober"
-    }
+  public static void main(String[] args) {
+    Unter u = new Unter(); // Führt zu Ausgabe: "Konstruktor Ober"
+  }
 }
 \end{lstlisting}
 
@@ -267,31 +264,30 @@ zugänglichen, parameterlosen Konstruktor besitzt. Ist dies nicht der Fall (z.B.
 \textbf{muss} die Unterklasse in jedem ihrer Konstruktoren explizit einen passenden Konstruktor der Oberklasse mittels \texttt{super(...)} mit 
 den erforderlichen Argumenten aufrufen. Andernfalls entsteht ein Kompilierfehler. Der Compiler kann die benötigten Argumente nicht "erraten".
 
-\begin{lstlisting}[language=Java, caption={Kompilierfehler: \texttt{super()}-Aufruf scheitert bei parametrisiertem Superkonstruktor}, 
-    label=lst:super_fehler, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Kompilierfehler: \texttt{super()}-Aufruf scheitert bei parametrisiertem Superkonstruktor}]
 class Elternteil {
-    private final String id;
-    public Elternteil(String id) { // Nur ein Konstruktor mit Parameter
-        this.id = id;
-    }
+  private final String id;
+  public Elternteil(String id) { // Nur ein Konstruktor mit Parameter
+    this.id = id;
+  }
 }
 
 class KindValid extends Elternteil {
-    public KindValid(String kindId, String elternId) {
+  public KindValid(String kindId, String elternId) {
         super(elternId); // Korrekt: Expliziter Aufruf des passenden Konstruktors
-    }
+  }
 }
 
 class KindError1 extends Elternteil {
-    public KindError1() {
-        // FEHLER! Implizites super() würde Elternteil() suchen, gibt es aber nicht.
-        // Explizites super("someID") wäre nötig.
-    }
+  public KindError1() {
+    // FEHLER! Implizites super() würde Elternteil() suchen, gibt es aber nicht.
+    // Explizites super("someID") wäre nötig.
+  }
 }
 
 class KindError2 extends Elternteil {
-    // FEHLER! Compiler fügt Default-Konstruktor ein, der super() aufruft.
-    // Elternteil() existiert nicht.
+  // FEHLER! Compiler fügt Default-Konstruktor ein, der super() aufruft.
+  // Elternteil() existiert nicht.
 }
 \end{lstlisting}
 
@@ -300,44 +296,43 @@ Mit \texttt{super.methodenName()} oder \texttt{super.variablenName} kann auf ein
 selbst wenn diese in der aktuellen Klasse überschrieben (Methode) oder verdeckt (Variable) wurde. Dies ist nützlich, um die Funktionalität 
 der Oberklasse zu erweitern, anstatt sie komplett zu ersetzen.
 
-\begin{lstlisting}[language=Java, caption={Zugriff auf überschriebene Methode der Oberklasse via \texttt{super.}}, label=lst:super_member, 
-    basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Zugriff auf überschriebene Methode der Oberklasse via \texttt{super.}}]
 class Basis {
-    public void anzeige() {
-        System.out.println("Anzeige aus Basis");
-    }
-    protected String info = "Info aus Basis";
+  public void anzeige() {
+    System.out.println("Anzeige aus Basis");
+  }
+  protected String info = "Info aus Basis";
 }
 
 class Erweitert extends Basis {
-    @Override
-    public void anzeige() {
-        super.anzeige(); // Ruft anzeige() der Klasse Basis auf
-        System.out.println("Anzeige aus Erweitert");
-    }
+  @Override
+  public void anzeige() {
+    super.anzeige(); // Ruft anzeige() der Klasse Basis auf
+    System.out.println("Anzeige aus Erweitert");
+  }
     
-    public void zeigeInfos() {
-        System.out.println("Eigene Info: " + this.info); // this.info ist hier redundant, da info nicht neu deklariert wurde
-        System.out.println("Basis Info: " + super.info); // Greift auf info der Basisklasse zu
-    }
+  public void zeigeInfos() {
+    System.out.println("Eigene Info: " + this.info); // this.info ist hier redundant, da info nicht neu deklariert wurde
+    System.out.println("Basis Info: " + super.info); // Greift auf info der Basisklasse zu
+  }
 
-    // Beispiel für Variablenverdeckung (Shadowing) - generell vermeiden!
-    // protected String info = "Info aus Erweitert"; 
-    // public void zeigeInfosMitVerdeckung() {
-    //     System.out.println("Eigene Info (verdeckt): " + this.info); // Info aus Erweitert
-    //     System.out.println("Basis Info (via super): " + super.info); // Info aus Basis
-    // }
+  // Beispiel für Variablenverdeckung (Shadowing) - generell vermeiden!
+  // protected String info = "Info aus Erweitert"; 
+  // public void zeigeInfosMitVerdeckung() {
+  //     System.out.println("Eigene Info (verdeckt): " + this.info); // Info aus Erweitert
+  //     System.out.println("Basis Info (via super): " + super.info); // Info aus Basis
+  // }
 }
 
 public class TestSuperMember {
-    public static void main(String[] args) {
-        Erweitert ext = new Erweitert();
-        ext.anzeige();
-        // Ausgabe:
-        // Anzeige aus Basis
-        // Anzeige aus Erweitert
-        ext.zeigeInfos();
-    }
+  public static void main(String[] args) {
+    Erweitert ext = new Erweitert();
+    ext.anzeige();
+    // Ausgabe:
+    // Anzeige aus Basis
+    // Anzeige aus Erweitert
+    ext.zeigeInfos();
+  }
 }
 \end{lstlisting}
 
@@ -354,40 +349,39 @@ innerhalb verschiedener Konstruktoren einer Klasse zu vermeiden.
     \item Mindestens ein Konstruktor in der Kette muss (implizit oder explizit) den Konstruktor der Oberklasse via \texttt{super(...)} aufrufen.
 \end{itemize}
 
-\begin{lstlisting}[language=Java, caption={Aufruf eines anderen Konstruktors derselben Klasse via \texttt{this()}}, label=lst:this_konstruktor_beispiel, 
-    basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb, numbers=left]
+\begin{lstlisting}[language=Java, caption={Aufruf eines anderen Konstruktors derselben Klasse via \texttt{this()}}]
 class Benutzer {
-    private final String benutzername;
-    private final String email;
-    private boolean istAktiv;
+  private final String benutzername;
+  private final String email;
+  private boolean istAktiv;
 
-    public Benutzer(String benutzername, String email) {
-        this.benutzername = benutzername;
-        this.email = email;
-        this.istAktiv = true; // Standardwert
-        System.out.println("Benutzer erstellt: " + benutzername + ", Aktiv: " + istAktiv);
-    }
+  public Benutzer(String benutzername, String email) {
+    this.benutzername = benutzername;
+    this.email = email;
+    this.istAktiv = true; // Standardwert
+    System.out.println("Benutzer erstellt: " + benutzername + ", Aktiv: " + istAktiv);
+  }
 
-    public Benutzer(String benutzername) {
-        this(benutzername, benutzername + "@example.com"); // Ruft den ersten Konstruktor auf
-        System.out.println("Benutzer (nur Name) erstellt, E-Mail generiert.");
-    }
+  public Benutzer(String benutzername) {
+    this(benutzername, benutzername + "@example.com"); // Ruft den ersten Konstruktor auf
+    System.out.println("Benutzer (nur Name) erstellt, E-Mail generiert.");
+  }
     
-    public Benutzer() {
-        this("gast"); // Ruft den zweiten Konstruktor auf, der dann den ersten aufruft
-        this.istAktiv = false; // Überschreibt den Standardwert für Gast-Benutzer
-        System.out.println("Gast-Benutzer erstellt, Inaktiv gesetzt.");
-    }
+  public Benutzer() {
+    this("gast"); // Ruft den zweiten Konstruktor auf, der dann den ersten aufruft
+    this.istAktiv = false; // Überschreibt den Standardwert für Gast-Benutzer
+    System.out.println("Gast-Benutzer erstellt, Inaktiv gesetzt.");
+  }
 }
 
 public class TestThisKonstruktor {
-    public static void main(String[] args) {
-        Benutzer b1 = new Benutzer("alice", "alice@mail.com");
-        System.out.println("---");
-        Benutzer b2 = new Benutzer("bob");
-        System.out.println("---");
-        Benutzer b3 = new Benutzer();
-    }
+  public static void main(String[] args) {
+    Benutzer b1 = new Benutzer("alice", "alice@mail.com");
+    System.out.println("---");
+    Benutzer b2 = new Benutzer("bob");
+    System.out.println("---");
+    Benutzer b3 = new Benutzer();
+  }
 }
 \end{lstlisting}
 
@@ -398,9 +392,9 @@ Das Schlüsselwort \texttt{final} hat im Kontext der Vererbung spezielle Bedeutu
 
 \paragraph{Finale Klassen}
 Eine mit \texttt{final} deklarierte Klasse \textbf{kann nicht erweitert werden}, d.h., es können keine Unterklassen von ihr abgeleitet werden.
-\begin{lstlisting}[language=Java, caption={\texttt{final} Klasse}, label=lst:final_klasse, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb]
+\begin{lstlisting}[language=Java, caption={\texttt{final} Klasse}]
 public final class Unveraenderlich {
-    // ...
+  // ...
 }
 
 // class VersuchAbleitung extends Unveraenderlich { } // KOMPILIERFEHLER!
@@ -409,24 +403,24 @@ Dies wird oft für Klassen verwendet, deren Implementierung als abgeschlossen un
 
 \paragraph{Finale Methoden}
 Eine mit \texttt{final} deklarierte Methode \textbf{kann in Unterklassen nicht überschrieben werden}.
-\begin{lstlisting}[language=Java, caption={\texttt{final} Methode}, label=lst:final_methode, basicstyle=\ttfamily\footnotesize, breaklines=true, frame=tb]
+\begin{lstlisting}[language=Java, caption={\texttt{final} Methode}]
 class BasisMitFinal {
-    public final void wichtigeOperation() {
-        System.out.println("Diese Operation darf nicht geändert werden.");
-    }
-    public void andereOperation() {
-        System.out.println("Diese Operation kann überschrieben werden.");
-    }
+  public final void wichtigeOperation() {
+    System.out.println("Diese Operation darf nicht geändert werden.");
+  }
+  public void andereOperation() {
+    System.out.println("Diese Operation kann überschrieben werden.");
+  }
 }
 
 class AbgeleitetVonFinal extends BasisMitFinal {
-    // @Override
-    // public final void wichtigeOperation() { } // KOMPILIERFEHLER!
+  // @Override
+  // public final void wichtigeOperation() { } // KOMPILIERFEHLER!
 
-    @Override
-    public void andereOperation() {
-        System.out.println("andereOperation in AbgeleitetVonFinal überschrieben.");
-    }
+  @Override
+  public void andereOperation() {
+    System.out.println("andereOperation in AbgeleitetVonFinal überschrieben.");
+  }
 }
 \end{lstlisting}
 Finale Methoden garantieren, dass das Verhalten dieser spezifischen Methode in der gesamten Klassenhierarchie unterhalb 
