@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, chains, decorations.pathmorphing, patterns}
+
 \addbibresource{references.bib}
 \loadglsentries{glossar.tex}
 
@@ -19,42 +20,52 @@
 
 \begin{document}
 
-	\include{config/globals}
-	\include{titlepage}
+    \include{config/globals}
+    \include{titlepage}
 
-	\clearpage
+    \clearpage
+    \thispagestyle{empty}
+    \pagenumbering{gobble}
 
-	\thispagestyle{empty}
-	\pagenumbering{gobble}
+    \include{copyright}
+    \include{abstract}
 
-	\include{copyright}
-	\include{abstract}
+    \clearpage
+    \pagenumbering{roman} 
+    \tableofcontents
 
-	\tableofcontents
+    \clearpage
+    \pagenumbering{arabic}
 
-	\clearpage
+    \part{Vorlesungszusammenfassung}
+    \label{part:vorlesungszusammenfassung}
 
-	\pagenumbering{arabic}
+    \include{chapters/pakete}
+    \include{chapters/klassenhierarchie}
+    \include{chapters/junit}
+    \include{chapters/object_klasse}
+    \include{chapters/collection_klassen}
+    \include{chapters/huellenklassen}
+    \include{chapters/exceptions}
 
-	\include{chapters/pakete}
-	\include{chapters/klassenhierarchie}
-	\include{chapters/junit}
-	\include{chapters/object_klasse}
-	\include{chapters/collection_klassen}
-	\include{chapters/huellenklassen}
-	\include{chapters/exceptions}
+    \chapter{Übungsaufgaben}
+    \label{chap:uebungsaufgaben}
 
-	\printglossary[title={Glossar}, toctitle={Glossar}]
-	
-	\pagestyle{empty}
-	\pagenumbering{roman}
-	\setcounter{page}{1}
+    \chapter{Praktikumsaufgaben}
+    \label{chap:praktikumsaufgaben}
 
-	\part{Extra}
-	\phantomsection
-	\addcontentsline{toc}{chapter}{Bibliography}
-	\printbibliography
+    \printglossary[title={Glossar}, toctitle={Glossar}]
 
-	\include{appendices}
+    \clearpage
+    \pagestyle{empty}
+    \pagenumbering{roman}
+    \setcounter{page}{1}
+
+    \part{Extra}
+    \phantomsection
+    \addcontentsline{toc}{chapter}{Bibliography}
+    \printbibliography
+
+    \include{appendices} % Anhänge
 
 \end{document}
