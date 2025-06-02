@@ -1,0 +1,126 @@
+\chapter{Exceptions (Ausnahmen)}
+
+Eine \textbf{Exception} (Ausnahme) ist ein abnormales oder unerwartetes Ereignis, das während der Ausführung eines Programms auftritt und den normalen Programmfluss unterbricht. Exceptions signalisieren Fehlerzustände, die zur Laufzeit auftreten. Sie können durch eine Vielzahl von Situationen ausgelöst werden, beispielsweise durch:
+
+\begin{itemize}
+    \item \textbf{Knappe Ressourcen:} Zu wenig Arbeitsspeicher (z.B. \texttt{OutOfMemoryError}) oder Festplattenspeicher.
+    \item \textbf{Ungültige Operationen:}
+    \begin{itemize}
+        \item Unzulässiger Zugriff auf ein Array (z.B. Zugriff auf einen Index außerhalb der Array-Grenzen, was zu einer \texttt{ArrayIndexOutOfBoundsException} führen kann).
+        \item Versuch, eine Methode auf einer \texttt{null}-Referenz aufzurufen (was eine \texttt{NullPointerException} auslöst).
+        \item Ungültige Typkonvertierung zwischen inkompatiblen Typen (kann eine \texttt{ClassCastException} verursachen).
+    \end{itemize}
+    \item \textbf{Fehlerhafte Eingaben:} Verarbeitung von ungültigen oder unerwarteten Daten.
+    \item \textbf{Externe Fehler:} Probleme mit Netzwerkverbindungen, Dateizugriffen (z.B. Datei nicht gefunden - \texttt{FileNotFoundException}).
+    \item \textbf{Verletzung einer Zusicherung:} Das Scheitern einer \texttt{assert}-Anweisung (führt zu einem \texttt{AssertionError}), was typischerweise auf einen Programmierfehler hindeutet.
+\end{itemize}
+
+\section{Folgen einer Exception}
+
+Wenn eine Exception während der Programmausführung auftritt und nicht behandelt wird, hat dies meist gravierende Folgen:
+
+\begin{enumerate}
+    \item \textbf{Programmabbruch:} Die Methode, in der die Exception aufgetreten ist, wird sofort beendet. Wenn die Exception auch von keiner der aufrufenden Methoden in der Aufrufkette (\gls{callstack}) behandelt wird, terminiert das gesamte Programm abrupt. Man spricht oft davon, dass das Programm "abstürzt".
+    \item \textbf{Fehlermeldung:} In der Regel wird eine Fehlermeldung ausgegeben, die Informationen über den Typ der Exception und die Stelle im Code enthält, an der sie aufgetreten ist (\gls{stacktrace}).
+\end{enumerate}
+
+Um einen solchen Absturz zu verhindern und stattdessen kontrolliert auf Fehler reagieren zu können, kommt die Ausnahmebehandlung (Exception Handling) ins Spiel.
+
+\section{Ausnahmebehandlung mit Try-Catch-Finally-Blöcken}
+
+Zur Behandlung von Exceptions werden spezielle Code-Blöcke verwendet: \texttt{try}, \texttt{catch} und optional \texttt{finally}.
+
+\subsection{Der \texttt{try}-Block}
+
+Der \texttt{try}-Block umschließt den Code-Abschnitt, in dem eine Exception auftreten könnte. Dieser Code wird als "kritischer Abschnitt" betrachtet.
+
+\begin{lstlisting}[language=Java, caption={Beispiel für einen try-Block}, label=lst:tryblock_beispiel]
+try {
+    // Kritischer Code, der möglicherweise eine Exception auslöst
+    // z.B. int result = 10 / 0; // Würde eine ArithmeticException auslösen
+    // oder
+    // String text = null;
+    // System.out.println(text.length()); // Würde eine NullPointerException auslösen
+} catch (SpecificExceptionType1 e1) {
+    // Behandlung für SpecificExceptionType1
+}
+// ... weitere catch-Blöcke oder finally-Block
+\end{lstlisting}
+
+\subsection{Der \texttt{catch}-Block}
+
+Wenn innerhalb des \texttt{try}-Blocks eine Exception auftritt, wird die normale Ausführung des \texttt{try}-Blocks sofort abgebrochen. Das Laufzeitsystem sucht dann nach einem passenden \texttt{catch}-Block, der diese spezifische Exception oder eine ihrer Oberklassen behandeln kann.
+
+\begin{itemize}
+    \item Ein \texttt{try}-Block kann einen oder mehrere \texttt{catch}-Blöcke haben.
+    \item Jeder \texttt{catch}-Block ist für einen bestimmten Typ von Exception zuständig.
+    \item Die \texttt{catch}-Blöcke werden in der Reihenfolge geprüft, in der sie definiert sind. Der erste \texttt{catch}-Block, dessen Exception-Typ zur aufgetretenen Exception passt, wird ausgeführt.
+    \item Nachdem ein \texttt{catch}-Block ausgeführt wurde, wird die Ausführung nach dem gesamten \texttt{try-catch}-Konstrukt fortgesetzt (es sei denn, der \texttt{catch}-Block selbst löst eine neue Exception aus oder beendet das Programm).
+    \item Wird keine Exception im \texttt{try}-Block geworfen, werden alle \texttt{catch}-Blöcke übersprungen.
+\end{itemize}
+
+\textbf{Beispiel für \texttt{catch}-Blöcke:}
+
+\begin{lstlisting}[language=Java, caption={Beispiel für catch-Blöcke}, label=lst:catchblock_beispiel_java]
+// Angenommen, wir lesen Daten aus einer Datei und verarbeiten Zahlen
+try {
+    // Code, der potenziell eine IOException (z.B. Datei nicht gefunden)
+    // oder eine NumberFormatException (z.B. Text kann nicht in Zahl umgewandelt werden) auslösen könnte.
+    String daten = dateiLesen("eingabe.txt"); // Methode könnte IOException werfen
+    int zahl = Integer.parseInt(daten);       // Könnte NumberFormatException werfen
+    System.out.println("Verarbeitete Zahl: " + zahl);
+
+} catch (java.io.IOException e) {
+    // Spezifische Behandlung, wenn ein Fehler beim Dateizugriff auftritt
+    System.err.println("Fehler beim Zugriff auf die Datei: " + e.getMessage());
+    // Hier könnte man z.B. einen Standardwert verwenden oder den Benutzer informieren.
+
+} catch (NumberFormatException e) {
+    // Spezifische Behandlung, wenn die Daten nicht in eine Zahl konvertiert werden können
+    System.err.println("Ungültiges Zahlenformat in den Daten: " + e.getMessage());
+    // Hier könnte man den Benutzer um eine korrigierte Eingabe bitten.
+
+} catch (Exception e) { // Ein allgemeinerer Exception-Handler
+    // Dieser Block fängt alle anderen Exceptions, die von den vorherigen catch-Blöcken nicht abgefangen wurden.
+    // Es ist oft eine gute Praxis, spezifischere Exceptions zuerst zu fangen.
+    System.err.println("Ein unerwarteter Fehler ist aufgetreten: " + e.getMessage());
+    e.printStackTrace(); // Gibt den \gls{stacktrace} aus, um bei der Fehlersuche zu helfen.
+}
+\end{lstlisting}
+Im obigen Beispiel wird \texttt{e} (oder \texttt{e1}, \texttt{e2} etc.) als Objekt der jeweiligen Exception-Klasse deklariert. Dieses Objekt enthält Informationen über den Fehler, wie z.B. eine Fehlermeldung (\texttt{e.getMessage()}) oder den \gls{stacktrace}.
+
+\subsection{Der \texttt{finally}-Block (optional)}
+
+Ein \texttt{finally}-Block kann an einen \texttt{try}-Block (nach allen \texttt{catch}-Blöcken) angehängt werden. Der Code innerhalb eines \texttt{finally}-Blocks wird \textbf{immer} ausgeführt, unabhängig davon, ob:
+\begin{itemize}
+    \item eine Exception im \texttt{try}-Block aufgetreten ist oder nicht.
+    \item eine aufgetretene Exception von einem \texttt{catch}-Block abgefangen wurde oder nicht.
+    \item ein \texttt{catch}-Block oder der \texttt{try}-Block durch eine \texttt{return}-Anweisung verlassen wird.
+\end{itemize}
+Der \texttt{finally}-Block wird typischerweise für Aufräumarbeiten verwendet, wie z.B. das Schließen von Dateien, Netzwerkverbindungen oder Datenbankverbindungen, um sicherzustellen, dass Ressourcen freigegeben werden, egal was passiert.
+
+\begin{lstlisting}[language=Java, caption={Beispiel für einen finally-Block}, label=lst:finallyblock_beispiel]
+java.io.FileReader reader = null;
+try {
+    reader = new java.io.FileReader("meineDatei.txt");
+    // ... Code zum Lesen der Datei ...
+    // Kann eine IOException auslösen
+} catch (java.io.IOException e) {
+    System.err.println("Fehler beim Lesen der Datei: " + e.getMessage());
+} finally {
+    if (reader != null) {
+        try {
+            reader.close(); // Wichtig: Ressourcen freigeben!
+        } catch (java.io.IOException e) {
+            System.err.println("Fehler beim Schliessen des Readers: " + e.getMessage());
+        }
+    }
+    System.out.println("Finally-Block wurde ausgeführt.");
+}
+\end{lstlisting}
+
+\section{Unbehandelte Exceptions}
+
+Exceptions, welche nicht explizit durch einen \texttt{catch}-Block in der aktuellen Methode behandelt werden, werden automatisch an die aufrufende Methode weitergegeben (propagiert). Dieser Vorgang setzt sich die Aufrufkette (\gls{callstack}) hinauf fort.
+
+Wenn eine Exception bis zur \texttt{main}-Methode (dem Einstiegspunkt des Programms) propagiert und auch dort nicht behandelt wird, führt dies zum Abbruch des gesamten Programms. Dabei wird üblicherweise der \gls{stacktrace} der Exception auf der Konsole ausgegeben, um die Fehlerquelle zu identifizieren.

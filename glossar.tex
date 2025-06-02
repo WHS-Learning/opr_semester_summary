@@ -1,3 +1,12 @@
+\newglossaryentry{vollstandigQualifiziert}{
+  name={Vollständig Qualifiziert},
+  description={Pakete und Klassen, welche über ihren vollen Namen angesprochen werden, nennt man 
+    \textit{vollständig Qualifiziert}. So wird also anstelle von \lstinline{Date} 
+    \lstinline{java.util.Date} verwendet. Klassen müssen vollständig Qualifiziert werden,
+    wenn mehrere Klassen gleich heißen. Beispielsweise \lstinline{java.util.Date} und 
+    \lstinline{java.sql.Date}}
+}
+
 \newglossaryentry{FiFo}{
   name={FIFO (First-In, First-Out)},
   description={Das FIFO-Prinzip (engl. First-In, First-Out) besagt, dass das Element, das zuerst zu einer Struktur hinzugefügt wurde, auch als erstes wieder entnommen wird. Man kann es sich wie eine Warteschlange vorstellen: Wer zuerst kommt, mahlt zuerst}
@@ -18,11 +27,12 @@
   description={Eine Deque (ausgesprochen \textit{Deck}, kurz für Double-Ended Queue) ist eine Datenstruktur, die das Einfügen und Entfernen von Elementen an beiden Enden (Anfang und Ende) effizient erlaubt. Sie kann somit sowohl als Warteschlange (Queue, FIFO) als auch als Stapelspeicher (Stack, LIFO) verwendet werden}
 }
 
-\newglossaryentry{vollstandigQualifiziert}{
-  name={Vollständig Qualifiziert},
-  description={Pakete und Klassen, welche über ihren vollen Namen angesprochen werden, nennt man 
-    \textit{vollständig Qualifiziert}. So wird also anstelle von \lstinline{Date} 
-    \lstinline{java.util.Date} verwendet. Klassen müssen vollständig Qualifiziert werden,
-    wenn mehrere Klassen gleich heißen. Beispielsweise \lstinline{java.util.Date} und 
-    \lstinline{java.sql.Date}}
+\newglossaryentry{stacktrace}{
+  name={Stack Trace (Aufrufliste / Stapelrückverfolgung)},
+  description={Ein Stack Trace ist eine detaillierte Liste der Methodenaufrufe, die zu einem bestimmten Zeitpunkt im Programm aktiv waren – typischerweise genau in dem Moment, als eine Exception ausgelöst und nicht sofort behandelt wurde. Er zeigt die Kette der Methodenaufrufe in umgekehrter Reihenfolge an: von der Methode, in der die Exception direkt aufgetreten ist, zurück bis zur Methode, die den Prozess gestartet hat (oft die \lstinline{main}-Methode). Jeder Eintrag im Stack Trace repräsentiert einen Methodenaufruf und enthält üblicherweise den Klassennamen, den Methodennamen und die Zeilennummer im Quellcode, an der der Aufruf zur nächsten Methode erfolgte oder die Exception auftrat. Der Stack Trace ist ein unverzichtbares Werkzeug für das Debugging, da er Entwicklern hilft, den genauen Pfad und Kontext zu verstehen, der zu einem Fehler geführt hat}
+}
+
+\newglossaryentry{callstack}{
+  name={Call Stack (Aufrufstapel / Aufrufkamin)},
+  description={Der Call Stack ist eine dynamische Datenstruktur, die vom Laufzeitsystem eines Programms verwendet wird, um den Überblick über die aktiven Methodenaufrufe zu behalten. Man kann ihn sich als einen Stapel von Blöcken vorstellen, bei dem jeder Block (ein sogenannter \textit{Stack Frame}) Informationen zu einem einzelnen Methodenaufruf enthält. Wenn eine Methode aufgerufen wird, wird ein neuer Frame für diese Methode oben auf den Stack gelegt. Dieser Frame beinhaltet unter anderem die lokalen Variablen der Methode und die Rücksprungadresse (die Stelle im Code, zu der nach Beendigung der Methode zurückgekehrt werden soll). Wenn eine Methode ihre Ausführung beendet, wird ihr Frame vom obersten Ende des Stacks entfernt, und die Kontrolle kehrt zur aufrufenden Methode zurück (anhand der Rücksprungadresse). Tritt eine Exception auf und wird nicht behandelt, wird der Call Stack verwendet, um den Stack Trace zu generieren}
 }
