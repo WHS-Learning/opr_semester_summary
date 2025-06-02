@@ -107,20 +107,17 @@ Die nachfolgende Abbildung~\ref{fig:linkedlistaccess} verdeutlicht diesen Prozes
     arrow/.style={-Latex, thick},
     traversalarrow/.style={Latex-, thick, red, dashed, bend left=20, shorten >=2pt, shorten <=2pt}
 ]
-% Nodes
 \node[listnode] (n0) {Index 0 \\ Wert A};
 \node[listnode, right=of n0] (n1) {Index 1 \\ Wert B};
 \node[listnode, right=of n1] (n2) {Index 2 \\ Wert C};
 \node[listnode, right=of n2] (n3) {Index 3 \\ Wert D};
 \node[right=0.5cm of n3] (dots) {\ldots};
 
-% Links between nodes (next pointers)
 \draw[arrow] (n0.east) -- (n1.west);
 \draw[arrow] (n1.east) -- (n2.west);
 \draw[arrow] (n2.east) -- (n3.west);
 \draw[arrow] (n3.east) -- (dots.west);
 
-% Traversal to get element at index 2 (Wert C)
 \node[above=0.3cm of n0, red] (start) {Start};
 \draw[traversalarrow] (n0.north) to (start.south);
 \path (n0.north east) edge[traversalarrow, bend left=30] node[above, midway, sloped, font=\tiny, red] {1. Sprung} (n1.north west);
@@ -268,6 +265,9 @@ for (Map.Entry<String, Integer> entry : ageMap.entrySet()) {
     System.out.println(entry.getKey() + ": " + entry.getValue()); // Reihenfolge nicht garantiert
 }
 \end{lstlisting}
+
+\subsection{Prüfungshinweis}
+Dass die HashMap (und HashCode) Effizient funktioniert, muss die \lstinline{hashcode} Methode (und damit die \lstinline{equals} Methode) sinnvoll überschrieben werden. 
 
 \section{TreeMap}
 Eine \texttt{TreeMap} implementiert das \texttt{SortedMap}-Interface (welches \texttt{Map} erweitert) und speichert Schlüssel-Wert-Paare in sortierter Reihenfolge der Schlüssel. Die Sortierung der Schlüssel erfolgt entweder natürlich (wenn die Schlüssel \texttt{Comparable} implementieren) oder durch einen beim Erstellen der \texttt{TreeMap} übergebenen \texttt{Comparator}. \texttt{TreeMap} erlaubt keine \texttt{null}-Schlüssel (im Gegensatz zu \texttt{HashMap}), aber \texttt{null}-Werte sind erlaubt. Die Implementierung basiert typischerweise auf einem Rot-Schwarz-Baum.

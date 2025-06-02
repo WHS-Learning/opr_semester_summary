@@ -1,0 +1,96 @@
+\chapter{Hüllenklassen}
+
+\section{Definition und Notwendigkeit}
+Hüllenklassen umhüllen primitive Datentypen. Dies ist beispielsweise für die Collection Klassen notwendig, da diese nur Objekte als Parameter aufnehmen. Hüllklassen haben keine andere Aufgabe als einen primitiven Datentyp zu umhüllen.
+
+\section{Übersicht der Hüllenklassen}
+Die folgende Tabelle zeigt die primitiven Datentypen und ihre entsprechenden Hüllenklassen:
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Primitiver Datentyp} & \textbf{Hüllklasse} \\
+\hline\hline
+boolean             & Boolean     \\
+\hline
+byte                & Byte        \\
+\hline
+char                & Character   \\
+\hline
+short               & Short       \\
+\hline
+int                 & Integer     \\
+\hline
+long                & Long        \\
+\hline
+float               & Float       \\
+\hline
+double              & Double      \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Erstellung von Hüllenklassen}
+\label{sec:erstellung_huellenklassen}
+Hüllenklassen werden wie jedes andere Objekt mittels des \texttt{new}-Operators instanziiert:
+
+\begin{lstlisting}[caption={Erstellung von Hüllenklassen-Objekten}]
+Integer i = new Integer(10);
+Boolean b = new Boolean(true);
+\end{lstlisting}
+
+\section{Verwendung vor JDK 1.5}
+\label{sec:verwendung_vor_jdk1_5}
+Bis zum Java Development Kit (JDK) Version 1.4 war eine direkte Kombination von Hüllenklassen-Objekten mit primitiven Datentypen in arithmetischen oder logischen Ausdrücken nicht möglich.
+
+\subsection{Ungültige Ausdrücke (Theoretisch)}
+\label{ssec:ungueltige_ausdruecke_vor_jdk1_5}
+Die folgenden Operationen wären ohne explizites Auspacken ungültig gewesen:
+\begin{lstlisting}[caption={Theoretisch ungültige Ausdrücke vor JDK 1.5}]
+Integer iObj = new Integer(10);
+Boolean bObj = new Boolean(true);
+
+// iObj + 20; // Compilerfehler: Operator + nicht anwendbar auf Integer, int
+// bObj && true; // Compilerfehler: Operator && nicht anwendbar auf Boolean, boolean
+\end{lstlisting}
+
+\subsection{Explizites Entpacken (Unboxing)}
+\label{ssec:explizites_entpacken}
+Um den Wert eines Hüllenklassen-Objekts verwenden zu können, musste dieser explizit mittels einer entsprechenden Methode (z.B. \texttt{intValue()}) entpackt werden:
+\begin{lstlisting}[caption={Explizites Entpacken des Wertes}]
+Integer iObj = new Integer(10);
+int j = iObj.intValue(); // j erhält den Wert 10
+
+Boolean bObj = new Boolean(true);
+boolean bVal = bObj.booleanValue(); // bVal erhält den Wert true
+\end{lstlisting}
+
+\section{Autoboxing und Autounboxing (seit JDK 1.5)}
+\label{sec:autoboxing_autounboxing}
+Seit dem JDK 1.5 führt der Java-Compiler das notwendige Umwandeln zwischen primitiven Typen und ihren Hüllenklassen automatisch durch. Dies wird als Autoboxing (primitiv zu Hüllklasse) und Autounboxing (Hüllklasse zu primitiv) bezeichnet.
+Der Compiler fügt die notwendigen Aufrufe (z.B. \texttt{intValue()}) automatisch ein, wodurch der Code lesbarer wird:
+
+\begin{lstlisting}[caption={Automatische Umwandlung durch Autoboxing/Autounboxing}]
+Integer i = new Integer(10); // Explizite Erstellung (Boxing auch möglich: Integer i = 10;)
+Boolean b = new Boolean(true); // Explizite Erstellung (Boxing auch möglich: Boolean b = true;)
+
+int k = i + 20; // Autounboxing: i wird zu int entpackt
+if (b && true) { // Autounboxing: b wird zu boolean entpackt
+// ...
+}
+\end{lstlisting}
+
+\section{Umwandlung von Strings in Hüllenklassenwerte}
+\label{sec:umwandlung_strings}
+Hüllenklassen bieten statische Methoden (z.B. \texttt{parseInt()}), um Strings, die Zahlen oder Wahrheitswerte repräsentieren, in den entsprechenden primitiven Datentyp oder direkt in ein Hüllenklassen-Objekt umzuwandeln.
+
+\begin{lstlisting}[caption={Parsen von Strings zu primitiven Typen/Hüllenklassen}]
+int i = Integer.parseInt("1337");
+double d = Double.parseDouble("-1.25E-13");
+boolean b = Boolean.parseBoolean("true");
+
+// Erzeugt direkt Hüllenklassen-Objekte (oft weniger gebräuchlich als das Parsen zu primitiven Typen)
+// Integer iObj = Integer.valueOf("1337");
+// Double dObj = Double.valueOf("-1.25E-13");
+// Boolean bObj = Boolean.valueOf("true");
+\end{lstlisting}
