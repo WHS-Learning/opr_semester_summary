@@ -7,7 +7,15 @@
 \usepackage{config/code}
 \usepackage{glossaries}
 \usepackage{biblatex}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, chains, decorations.pathmorphing, patterns}
 \addbibresource{references.bib}
+\loadglsentries{glossar.tex}
+
+\makeglossaries
 
 \begin{document}
 
@@ -34,7 +42,7 @@
 	\include{chapters/object_klasse}
 	\include{chapters/collection_klassen}
 
-	\printglossaries
+	\printglossary[title={Glossar}, toctitle={Glossar}]
 	
 	\pagestyle{empty}
 	\pagenumbering{roman}
