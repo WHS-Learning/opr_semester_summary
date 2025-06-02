@@ -1,0 +1,122 @@
+\chapter{Pakete in Java}
+\label{chap:pakete}
+
+\textit{Pakete schaffen Ordnung.} Sie bilden eine übersichtliche, hierarchische Struktur innerhalb von Java-Projekten.
+Im Prinzip sind Pakete Ordnerstrukturen, die Klassen und weitere (Unter-)Pakete enthalten können.
+Die Adressierung eines Paketes erfolgt durch seinen vollqualifizierten Paketpfad, der die Hierarchie widerspiegelt:
+$p_1.p_2.\dots.p_n$. Dabei ist $p_n$ ein Paket innerhalb von $p_{n-1}$, welches wiederum in $p_{n-2}$ liegt, und so weiter.
+
+Klassen werden analog dazu über ihren vollqualifizierten Namen angesprochen: $p_1.p_2.\dots.p_n.K$, wobei $K$ der Name der Klasse ist.
+
+\paragraph{Beispiele für Paket- und Klassennamen:}
+\begin{lstlisting}[language=Java, caption={Beispiele für Paket- und Klassenspezifikationen}, label=lst:paketbeispiele]
+// Paket "regex", enthalten im Paket "util", das im Paket "java" liegt:
+java.util.regex
+
+// Klasse "StringTokenizer", enthalten im Paket "util", das im Paket "java" liegt:
+java.util.StringTokenizer
+\end{lstlisting}
+
+Eine Klasse wird einem spezifischen Paket zugeordnet, indem die \texttt{package}-Anweisung als erste Zeile in der Quelldatei deklariert wird:
+\begin{lstlisting}[language=Java, caption={Deklaration der Paketzugehörigkeit}]
+package java.util; // Beispielhafter Paketpfad
+
+public class Main {
+    // ...
+}
+\end{lstlisting}
+Diese Angabe ist für jede Java-Datei, die zu einem Paket gehört, obligatorisch. Vor der \texttt{package}-Anweisung dürfen lediglich Kommentare stehen
+- keine anderen Klassendefinitionen, Variablen oder Importanweisungen.
+
+\section{Importieren von Klassen und Paketen}
+\label{sec:importieren}
+
+Um Klassen aus anderen Paketen innerhalb der eigenen Klasse nutzen zu können, müssen diese \textit{importiert} werden.
+Die \texttt{import}-Anweisungen stehen dabei stets am Anfang der Datei, nach der optionalen \texttt{package}-Deklaration und 
+\textit{vor} dem Klassenkopf (der Klassendefinition).
+
+In modernen Entwicklungsumgebungen (IDEs) werden \texttt{import}-Anweisungen häufig automatisch hinzugefügt oder vorgeschlagen. 
+Dennoch kann es in bestimmten Szenarien notwendig sein, diese manuell anzupassen oder zu ergänzen.
+
+\subsection{Importieren aller Klassen eines Pakets (Wildcard-Import)}
+\label{ssec:wildcard_import}
+
+Um alle öffentlichen Klassen eines bestimmten Pakets verfügbar zu machen, kann ein sogenannter Wildcard-Import verwendet werden. 
+Dieser wird durch das Sternchen (\texttt{*}) symbolisiert. Beispielsweise importiert die Anweisung
+\begin{lstlisting}[language=Java, caption={Wildcard-Import des java.util Pakets}]
+import java.util.*;
+\end{lstlisting}
+alle öffentlichen Klassen aus dem Paket \texttt{java.util}. Die importierten Klassen können daraufhin so verwendet werden, 
+als wären sie im aktuellen Paket definiert worden.
+
+\paragraph{Vorsicht bei Namenskonflikten:}
+Wenn zwei oder mehrere Klassen mit identischem Namen aus unterschiedlichen Paketen importiert werden 
+(oder eine importierte Klasse denselben Namen wie eine Klasse im aktuellen Paket hat), entsteht ein Namenskonflikt. 
+In solchen Fällen müssen die betroffenen Klassen \gls{vollstaendig Qualifiziert} verwendet werden, um Eindeutigkeit zu gewährleisten.
+Beispiel:
+\begin{lstlisting}[language=Java, caption={Umgang mit Namenskonflikten}]
+import java.util.Date;
+import java.sql.Date;
+
+public class DateTest {
+    java.util.Date utilDate; // Vollständig qualifiziert
+    java.sql.Date sqlDate;   // Vollständig qualifiziert
+
+    public void example() {
+        utilDate = new java.util.Date(); // Eindeutige Zuweisung
+        // Date ambiguDate; // Fehler: Mehrdeutigkeit ohne Qualifizierung
+    }
+}
+\end{lstlisting}
+
+\section{Das Paket \texttt{java.lang}}
+\label{sec:java_lang}
+
+Das Paket \texttt{java.lang} nimmt eine Sonderstellung ein. Es enthält fundamentale Klassen, die für die grundlegende 
+Funktionalität der Java-Sprache unerlässlich sind. Dazu gehören beispielsweise:
+\begin{itemize}
+    \item \texttt{Object}: Die Wurzelklasse aller Java-Klassen.
+    \item \texttt{String}: Für die Verarbeitung von Zeichenketten.
+    \item \texttt{System}: Bietet Zugriff auf systemabhängige Ressourcen und Funktionen.
+    \item Wrapper-Klassen für primitive Datentypen (z.B. \texttt{Integer}, \texttt{Boolean}).
+    \item \texttt{Math}: Stellt mathematische Funktionen bereit.
+\end{itemize}
+Klassen aus dem \texttt{java.lang}-Paket sind \textbf{immer automatisch verfügbar} und müssen nicht explizit importiert werden.
+
+\subsection{Statische Importanweisungen}
+\label{ssec:statische_importe}
+
+Neben dem Import von Klassen ist es auch möglich, statische Methoden und Variablen direkt zu importieren. 
+Dies geschieht mithilfe der \texttt{import static}-Anweisung.
+Durch einen statischen Import können statische Mitglieder einer Klasse so aufgerufen werden, als wären sie 
+in der aktuellen Klasse definiert, ohne den Klassennamen voranstellen zu müssen.
+
+\paragraph{Beispiel für statischen Import:}
+Die Anweisung
+\begin{lstlisting}[language=Java, caption={Statischer Import der max-Methode}]
+import static java.lang.Math.max;
+\end{lstlisting}
+importiert die statische Methode \texttt{max} aus der Klasse \texttt{Math} (welche sich im Paket \texttt{java.lang} befindet).
+Anschließend kann die Methode direkt verwendet werden:
+\begin{lstlisting}[language=Java, caption={Verwendung nach statischem Import}]
+public class MathExample {
+    public int biggerNumber(int a, int b) {
+        return max(a, b); // Aufruf ohne "Math." Präfix
+    }
+}
+\end{lstlisting}
+
+Es ist auch möglich, alle statischen Mitglieder einer Klasse zu importieren:
+\begin{lstlisting}[language=Java, caption={Statischer Import aller Mitglieder von Math}]
+import static java.lang.Math.*;
+
+public class MathExampleAll {
+    public double circleSurfaceArea(double radius) {
+        return PI * pow(radius, 2); // PI und pow direkt verfügbar
+    }
+}
+\end{lstlisting}
+
+\textbf{Wichtig:} Nicht-statische Variablen oder Methoden können nicht über \texttt{import static} importiert werden. 
+Diese Art des Imports ist ausschließlich statischen Mitgliedern vorbehalten. Instanzvariablen (nicht statische Variablen) können
+gar nicht importiert werden.

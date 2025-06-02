@@ -1,0 +1,46 @@
+\documentclass[11pt, oneside, ngerman]{report}
+
+\usepackage{config/style}
+\usepackage{config/code}
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{glossaries}
+\usepackage[T1]{fontenc}
+\addbibresource{references.bib}
+
+\begin{document}
+
+	\include{config/globals}
+	\include{titlepage}
+
+	\clearpage
+
+	\thispagestyle{empty}
+	\pagenumbering{gobble}
+
+	\include{copyright}
+	\include{abstract}
+
+	\tableofcontents
+
+	\clearpage
+
+	\pagenumbering{arabic}
+
+	\include{chapters/pakete}
+	\include{chapters/klassenhierarchie}
+
+	\printglossaries
+	
+	\pagestyle{empty}
+	\pagenumbering{roman}
+	\setcounter{page}{1}
+
+	\part{Extra}
+	\phantomsection
+	\addcontentsline{toc}{chapter}{Bibliography}
+	\printbibliography
+
+	\include{appendices}
+
+\end{document}
