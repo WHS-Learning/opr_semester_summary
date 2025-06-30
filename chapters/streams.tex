@@ -1,0 +1,100 @@
+\chapter{Streams}
+
+Ein Stream ist eine Folge von Elementen, auf die sequentielle und parallele Operationen angewendet werden können.
+
+Streams unterstützen eine Vielzahl an Operationen wie Filtern, Transformieren, Aggregieren und vieles mehr. Zudem lassen sich Streams parallel verarbeiten, wodurch die Laufzeit im Vergleich zu normalen Schleifen auf Mehrkern-CPUs deutlich schneller ist.
+
+\section{Beispiel}
+
+\begin{lstlisting}[language=Java, caption={Beispiel für Streams}]
+Stream.of("08/15", "4771", "501", "s04", "1250", "333", "475")
+    .filter(s -> s.matches("[0-9]+")) // nur Strings welche ausschließlich Ziffern enthalten
+    .map(s -> Integer.parseInt(s)) // Strings als Integer parsen
+    .filter(n -> n >= 400) // nur Zahlen größer gleich 400
+    .sorted() // Zahlen sortieren
+    .forEach(System.out::println); // Zahlen ausgeben
+\end{lstlisting}
+
+Die Ausgabe des Streams ist dann `475, 501, 1250, 4771`.
+
+\section{Arten von Streams}
+
+Es gibt vier verschiedene Arten von Streams:
+\begin{itemize}
+    \item \texttt{Stream<T>}
+    \item \texttt{IntStream}
+    \item \texttt{DoubleStream}
+    \item \texttt{LongStream}
+\end{itemize}
+
+Der Stream \lstinline{Stream<Integer>} ist \textbf{nicht} äquivalent zu dem \lstinline{IntStream}. Der \lstinline{IntStream} besitzt einige Methoden wie beispielsweise \lstinline{sum}, welche der \lstinline{Stream<Integer>} nicht besitzen kann.
+
+\subsection{IntStream Beispiel}
+
+\begin{lstlisting}[language=Java, caption={Beispiel eines IntStreams}]
+IntStream.rangeClosed(111, 999)
+    .filter(n -> n % (n / 100 + n / 10 % 10 + n % 10) == 0)
+    .forEach(System.out::println);
+\end{lstlisting}
+
+Hier wird ein \lstinline{IntStream} mit dem geschlossenen Intervall \((111, 999)\) erstellt, bei welchem dann alle Zahlen gefiltert werden, die durch die Summe ihrer Ziffern teilbar sind. Diese werden anschließend in der Konsole ausgegeben.
+
+\section{Hinweis}
+
+Ein Stream ist \textbf{keine} Datenstruktur. Sie verwalten keine Daten. Wenn ein Stream basierend auf einer Collection erstellt wird und diese Collection anschließend bearbeitet wird, dann verändert sich der Stream automatisch mit.
+
+\begin{lstlisting}[language=Java, caption={Stream über Collection}]
+ArrayList<Integer> list = new ArrayList<>();
+list.add(10);
+list.add(20);
+list.add(30);
+Stream s = list.stream();
+list.remove(0);
+s.forEach(System.out::println);
+\end{lstlisting}
+Es wird `20, 30` in der Konsole ausgegeben, da der Stream die Änderungen in der zugrunde liegenden Collection widerspiegelt.
+
+\section{Stream erzeugen (Häufige Prüfungsaufgabe)}
+
+Ein Stream kann über mehrere Wege erzeugt werden:
+
+\begin{itemize}
+    \item Über die statische Methode in der Schnittstelle \lstinline{Stream<T>}:
+    \lstinline{Stream<T> of(T... values)}
+    \item Über die Instanzmethode der Schnittstelle \lstinline{Collection<E>}:
+    \lstinline{Stream<E> stream()} \(\rightarrow\) \lstinline{ArrayList<String> list.stream()}
+    \item Über die statische Methode in der Klasse \lstinline{Arrays}:
+    \lstinlineArrays.stream(new String[])
+    \item Über die Instanzmethode der Klasse \lstinline{BufferedReader}:
+    \lstinline{BufferedReader br.lines()}
+\end{itemize}
+
+\subsection{Iterate}
+
+Es kann eine Funktion verwendet werden, um einen unendlichen Stream zu erstellen:
+
+\begin{lstlisting}[language=Java, caption={Unendlicher Stream mit Iterate}]
+Stream<Integer> s = Stream.iterate(2, n -> n + 2).takeWhile(n -> n > 0);
+\end{lstlisting}
+
+Somit wurde ein Stream erstellt, welcher alle positiven geraden Zahlen beinhaltet.
+Das \lstinline{takeWhile(n -> n > 0)} sorgt dafür, dass nur positive Zahlen ausgegeben werden und der Stream terminiert, sobald \texttt{n} durch einen Integer-Overflow negativ wird.
+
+\subsection{Generate}
+
+Ein Stream kann mit einer \lstinline{generate}-Methode gekoppelt werden, welche aufgerufen wird, um ein neues Element anzufragen:
+
+\begin{lstlisting}[language=Java, caption={Unendlicher Stream mit Generate}]
+// Beispiel für eine Methode in einer Klasse, die ein Integer zurückgibt
+private int n = 0; // Das Feld muss im Kontext der Klasse definiert sein
+
+public Integer nextInt() {
+    return n++; // n zurückgeben und danach erhöhen
+}
+
+// Aufruf im Kontext der Klasse (z.B. in einer anderen Methode)
+Stream<Integer> s = Stream.generate(this::nextInt).takeWhile(n -> n > 0);
+\end{lstlisting}
+
+Es wird ein Stream erzeugt, welcher über alle positiven \texttt{int}-Werte läuft.
+Das \lstinline{takeWhile(n -> n > 0)} sorgt dafür, dass nur positive Zahlen im Stream landen und der Stream bei einem möglichen Integer-Overflow terminiert.

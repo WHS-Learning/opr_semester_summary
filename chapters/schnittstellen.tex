@@ -1,0 +1,60 @@
+\chapter{Schnittstellen (Prüfungsrelevant)}
+
+Schnittstellen geben ein Versprechen, dass Klassen bestimmte Fähigkeiten besitzen, ohne vorzugeben, wie sich eine Klasse zu verhalten hat. Sie definieren, welche Methoden eine Klasse implementieren muss.
+
+\begin{lstlisting}[language=Java, caption={Beispiel einer Schnittstelle}]
+
+public interface Salable {
+    boolean matches(String searchPattern);
+    String asText();
+    float getPrice();
+}
+\end{lstlisting}
+
+\section{Eigenschaften und Hinweise}
+\begin{itemize}
+    \item Schnittstellen können \textbf{nicht} \lstinline{protected} oder \lstinline{private} sein.
+    \item Es gibt keine oberste Schnittstelle, analog zur Klasse \lstinline{Object}.
+    \item In Schnittstellen können \lstinline{public static final}-Variablen (Konstanten) deklariert werden.
+    \item Schnittstellen können \lstinline{static} Methoden besitzen, die keinen Bezug zu Objekten haben.
+    \item Wenn eine Klasse eine Schnittstelle implementiert (\lstinline{implements}), muss sie entweder \texttt{abstract} sein oder alle nicht-statischen Methoden der Schnittstelle definieren.
+\end{itemize}
+
+\section{Schnittstellen als Typ}
+Schnittstellen können als Typdeklaration und als Ergebnistyp von Methoden verwendet werden. Dies ermöglicht die Angabe eines Objekts jeder Klasse, die die Schnittstelle implementiert.
+\begin{lstlisting}[language=Java, caption={Schnittstelle als Typ}]
+Salable item;
+
+public void add(Salable item) {
+    ...
+}
+\end{lstlisting}
+
+\section{Funktionale Schnittstellen}
+Eine Schnittstelle ist funktional, wenn sie genau eine nicht-statische Methode definiert. Sie kann optional mit der Annotation \texttt{@FunctionalInterface} versehen werden.
+
+\section{Lambda-Ausdrücke (sehr sehr Prüfungsrelevant)}
+Lambda-Ausdrücke sind namenlose Funktionen, die über die Syntax \texttt{(lambdaParameter) -> { Anweisung }} definiert werden.
+
+\subsection{Vereinfachung von Lambda-Ausdrücken}
+Lambda-Ausdrücke können vereinfacht werden:
+\begin{itemize}
+    \item Der Typ der Parameter kann weggelassen werden, da er aus dem Kontext hervorgeht.
+    \item Geschweifte Klammern können weggelassen werden, wenn der Ausdruck nur eine Anweisung enthält.
+    \item Runde Klammern können weggelassen werden, wenn der Ausdruck nur einen Parameter hat.
+\end{itemize}
+\begin{lstlisting}[language=Java, caption={Vereinfachung von Lambda ausdrücken}]
+(String s) -> { return s.length() >= 4; } // Ursprünglich
+
+(s) -> { return s.length() >= 4; }       // Parameter Typen weglassen
+(s) -> s.length() >= 4;                  // Geschweifte Klammern weglassen
+s -> s.length() >= 4;                    // Runde Klammern weglassen
+\end{lstlisting}
+Wenn in einem Lambda-Ausdruck nur eine Methode aufgerufen wird, kann eine Methodenreferenz verwendet werden:
+\begin{lstlisting}[language=Java, caption={Methodenreferenz}]
+s -> s.isEmpty();       // Lambda Ausdruck
+String::isEmpty;        // Methodenreferenz
+\end{lstlisting}
+
+\subsection{Hinweise zu Lambda-Ausdrücken}
+Lambda-Ausdrücke dürfen lokale Variablen nicht verändern, können aber deren Werte auslesen. Objekte können über Methodenaufrufe bearbeitet werden.

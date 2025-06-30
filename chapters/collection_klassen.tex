@@ -1,4 +1,4 @@
-\chapter{Collection-Klassen}
+\chapter{Collection-Klassen (Sehr Prüfungsrelevant)}
 \label{chap:CollectionKlassen}
 
 Arrays haben eine feste Größe, die sich während der Laufzeit nicht ändern kann. Dies stellt häufig eine Einschränkung dar. Sogenannte Collection-Klassen (oder Kollektionen) bieten hier flexiblere Alternativen. Es gibt verschiedene Arten von Collection-Klassen, die sich grob in Listen (\texttt{List}), Mengen (\texttt{Set}) und Abbildungen (\texttt{Map}) einteilen lassen. Jede Art und ihre spezifischen Implementierungen haben eigene Vor- und Nachteile, die sie für unterschiedliche Anwendungsfälle geeignet machen.
@@ -318,5 +318,5 @@ SortedMap<Integer, String> subMap = sortedUserMap.subMap(100, 103); // Einträge
 System.out.println("SubMap: " + subMap);
 \end{lstlisting}
 
-\section{Über Listen Iterieren (Prüfungshinweis)}
-Über Listen sollte \textit{immer} mittels Iterator iteriert werden. Andere lösungen mit einer Zähl Variable und mehteren \lstinline{.get} aufrufen funktionieren zwar, sind aber in der Praxis sehr Ineffizient und führen zu Punktabzug.
+\section{Über Collections Iterieren (Prüfungshinweis)}
+Über Collections sollte \textit{immer} mittels Iterator iteriert werden. Andere lösungen mit einer Zähl Variable und mehreren \lstinline{.get} aufrufen funktionieren zwar, sind aber in der Praxis sehr Ineffizient und führen zu Punktabzug.
