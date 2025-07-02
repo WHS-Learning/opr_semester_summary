@@ -1,0 +1,43 @@
+\chapter{Ein- und Ausgabe}
+
+\section{InputStream}
+
+Der \lstinline{InputStream} ist die Oberklasse und Abstraktion alelr
+byteorientierten Eingabeströme. Im prinzip gibt es nur zwei Methoden zum Lesen
+von Bytes:
+\begin{itemize}
+    \item \lstinline{int read()} liest \textit{ein} Byte
+    \item \lstinline{int read(byte[])} liest mehrere Bytes, Ergebniswert hat eine andere
+          Bedeutung als der von \lstinline{read()}
+\end{itemize}
+
+Der Rückgabewert der \lstinline{read()} Methode gibt den gelesenen Byte zurück.
+Dieser kann einen Wert zwischen 0 und 255 sein. Jedoch kann der Ergebniswert
+auch -1 sein, falls das Byte nicht existiert. Es wird also keine Fehlermeldung
+geworfen, wenn das Ende der Datei erreicht wurde. Wenn bei dem Lesen allerdings
+ein Fehler auftritt, wird eine \lstinline{IOException} geworfen.
+
+\begin{lstlisting}[language=Java, caption={Beispiel für IntStream}]
+IntStream is;
+
+int b = is.read();
+ArrayList<Integer> content = new ArrayList<>();
+
+while (b != -1) {
+    content.add(b);
+}
+\end{lstlisting}
+
+Das einzelne Lesen von Bytes aus einen \lstinline{InputStream} ist sehr
+ineffizient. Dateien können sehr groß werden, schnell auch mehrere Gigabyte
+groß. Dies entspricht millionen von \lstinline{read()} aufrufen und damit
+millionen von \texttt{I/O}-Zugriffen. Aufgrunddessen ist die einfache
+\lstinline{read()} Methode in \lstinline{InputStreams} oft eine schlechte
+lösung. Abhilfe schafft hier die Klasse \lstinline{BufferedInputStream}.
+
+\subsection{BufferedInputStream}
+
+Der BufferedInputStream kapselt einen InputStream und liest intern aus diesen
+Blockweise über die Methode
+\lstinline{read(byte[])}. Hier ist die Methode \lstinline{read()} effizient und
+kann gut genutzt werden.

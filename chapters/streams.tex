@@ -1,8 +1,12 @@
 \chapter{Streams}
 
-Ein Stream ist eine Folge von Elementen, auf die sequentielle und parallele Operationen angewendet werden können.
+Ein Stream ist eine Folge von Elementen, auf die sequentielle und parallele
+Operationen angewendet werden können.
 
-Streams unterstützen eine Vielzahl an Operationen wie Filtern, Transformieren, Aggregieren und vieles mehr. Zudem lassen sich Streams parallel verarbeiten, wodurch die Laufzeit im Vergleich zu normalen Schleifen auf Mehrkern-CPUs deutlich schneller ist.
+Streams unterstützen eine Vielzahl an Operationen wie Filtern, Transformieren,
+Aggregieren und vieles mehr. Zudem lassen sich Streams parallel verarbeiten,
+wodurch die Laufzeit im Vergleich zu normalen Schleifen auf Mehrkern-CPUs
+deutlich schneller ist.
 
 \section{Beispiel}
 
@@ -27,7 +31,10 @@ Es gibt vier verschiedene Arten von Streams:
     \item \texttt{LongStream}
 \end{itemize}
 
-Der Stream \lstinline{Stream<Integer>} ist \textbf{nicht} äquivalent zu dem \lstinline{IntStream}. Der \lstinline{IntStream} besitzt einige Methoden wie beispielsweise \lstinline{sum}, welche der \lstinline{Stream<Integer>} nicht besitzen kann.
+Der Stream \lstinline{Stream<Integer>} ist \textbf{nicht} äquivalent zu dem
+\lstinline{IntStream}. Der \lstinline{IntStream} besitzt einige Methoden wie
+beispielsweise \lstinline{sum}, welche der \lstinline{Stream<Integer>} nicht
+besitzen kann.
 
 \subsection{IntStream Beispiel}
 
@@ -37,11 +44,16 @@ IntStream.rangeClosed(111, 999)
     .forEach(System.out::println);
 \end{lstlisting}
 
-Hier wird ein \lstinline{IntStream} mit dem geschlossenen Intervall \((111, 999)\) erstellt, bei welchem dann alle Zahlen gefiltert werden, die durch die Summe ihrer Ziffern teilbar sind. Diese werden anschließend in der Konsole ausgegeben.
+Hier wird ein \lstinline{IntStream} mit dem geschlossenen Intervall \((111,
+999)\) erstellt, bei welchem dann alle Zahlen gefiltert werden, die durch die
+Summe ihrer Ziffern teilbar sind. Diese werden anschließend in der Konsole
+ausgegeben.
 
 \section{Hinweis}
 
-Ein Stream ist \textbf{keine} Datenstruktur. Sie verwalten keine Daten. Wenn ein Stream basierend auf einer Collection erstellt wird und diese Collection anschließend bearbeitet wird, dann verändert sich der Stream automatisch mit.
+Ein Stream ist \textbf{keine} Datenstruktur. Sie verwalten keine Daten. Wenn
+ein Stream basierend auf einer Collection erstellt wird und diese Collection
+anschließend bearbeitet wird, dann verändert sich der Stream automatisch mit.
 
 \begin{lstlisting}[language=Java, caption={Stream über Collection}]
 ArrayList<Integer> list = new ArrayList<>();
@@ -52,7 +64,8 @@ Stream s = list.stream();
 list.remove(0);
 s.forEach(System.out::println);
 \end{lstlisting}
-Es wird `20, 30` in der Konsole ausgegeben, da der Stream die Änderungen in der zugrunde liegenden Collection widerspiegelt.
+Es wird `20, 30` in der Konsole ausgegeben, da der Stream die Änderungen in der
+zugrunde liegenden Collection widerspiegelt.
 
 \section{Stream erzeugen (Häufige Prüfungsaufgabe)}
 
@@ -60,29 +73,47 @@ Ein Stream kann über mehrere Wege erzeugt werden:
 
 \begin{itemize}
     \item Über die statische Methode in der Schnittstelle \lstinline{Stream<T>}:
-    \lstinline{Stream<T> of(T... values)}
+          \lstinline{Stream<T> of(T... values)}
     \item Über die Instanzmethode der Schnittstelle \lstinline{Collection<E>}:
-    \lstinline{Stream<E> stream()} \(\rightarrow\) \lstinline{ArrayList<String> list.stream()}
+          \lstinline{Stream<E> stream()} \(\rightarrow\) \lstinline{ArrayList<String> list.stream()}
     \item Über die statische Methode in der Klasse \lstinline{Arrays}:
-    \lstinlineArrays.stream(new String[])
+          \lstinline{Arrays.stream(new String[])}
     \item Über die Instanzmethode der Klasse \lstinline{BufferedReader}:
-    \lstinline{BufferedReader br.lines()}
+          \lstinline{BufferedReader br.lines()}
 \end{itemize}
 
 \subsection{Iterate}
+\label{iterate}
 
-Es kann eine Funktion verwendet werden, um einen unendlichen Stream zu erstellen:
+Es kann eine Funktion verwendet werden, um einen unendlichen Stream zu
+erstellen:
 
 \begin{lstlisting}[language=Java, caption={Unendlicher Stream mit Iterate}]
 Stream<Integer> s = Stream.iterate(2, n -> n + 2).takeWhile(n -> n > 0);
 \end{lstlisting}
 
-Somit wurde ein Stream erstellt, welcher alle positiven geraden Zahlen beinhaltet.
-Das \lstinline{takeWhile(n -> n > 0)} sorgt dafür, dass nur positive Zahlen ausgegeben werden und der Stream terminiert, sobald \texttt{n} durch einen Integer-Overflow negativ wird.
+Somit wurde ein Stream erstellt, welcher alle positiven geraden Zahlen
+beinhaltet. Das
+\lstinline{takeWhile(n -> n > 0)} sorgt dafür, dass nur positive Zahlen ausgegeben werden und der Stream terminiert, sobald \texttt{n}
+durch einen Integer-Overflow negativ wird.
+
+\subsubsection{im IntStream}
+
+\begin{lstlisting}[language=Java, caption={Unendlicher Stream mit Iterate im IntStream}]
+IntStream is = IntStream.iterate(2, n -> n + 2).takeWhile(n -> n > 0);
+\end{lstlisting}
+
+\subsection{im LongStream}
+
+\begin{lstlisting}[language=Java, caption={Unendlicher Stream mit Iterate im LongStream}]
+LongStream ls = LongStream.iterate(2, n -> n + 2).takeWhile(n -> n > 0);
+\end{lstlisting}
 
 \subsection{Generate}
+\label{generate}
 
-Ein Stream kann mit einer \lstinline{generate}-Methode gekoppelt werden, welche aufgerufen wird, um ein neues Element anzufragen:
+Ein Stream kann mit einer \lstinline{generate}-Methode gekoppelt werden, welche
+aufgerufen wird, um ein neues Element anzufragen:
 
 \begin{lstlisting}[language=Java, caption={Unendlicher Stream mit Generate}]
 // Beispiel für eine Methode in einer Klasse, die ein Integer zurückgibt
@@ -93,8 +124,57 @@ public Integer nextInt() {
 }
 
 // Aufruf im Kontext der Klasse (z.B. in einer anderen Methode)
-Stream<Integer> s = Stream.generate(this::nextInt).takeWhile(n -> n > 0);
+Stream<Integer> s = Stream.generate(this::nextInt).takeWhile(n -> n >= 0);
+IntStream is = IntStream.generate(this::nextInt).takeWhile(n -> n >= 0);
+LongStream ls = LongStream.generate(this::nextInt).takeWhile(n -> n >= 0);
 \end{lstlisting}
 
-Es wird ein Stream erzeugt, welcher über alle positiven \texttt{int}-Werte läuft.
-Das \lstinline{takeWhile(n -> n > 0)} sorgt dafür, dass nur positive Zahlen im Stream landen und der Stream bei einem möglichen Integer-Overflow terminiert.
+Es wird ein Stream erzeugt, welcher über alle positiven \texttt{int}-Werte
+läuft. Das \lstinline{takeWhile(n -> n > 0)} sorgt dafür, dass nur positive
+Zahlen im Stream landen und der Stream bei einem möglichen Integer-Overflow
+terminiert.
+
+\subsection{IntStream.range}
+
+Ein \lstinline{IntStream} und \lstinline{LongStream} kann auch über ein
+Intervall erstellt werden. Hier gibt es die statischen Methoden
+\lstinline{range(int startInclusive, int endExclusive)} und
+\lstinline{rangeClosed(int startInclusive, int endInclusive)}. Die erstellen
+ein Intervall von \texttt{start} bis \texttt{end}. Der Unterschied zwischen den
+beiden Methoden ist, dass bei der \lstinline{range} Methode das Ende nicht mit
+eingeschlossen ist und bei der \lstinline{rangeClosed} das ende mit
+eingeschlossen ist.
+
+\section{Operationen auf Streams}
+
+Auf streams können eine vielzahl an Operationen durchgeführt werden. Die
+wichtigsten sind:
+
+\begin{itemize}
+    \item \lstinline{limit(int limit)} Geht mit maximal so vielen Elementen
+          über den Stream. Hat der Stream weniger Elemente als das limit dann
+          hört er auf, bevor das limit erreicht wurde.
+    \item \lstinline{filter(Predicate<? super T> predicate)} Filtert den Stream nach bestimmten
+          kriterien. Beispiel: \lstinline{Stream.filter(i -> i > 3)}
+    \item \lstinline{map(Function<? super T, extends R> mapper)} Mappt die Elemente des Streams.
+          Beispiel: \lstinline{Stream.map(s -> Integer.parseInt(s))}
+    \item \lstinline{mapToInt} Ist äquivalent zu \lstinline{Stream.map(s -> Integer.parseInt(s))},
+          nur dass ein \lstinline{IntStream} und kein \lstinline{Stream<Integer>} zurückgegeben wird.
+          Es gibt äquivalente Methoden \lstinline{mapToLong} und \lstinline{mapToDouble}
+    \item \lstinline{min(Comperator<? super T> comperator)} und \lstinline{max(Comperator<? super T> comperator)}
+          Gibt den Maximalen bzw Minimalen Wert zugrunde des Comperators. Comperator funktioniert
+          wie das \lstinline{compareto}
+    \item \lstinline{findFirst()} Gibt das Erste Element das gefunden aus. Hier wird ein
+          \gls{optional} zurückgegeben.
+    \item \lstinline{findAny()} Gibt irgend ein Element des Streams als \gls{optional} zurück.
+    \item \lstinline{anyMatches(Predicate<? super T> predicate)} Gibt als Boolean aus, ob
+          irgendein Element des Streams eine bedingung erfüllt. Beispiel:
+          \lstinline{Stream.anyMatches(s -> s.length() < 3)}
+    \item \lstinline{allMatches(Predicate<? super T> predicate)} äquivalent zu \lstinline{anyMatches},
+          nur dass geprüft wird, ob Alle elemente des Streams diese bedingung erfüllen.
+    \item \lstinline{noneMatch(Predicate<? super T> predicate)} äquivalent zu \lstinline{anyMatches},
+          nur dass geprüft wird, ob kein Element der Liste diese bedingung erfüllt.
+        \item \lstinline{sorted(<Comparator<? super T> comparator)} Sortiert den Stream entweder
+        aufgrund des compareTo (wenn kein Parameter übergeben wird) oder anhand eines Comperator.
+        Beispiel: \lstinline{Stream.sort((s1, s2) -> s1.toLowerCase().compareTo(s2.toLowerCase))}
+\end{itemize}
