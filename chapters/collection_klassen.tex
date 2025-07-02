@@ -1,19 +1,33 @@
 \chapter{Collection-Klassen (Sehr Prüfungsrelevant)}
 \label{chap:CollectionKlassen}
 
-Arrays haben eine feste Größe, die sich während der Laufzeit nicht ändern kann. Dies stellt häufig eine Einschränkung dar. Sogenannte Collection-Klassen (oder Kollektionen) bieten hier flexiblere Alternativen. Es gibt verschiedene Arten von Collection-Klassen, die sich grob in Listen (\texttt{List}), Mengen (\texttt{Set}) und Abbildungen (\texttt{Map}) einteilen lassen. Jede Art und ihre spezifischen Implementierungen haben eigene Vor- und Nachteile, die sie für unterschiedliche Anwendungsfälle geeignet machen.
+Arrays haben eine feste Größe, die sich während der Laufzeit nicht ändern kann.
+Dies stellt häufig eine Einschränkung dar. Sogenannte Collection-Klassen (oder
+Kollektionen) bieten hier flexiblere Alternativen. Es gibt verschiedene Arten
+von Collection-Klassen, die sich grob in Listen (\texttt{List}), Mengen
+(\texttt{Set}) und Abbildungen (\texttt{Map}) einteilen lassen. Jede Art und
+ihre spezifischen Implementierungen haben eigene Vor- und Nachteile, die sie
+für unterschiedliche Anwendungsfälle geeignet machen.
 
 \section{Arrays}
-Arrays sind streng genommen keine Collection-Klassen im Sinne des Java Collections Frameworks. Dennoch ist es sinnvoll, sie hier zu betrachten, da sie einen grundlegenden Mechanismus zur Gruppierung von Elementen darstellen und als Vergleichsbasis für die eigentlichen Collection-Klassen dienen.
+Arrays sind streng genommen keine Collection-Klassen im Sinne des Java
+Collections Frameworks. Dennoch ist es sinnvoll, sie hier zu betrachten, da sie
+einen grundlegenden Mechanismus zur Gruppierung von Elementen darstellen und
+als Vergleichsbasis für die eigentlichen Collection-Klassen dienen.
 
 \subsection{Anwendungsbereiche}
-Arrays eignen sich, wenn eine feste Anzahl von Elementen desselben Typs geordnet gespeichert werden soll und sich diese Anzahl zur Laufzeit nicht ändert.
+Arrays eignen sich, wenn eine feste Anzahl von Elementen desselben Typs
+geordnet gespeichert werden soll und sich diese Anzahl zur Laufzeit nicht
+ändert.
 
 \subsection{Vorteile}
-Der Zugriff auf Elemente über ihren Index ist bei Arrays sehr schnell und effizient (konstante Zeitkomplexität, $O(1)$).
+Der Zugriff auf Elemente über ihren Index ist bei Arrays sehr schnell und
+effizient (konstante Zeitkomplexität, $O(1)$).
 
 \subsection{Nachteile}
-Die Größe eines Arrays ist nach seiner Initialisierung unveränderlich. Eine nachträgliche Größenänderung erfordert die Erstellung eines neuen Arrays und das Kopieren der Elemente.
+Die Größe eines Arrays ist nach seiner Initialisierung unveränderlich. Eine
+nachträgliche Größenänderung erfordert die Erstellung eines neuen Arrays und
+das Kopieren der Elemente.
 
 \subsection{Beispiel}
 \begin{lstlisting}[caption={Beispiel für die Verwendung eines Arrays in Java}, label=lst:arrayExample]
@@ -32,13 +46,17 @@ System.out.println(numbers[3]); // Wert am Index 3 ausgeben (Ausgabe: 42)
 \subsection{Vorteile}
 \begin{itemize}
     \item Die Größe der Liste kann zur Laufzeit dynamisch wachsen oder schrumpfen.
-    \item Der Zugriff auf Elemente über ihren Index ist in der Regel schnell (amortisiert $O(1)$), ähnlich wie bei Arrays.
+    \item Der Zugriff auf Elemente über ihren Index ist in der Regel schnell (amortisiert
+          $O(1)$), ähnlich wie bei Arrays.
 \end{itemize}
 
 \subsection{Nachteile}
 \begin{itemize}
-    \item Das Einfügen oder Löschen von Elementen am Anfang oder in der Mitte der Liste kann langsam sein ($O(n)$), da nachfolgende Elemente verschoben werden müssen.
-    \item Beim Überschreiten der internen Kapazität muss das zugrundeliegende Array vergrößert und die Elemente kopiert werden. Obwohl das Hinzufügen am Ende amortisiert $O(1)$ ist, kann diese Operation vereinzelt länger dauern.
+    \item Das Einfügen oder Löschen von Elementen am Anfang oder in der Mitte der Liste
+          kann langsam sein ($O(n)$), da nachfolgende Elemente verschoben werden müssen.
+    \item Beim Überschreiten der internen Kapazität muss das zugrundeliegende Array
+          vergrößert und die Elemente kopiert werden. Obwohl das Hinzufügen am Ende
+          amortisiert $O(1)$ ist, kann diese Operation vereinzelt länger dauern.
 \end{itemize}
 
 \subsection{Beispiel}
@@ -56,21 +74,31 @@ list.remove(0); // Element am Index 0 entfernen
 \end{lstlisting}
 
 \section{LinkedList}
-Eine \texttt{LinkedList} speichert ihre Elemente in einer doppelt verketteten Liste. Jeder Knoten enthält das Element selbst sowie Verweise auf das vorherige und das nächste Element in der Sequenz. Sie implementiert ebenfalls das \texttt{List}-Interface sowie das \texttt{Deque}-Interface (Double-Ended Queue), siehe \gls{Deque}.
+Eine \texttt{LinkedList} speichert ihre Elemente in einer doppelt verketteten
+Liste. Jeder Knoten enthält das Element selbst sowie Verweise auf das vorherige
+und das nächste Element in der Sequenz. Sie implementiert ebenfalls das
+\texttt{List}-Interface sowie das \texttt{Deque}-Interface (Double-Ended
+Queue), siehe \gls{Deque}.
 
 \subsection{Anwendungsbereiche}
 \texttt{LinkedList}s eignen sich besonders gut, wenn häufig Elemente am Anfang oder Ende der Liste hinzugefügt oder entfernt werden müssen. Sie sind daher eine gute Wahl für die Implementierung von Stacks (\gls{Stapelspeicher}, \gls{LIFO}) oder Queues (Warteschlangen, \gls{FiFo}).
 
 \subsection{Vorteile}
 \begin{itemize}
-    \item Sehr schnelles Einfügen und Löschen von Elementen am Anfang und Ende der Liste ($O(1)$).
-    \item Dynamische Größenanpassung ohne die Notwendigkeit, große Speicherblöcke am Stück zu reservieren oder umzukopieren.
+    \item Sehr schnelles Einfügen und Löschen von Elementen am Anfang und Ende der Liste
+          ($O(1)$).
+    \item Dynamische Größenanpassung ohne die Notwendigkeit, große Speicherblöcke am
+          Stück zu reservieren oder umzukopieren.
 \end{itemize}
 
 \subsection{Nachteile}
 \begin{itemize}
-    \item Der Zugriff auf ein Element anhand seines Indexes (z.B. mit \texttt{get(index)}) ist langsam ($O(n)$), da die Liste vom Anfang (oder Ende, je nachdem, was näher ist) bis zum gewünschten Element durchlaufen werden muss.
-    \item Benötigt mehr Speicher pro Element als eine \texttt{ArrayList}, da für jeden Knoten zusätzliche Referenzen auf Vorgänger und Nachfolger gespeichert werden müssen.
+    \item Der Zugriff auf ein Element anhand seines Indexes (z.B. mit
+          \texttt{get(index)}) ist langsam ($O(n)$), da die Liste vom Anfang (oder Ende,
+          je nachdem, was näher ist) bis zum gewünschten Element durchlaufen werden muss.
+    \item Benötigt mehr Speicher pro Element als eine \texttt{ArrayList}, da für jeden
+          Knoten zusätzliche Referenzen auf Vorgänger und Nachfolger gespeichert werden
+          müssen.
 \end{itemize}
 
 \subsection{Beispiel}
@@ -94,68 +122,90 @@ System.out.println(((LinkedList<String>) queueList).poll()); // Erstes Element a
 \label{subsec:LinkedListIndexAccess}
 Der Zugriff auf ein Element an einem bestimmten Index (z.B. mittels \texttt{liste.get(index)}) ist bei einer \texttt{LinkedList} vergleichsweise langsam und hat eine Zeitkomplexität von $O(n)$ im schlechtesten und durchschnittlichen Fall. Der Grund hierfür liegt in der Struktur der verketteten Liste:
 \begin{itemize}
-    \item Anders als bei einem Array, wo die Speicheradresse eines Elements direkt aus dem Index berechnet werden kann, muss bei einer \texttt{LinkedList} die Kette von Verweisen vom ersten (oder letzten, je nach Implementierung und Index) Knoten bis zum gewünschten Knoten verfolgt werden.
-    \item Jeder Knoten kennt nur seinen direkten Vorgänger und Nachfolger. Um zum i-ten Element zu gelangen, müssen i Schritte (oder n-i Schritte vom Ende) durchlaufen werden.
+    \item Anders als bei einem Array, wo die Speicheradresse eines Elements direkt aus
+          dem Index berechnet werden kann, muss bei einer \texttt{LinkedList} die Kette
+          von Verweisen vom ersten (oder letzten, je nach Implementierung und Index)
+          Knoten bis zum gewünschten Knoten verfolgt werden.
+    \item Jeder Knoten kennt nur seinen direkten Vorgänger und Nachfolger. Um zum i-ten
+          Element zu gelangen, müssen i Schritte (oder n-i Schritte vom Ende) durchlaufen
+          werden.
 \end{itemize}
 Die nachfolgende Abbildung~\ref{fig:linkedlistaccess} verdeutlicht diesen Prozess.
 
 \begin{figure}[h!]
-\centering
-\begin{tikzpicture}[
-    node distance=1.5cm and 1cm,
-    listnode/.style={rectangle, draw, fill=blue!10, rounded corners, minimum height=1cm, minimum width=1.5cm, text width=1.3cm, align=center},
-    arrow/.style={-Latex, thick},
-    traversalarrow/.style={Latex-, thick, red, dashed, bend left=20, shorten >=2pt, shorten <=2pt}
-]
-\node[listnode] (n0) {Index 0 \\ Wert A};
-\node[listnode, right=of n0] (n1) {Index 1 \\ Wert B};
-\node[listnode, right=of n1] (n2) {Index 2 \\ Wert C};
-\node[listnode, right=of n2] (n3) {Index 3 \\ Wert D};
-\node[right=0.5cm of n3] (dots) {\ldots};
+    \centering
+    \begin{tikzpicture}[
+            node distance=1.5cm and 1cm,
+            listnode/.style={rectangle, draw, fill=blue!10, rounded corners, minimum height=1cm, minimum width=1.5cm, text width=1.3cm, align=center},
+            arrow/.style={-Latex, thick},
+            traversalarrow/.style={Latex-, thick, red, dashed, bend left=20, shorten >=2pt, shorten <=2pt}
+        ]
+        \node[listnode] (n0) {Index 0 \\ Wert A};
+        \node[listnode, right=of n0] (n1) {Index 1 \\ Wert B};
+        \node[listnode, right=of n1] (n2) {Index 2 \\ Wert C};
+        \node[listnode, right=of n2] (n3) {Index 3 \\ Wert D};
+        \node[right=0.5cm of n3] (dots) {\ldots};
 
-\draw[arrow] (n0.east) -- (n1.west);
-\draw[arrow] (n1.east) -- (n2.west);
-\draw[arrow] (n2.east) -- (n3.west);
-\draw[arrow] (n3.east) -- (dots.west);
+        \draw[arrow] (n0.east) -- (n1.west);
+        \draw[arrow] (n1.east) -- (n2.west);
+        \draw[arrow] (n2.east) -- (n3.west);
+        \draw[arrow] (n3.east) -- (dots.west);
 
-\node[above=0.3cm of n0, red] (start) {Start};
-\draw[traversalarrow] (n0.north) to (start.south);
-\path (n0.north east) edge[traversalarrow, bend left=30] node[above, midway, sloped, font=\tiny, red] {1. Sprung} (n1.north west);
-\path (n1.north east) edge[traversalarrow, bend left=30] node[above, midway, sloped, font=\tiny, red] {2. Sprung} (n2.north west);
-\node[above=0.3cm of n2, red] (target) {Ziel: Index 2};
-\draw[traversalarrow, bend left=0] (n2.north) to (target.south);
+        \node[above=0.3cm of n0, red] (start) {Start};
+        \draw[traversalarrow] (n0.north) to (start.south);
+        \path (n0.north east) edge[traversalarrow, bend left=30] node[above, midway, sloped, font=\tiny, red] {1. Sprung} (n1.north west);
+        \path (n1.north east) edge[traversalarrow, bend left=30] node[above, midway, sloped, font=\tiny, red] {2. Sprung} (n2.north west);
+        \node[above=0.3cm of n2, red] (target) {Ziel: Index 2};
+        \draw[traversalarrow, bend left=0] (n2.north) to (target.south);
 
-\node[below=2cm of n1.south, text width=8cm, align=center] (captiontext)
-    {Zugriff auf Index 2: Es müssen 2 Sprünge vom Start (Index 0) erfolgen, um das Element zu erreichen. Jeder Sprung folgt dem Verweis des aktuellen Knotens auf den nächsten Knoten.};
+        \node[below=2cm of n1.south, text width=8cm, align=center] (captiontext)
+        {Zugriff auf Index 2: Es müssen 2 Sprünge vom Start (Index 0) erfolgen, um das Element zu erreichen. Jeder Sprung folgt dem Verweis des aktuellen Knotens auf den nächsten Knoten.};
 
-\end{tikzpicture}
-\caption{Visualisierung des sequenziellen Zugriffs auf ein Element (hier Index 2) in einer LinkedList. Um zum Zielknoten zu gelangen, muss die Liste vom Anfangsknoten aus durchlaufen werden.}
-\label{fig:linkedlistaccess}
+    \end{tikzpicture}
+    \caption{Visualisierung des sequenziellen Zugriffs auf ein Element (hier Index 2) in einer LinkedList. Um zum Zielknoten zu gelangen, muss die Liste vom Anfangsknoten aus durchlaufen werden.}
+    \label{fig:linkedlistaccess}
 \end{figure}
 
-Im Gegensatz dazu ist das sequentielle Durchlaufen aller Elemente einer \texttt{LinkedList} mit einem Iterator (z.B. in einer for-each-Schleife) effizient. Jeder Schritt des Iterators zum nächsten Element dauert $O(1)$, sodass das Iterieren über die gesamte Liste eine Gesamtkomplexität von $O(n)$ hat. Problematisch ist also nicht das Iterieren an sich, sondern der wahlfreie Zugriff per Index.
+Im Gegensatz dazu ist das sequentielle Durchlaufen aller Elemente einer
+\texttt{LinkedList} mit einem Iterator (z.B. in einer for-each-Schleife)
+effizient. Jeder Schritt des Iterators zum nächsten Element dauert $O(1)$,
+sodass das Iterieren über die gesamte Liste eine Gesamtkomplexität von $O(n)$
+hat. Problematisch ist also nicht das Iterieren an sich, sondern der wahlfreie
+Zugriff per Index.
 
 \section{HashSet}
-Ein \texttt{HashSet} implementiert das \texttt{Set}-Interface und speichert eine Sammlung von eindeutigen Elementen. Die Elemente in einem \texttt{HashSet} haben keine garantierte Reihenfolge; die Iterationsreihenfolge kann sich sogar ändern, wenn neue Elemente hinzugefügt werden. Die Implementierung basiert auf einer Hashtabelle (intern wird oft eine \texttt{HashMap} verwendet, bei der die Werte ignoriert werden).
+Ein \texttt{HashSet} implementiert das \texttt{Set}-Interface und speichert
+eine Sammlung von eindeutigen Elementen. Die Elemente in einem \texttt{HashSet}
+haben keine garantierte Reihenfolge; die Iterationsreihenfolge kann sich sogar
+ändern, wenn neue Elemente hinzugefügt werden. Die Implementierung basiert auf
+einer Hashtabelle (intern wird oft eine \texttt{HashMap} verwendet, bei der die
+Werte ignoriert werden).
 
 \subsection{Anwendungsbereiche}
 \texttt{HashSet}s eignen sich hervorragend, wenn:
 \begin{itemize}
-    \item Eindeutige Elemente gespeichert werden sollen und die Reihenfolge keine Rolle spielt.
-    \item Schnell geprüft werden muss, ob ein Element bereits in der Sammlung vorhanden ist.
+    \item Eindeutige Elemente gespeichert werden sollen und die Reihenfolge keine Rolle
+          spielt.
+    \item Schnell geprüft werden muss, ob ein Element bereits in der Sammlung vorhanden
+          ist.
     \item Duplikate automatisch verhindert werden sollen.
 \end{itemize}
 
 \subsection{Vorteile}
 \begin{itemize}
-    \item Sehr schnelle durchschnittliche Zeitkomplexität von $O(1)$ (amortisiert) für die Operationen \texttt{add}, \texttt{remove} und \texttt{contains}.
+    \item Sehr schnelle durchschnittliche Zeitkomplexität von $O(1)$ (amortisiert) für
+          die Operationen \texttt{add}, \texttt{remove} und \texttt{contains}.
     \item Effiziente Vermeidung von Duplikaten.
 \end{itemize}
 
 \subsection{Nachteile}
 \begin{itemize}
-    \item Keine garantierte Reihenfolge der Elemente. Die Reihenfolge bei der Iteration ist nicht vorhersagbar.
-    \item Die Leistung kann bei einer schlechten Implementierung der \texttt{hashCode()}-Methode der gespeicherten Objekte oder bei einer sehr hohen Füllrate der internen Hashtabelle (viele Kollisionen) im schlechtesten Fall auf $O(n)$ für einzelne Operationen abfallen.
+    \item Keine garantierte Reihenfolge der Elemente. Die Reihenfolge bei der Iteration
+          ist nicht vorhersagbar.
+    \item Die Leistung kann bei einer schlechten Implementierung der
+          \texttt{hashCode()}-Methode der gespeicherten Objekte oder bei einer sehr hohen
+          Füllrate der internen Hashtabelle (viele Kollisionen) im schlechtesten Fall auf
+          $O(n)$ für einzelne Operationen abfallen.
 \end{itemize}
 
 \subsection{Beispiel}
@@ -177,26 +227,39 @@ for (String name : uniqueNames) {
 \end{lstlisting}
 
 \section{TreeSet}
-Ein \texttt{TreeSet} implementiert das \texttt{SortedSet}-Interface (welches \texttt{Set} erweitert) und speichert eine Sammlung von eindeutigen Elementen in sortierter Reihenfolge. Die Sortierung erfolgt entweder natürlich (wenn die Elemente \texttt{Comparable} implementieren) oder durch einen beim Erstellen des \texttt{TreeSet}s übergebenen \texttt{Comparator}. Die Implementierung basiert typischerweise auf einem Rot-Schwarz-Baum.
+Ein \texttt{TreeSet} implementiert das \texttt{SortedSet}-Interface (welches
+\texttt{Set} erweitert) und speichert eine Sammlung von eindeutigen Elementen
+in sortierter Reihenfolge. Die Sortierung erfolgt entweder natürlich (wenn die
+Elemente \texttt{Comparable} implementieren) oder durch einen beim Erstellen
+des \texttt{TreeSet}s übergebenen \texttt{Comparator}. Die Implementierung
+basiert typischerweise auf einem Rot-Schwarz-Baum.
 
 \subsection{Anwendungsbereiche}
 \texttt{TreeSet}s sind nützlich, wenn:
 \begin{itemize}
-    \item Eindeutige Elemente in einer sortierten Reihenfolge gespeichert und abgerufen werden müssen.
-    \item Operationen wie das Finden des kleinsten/größten Elements oder das Abrufen von Teilmengen (Ranges) basierend auf der Sortierung benötigt werden.
+    \item Eindeutige Elemente in einer sortierten Reihenfolge gespeichert und abgerufen
+          werden müssen.
+    \item Operationen wie das Finden des kleinsten/größten Elements oder das Abrufen von
+          Teilmengen (Ranges) basierend auf der Sortierung benötigt werden.
 \end{itemize}
 
 \subsection{Vorteile}
 \begin{itemize}
     \item Elemente werden automatisch sortiert gehalten.
-    \item Effiziente Operationen ($O(\log n)$) für \texttt{add}, \texttt{remove} und \texttt{contains}.
-    \item Ermöglicht den Zugriff auf das erste/letzte Element sowie auf Teilmengen in $O(\log n)$ oder $O(1)$ (für erste/letzte).
+    \item Effiziente Operationen ($O(\log n)$) für \texttt{add}, \texttt{remove} und
+          \texttt{contains}.
+    \item Ermöglicht den Zugriff auf das erste/letzte Element sowie auf Teilmengen in
+          $O(\log n)$ oder $O(1)$ (für erste/letzte).
 \end{itemize}
 
 \subsection{Nachteile}
 \begin{itemize}
-    \item Langsamer als \texttt{HashSet} für die grundlegenden Operationen \texttt{add}, \texttt{remove} und \texttt{contains}, da die Sortierreihenfolge aufrechterhalten werden muss.
-    \item Erfordert, dass Elemente entweder \texttt{Comparable} implementieren oder ein \texttt{Comparator} bereitgestellt wird. \texttt{null}-Elemente sind standardmäßig nicht erlaubt.
+    \item Langsamer als \texttt{HashSet} für die grundlegenden Operationen \texttt{add},
+          \texttt{remove} und \texttt{contains}, da die Sortierreihenfolge
+          aufrechterhalten werden muss.
+    \item Erfordert, dass Elemente entweder \texttt{Comparable} implementieren oder ein
+          \texttt{Comparator} bereitgestellt wird. \texttt{null}-Elemente sind
+          standardmäßig nicht erlaubt.
 \end{itemize}
 
 \subsection{Beispiel}
@@ -223,7 +286,12 @@ System.out.println(((TreeSet<Integer>)sortedNumbers).higher(50)); // 90 (Casting
 \end{lstlisting}
 
 \section{HashMap}
-Eine \texttt{HashMap} implementiert das \texttt{Map}-Interface und speichert Schlüssel-Wert-Paare. Jedem Schlüssel kann höchstens ein Wert zugeordnet sein. \texttt{HashMap} erlaubt \texttt{null}-Werte und einen einzelnen \texttt{null}-Schlüssel. Die Reihenfolge der Einträge in einer \texttt{HashMap} ist nicht garantiert und kann sich ändern. Die Implementierung basiert auf einer Hashtabelle.
+Eine \texttt{HashMap} implementiert das \texttt{Map}-Interface und speichert
+Schlüssel-Wert-Paare. Jedem Schlüssel kann höchstens ein Wert zugeordnet sein.
+\texttt{HashMap} erlaubt \texttt{null}-Werte und einen einzelnen
+\texttt{null}-Schlüssel. Die Reihenfolge der Einträge in einer \texttt{HashMap}
+ist nicht garantiert und kann sich ändern. Die Implementierung basiert auf
+einer Hashtabelle.
 
 \subsection{Anwendungsbereiche}
 \texttt{HashMap}s sind die Standardwahl für Map-Implementierungen, wenn:
@@ -235,8 +303,11 @@ Eine \texttt{HashMap} implementiert das \texttt{Map}-Interface und speichert Sch
 
 \subsection{Vorteile}
 \begin{itemize}
-    \item Sehr schnelle durchschnittliche Zeitkomplexität von $O(1)$ (amortisiert) für die Operationen \texttt{put}, \texttt{get}, \texttt{remove} und \texttt{containsKey}.
-    \item Flexibel durch die Erlaubnis eines \texttt{null}-Schlüssels und beliebig vieler \texttt{null}-Werte.
+    \item Sehr schnelle durchschnittliche Zeitkomplexität von $O(1)$ (amortisiert) für
+          die Operationen \texttt{put}, \texttt{get}, \texttt{remove} und
+          \texttt{containsKey}.
+    \item Flexibel durch die Erlaubnis eines \texttt{null}-Schlüssels und beliebig vieler
+          \texttt{null}-Werte.
 \end{itemize}
 
 \subsection{Nachteile}
@@ -267,29 +338,45 @@ for (Map.Entry<String, Integer> entry : ageMap.entrySet()) {
 \end{lstlisting}
 
 \subsection{Prüfungshinweis}
-Dass die HashMap (und HashCode) Effizient funktioniert, muss die \lstinline{hashcode} Methode (und damit die \lstinline{equals} Methode) sinnvoll überschrieben werden. 
+Dass die HashMap (und HashCode) Effizient funktioniert, muss die
+\lstinline{hashcode} Methode (und damit die \lstinline{equals} Methode)
+sinnvoll überschrieben werden.
 
 \section{TreeMap}
-Eine \texttt{TreeMap} implementiert das \texttt{SortedMap}-Interface (welches \texttt{Map} erweitert) und speichert Schlüssel-Wert-Paare in sortierter Reihenfolge der Schlüssel. Die Sortierung der Schlüssel erfolgt entweder natürlich (wenn die Schlüssel \texttt{Comparable} implementieren) oder durch einen beim Erstellen der \texttt{TreeMap} übergebenen \texttt{Comparator}. \texttt{TreeMap} erlaubt keine \texttt{null}-Schlüssel (im Gegensatz zu \texttt{HashMap}), aber \texttt{null}-Werte sind erlaubt. Die Implementierung basiert typischerweise auf einem Rot-Schwarz-Baum.
+Eine \texttt{TreeMap} implementiert das \texttt{SortedMap}-Interface (welches
+\texttt{Map} erweitert) und speichert Schlüssel-Wert-Paare in sortierter
+Reihenfolge der Schlüssel. Die Sortierung der Schlüssel erfolgt entweder
+natürlich (wenn die Schlüssel \texttt{Comparable} implementieren) oder durch
+einen beim Erstellen der \texttt{TreeMap} übergebenen \texttt{Comparator}.
+\texttt{TreeMap} erlaubt keine \texttt{null}-Schlüssel (im Gegensatz zu
+\texttt{HashMap}), aber \texttt{null}-Werte sind erlaubt. Die Implementierung
+basiert typischerweise auf einem Rot-Schwarz-Baum.
 
 \subsection{Anwendungsbereiche}
 \texttt{TreeMap}s werden verwendet, wenn:
 \begin{itemize}
-    \item Schlüssel-Wert-Paare gespeichert werden müssen und eine Iteration über die Schlüssel in sortierter Reihenfolge erforderlich ist.
-    \item Operationen benötigt werden, die von der Sortierung der Schlüssel abhängen, wie das Finden des Eintrags mit dem kleinsten/größten Schlüssel oder das Abrufen von Teilmengen basierend auf Schlüsselbereichen.
+    \item Schlüssel-Wert-Paare gespeichert werden müssen und eine Iteration über die
+          Schlüssel in sortierter Reihenfolge erforderlich ist.
+    \item Operationen benötigt werden, die von der Sortierung der Schlüssel abhängen, wie
+          das Finden des Eintrags mit dem kleinsten/größten Schlüssel oder das Abrufen
+          von Teilmengen basierend auf Schlüsselbereichen.
 \end{itemize}
 
 \subsection{Vorteile}
 \begin{itemize}
     \item Schlüssel werden automatisch sortiert gehalten.
-    \item Effiziente Operationen ($O(\log n)$) für \texttt{put}, \texttt{get}, \texttt{remove} und \texttt{containsKey}.
-    \item Ermöglicht den Zugriff auf den ersten/letzten Eintrag sowie auf Teil-Maps (Ranges) in $O(\log n)$ oder $O(1)$.
+    \item Effiziente Operationen ($O(\log n)$) für \texttt{put}, \texttt{get},
+          \texttt{remove} und \texttt{containsKey}.
+    \item Ermöglicht den Zugriff auf den ersten/letzten Eintrag sowie auf Teil-Maps
+          (Ranges) in $O(\log n)$ oder $O(1)$.
 \end{itemize}
 
 \subsection{Nachteile}
 \begin{itemize}
-    \item Langsamer als \texttt{HashMap} für die grundlegenden Operationen, da die Sortierreihenfolge der Schlüssel aufrechterhalten werden muss.
-    \item Erfordert, dass Schlüssel entweder \texttt{Comparable} implementieren oder ein \texttt{Comparator} bereitgestellt wird.
+    \item Langsamer als \texttt{HashMap} für die grundlegenden Operationen, da die
+          Sortierreihenfolge der Schlüssel aufrechterhalten werden muss.
+    \item Erfordert, dass Schlüssel entweder \texttt{Comparable} implementieren oder ein
+          \texttt{Comparator} bereitgestellt wird.
     \item Erlaubt keine \texttt{null}-Schlüssel (wirft \texttt{NullPointerException}).
 \end{itemize}
 
@@ -319,4 +406,7 @@ System.out.println("SubMap: " + subMap);
 \end{lstlisting}
 
 \section{Über Collections Iterieren (Prüfungshinweis)}
-Über Collections sollte \textit{immer} mittels Iterator iteriert werden. Andere lösungen mit einer Zähl Variable und mehreren \lstinline{.get} aufrufen funktionieren zwar, sind aber in der Praxis sehr Ineffizient und führen zu Punktabzug.
+Über Collections, abgesehen von der \lstinline{ArrayList}, sollte \textit{immer} mittels
+Iterator iteriert werden. Andere lösungen mit einer Zähl Variable und mehreren
+\lstinline{.get} aufrufen funktionieren zwar, sind aber in der Praxis sehr Ineffizient
+und führen zu Punktabzug.
