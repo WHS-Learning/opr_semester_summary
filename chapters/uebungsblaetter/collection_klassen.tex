@@ -1,0 +1,189 @@
+\chapter{Übung Collection Klassen}
+
+\section{Aufgabe 1}
+Gegeben sei die Klasse Point:
+
+\begin{lstlisting}
+public class Point {
+  private int x;
+  private int y;
+
+  public Point(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  public int getX() {
+    return this.x;
+  }
+
+  public int getY() {
+    return this.y;
+  }
+}
+\end{lstlisting}
+
+Realisieren Sie eine statische Methode \newline 
+\lstinline{boolean doesInclude(LinkedList<Point> points, Point p)} um zu prüfen, ob eine
+verkettete Liste ein Point-Objekt enthält, das hinsichtlich seiner Koordinaten
+mit dem übergebenen Punkt übereinstimmt. Sie dürfen auch den Code der Klasse
+Point erweitern.
+
+\begin{lstlisting}
+public static boolean doesInclude(LinkedList<Point> points, Point p) {
+    return points.contains(p);
+}
+
+@Override
+public boolean equals(Object obj) {
+    if (obj instanceof Point p) {
+        this.x == p.x && this.y == p.y;
+    }
+    return false;
+}
+
+@Override 
+public int hashCode() {
+    return this.x + this.y;
+}
+\end{lstlisting}
+
+\section{Aufgabe 2}
+
+Die Menge $M \subset \mathbb{N}$ sei wie folgt indukttiv definiert:
+
+\begin{enumerate}
+    \item $1 \in M$
+    \item falls $m \in M$, dann sind auch $2m + 1 \in M$ und $3m \in M$
+\end{enumerate}
+
+Realisieren Sie eine statische Methode ArrayList<Integer> upTo(int n), die
+aufsteigend sortiert alle Elemente der Menge M bis zum ersten Element liefert,
+das größer oder gleich n ist. Beispiel: upTo(20) liefert eine Liste mit den
+Elementen 1, 3, 7, 9, 15, 19 und 21.
+
+\begin{lstlisting}
+public static ArrayList<Integer> upTo(int n) {
+    ArrayList<Integer> list = new ArrayList<>();
+    list.add(1);
+
+    int i = 0;
+
+    while (list.get(i) < n) {
+        int num = list.get(i);
+        list.add(2 * num + 1);
+        list.add(3 * num);
+        i++;
+    }
+
+    Collections.sort(list);
+
+    while (list.size() > 1 && list.get(list.size() - 2) > n) {
+        list.removeLast();
+    }
+
+    list = new ArrayList<>(new TreeSet<>(list));
+
+    return list;
+}
+\end{lstlisting}
+
+\section{Aufgabe 3}
+
+Diese Aufgabe bezieht sich auf die praktische Aufgabe `Car Sharing'. Ein
+VehicleManager verwaltet viele Fahrzeuge an vielen Standorten, ein Fahrzeug
+kann für viele Zeiträume gebucht werden. Überlegen Sie, wie man diese Daten der
+Car Sharing-Anwendung am besten repräsentieren kann. Berücksichtigen Sie
+insbesondere, welche Zugriffe auf diese Daten aufgrund der Methoden der Klasse
+VehicleManager erforderlich sind, und denken Sie an Laufzeiteffizienz.
+
+HashMap.
+
+\section{Aufgabe 4}
+Skizzieren Sie die notwendigen Erweiterungen der Klasse Fraction (Praktikum zu
+EPR), damit ein Objekt der Klasse HashSet<Fraction> keine zwei Brüche mit
+gleichem Wert enthalten kann.
+
+\begin{lstlisting}
+@Override
+public boolean equals(Object obj) {
+    if (obj instanceof Fraction f) {
+        return this.numerator == f.numerator && this.denominator == f.denominator;
+    }
+    return false;
+}
+
+@Override
+public int hashCode() {
+    return this.numerator + this.denominator;
+}
+\end{lstlisting}
+
+\section{Aufgabe 5}
+Diese Aufgabe können Sie erst bearbeiten, wenn Sie das Kapitel `Hüllklassen'
+durchgearbeitet haben. Ein Objekt der Klasse Zeitgeschichte soll Ereignisse der
+Zeitgeschichte verwalten. Welche Instanzvariablen wählen Sie (es kommt vor
+allem auf die Typen an), sodass eine Instanzmethode
+\lstinline{gibEreignisse(int jahr)} möglichst effizient die Ereignisse eines
+Jahres liefert? Skizzieren Sie den Quellcode dieser Methode, ebenso wie den
+Quellcode des Konstruktors sowie einer Methode 
+\lstinline{void fuegeEreignisHinzu(int jahr, String ereignis)}.
+
+Nimmt man ein TreeMap<Integer, String> als Collection, so sind die Ereignisse 
+sehr effizient gespeichert und sie sind direkt sortiert.
+
+\begin{lstlisting}
+public class Zeitgeschichte {
+  TreeMap<Integer, Set<String>> ereignisse;
+
+  public Zeitgeschichte() {
+    this.ereignisse = new TreeMap<>();
+  }
+
+  public Set<String> gibEreignis(int jahr) {
+    return ereignisse.get(jahr);
+  }
+
+  public void fuegeEreignisHinzu(int jahr, String ereignis) {
+    Set<String> set = ereignisse.getOrDefault(jahr, new HashSet<>());
+    set.add(ereignis);
+    ereignisse.put(jahr, set);
+  }
+}
+\end{lstlisting}
+
+\section{Aufgabe 6}
+Diese Aufgabe bezieht sich auf die praktische Aufgabe `Staff'. Realisieren Sie
+in der Klasse Employee eine statische Methode \newline
+\lstinline{...getHierarchy(ArrayList<Employee>)}, die aus den übergebenen
+Mitarbeitern und allen Vorgesetzten, auf die darüber zugegriffen werden kann,
+eine Personalhierarchie erstellt. Eine passende Datenstruktur dafür müssen Sie
+selbst finden, weshalb der Ergebnistyp der Methode offen gelassen ist. In der
+Personalhierarchie sollen alle Personen enthalten sein, die oben genannt sind,
+und jeder Person sollen ihre direkt untergebenen Personen zugeordnet sein. Für
+diese Aufgabe ist es zulässig, dass verschiedene Mitarbeiter den gleichen Namen
+haben. Anders ausgedrückt: Haben zwei Objekte der Klasse Employee und Superior
+verschiedene Identitäten, handelt es sich um verschiedene Personen. Diese
+Aufgabe ist ein Beispiel dafür, dass man nicht zwingend hashCode und equals in
+einer Klasse überschreiben muss, wenn man Objekte dieser Klasse als Schlüssel
+in einer HashMap verwendet. Warum nicht? Weil in Object beide Methoden
+implementiert sind - und manchmal ist die Implementierung dort genau die, die
+man benötigt.
+
+\begin{lstlisting}
+HashMap<Superior, HashSet<Employee>> getHierarchy(ArrayList<Employee> employees) {
+    HashMap<Superior, HashSet<Employee>> hierarchie = new HashMap<>();
+
+    for (Employee employee : employees) {
+        Employee superior = employee.getSuperior();
+
+        HashSet<Employee> list = hierarchie.getOrDefault(superior, new HashSet<>());
+        list.add(employee);
+
+        hierarchie.put(super, list);
+    }
+
+    return hierarchie;
+}
+
+\end{lstlisting}

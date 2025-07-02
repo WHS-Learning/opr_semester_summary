@@ -1,88 +1,103 @@
 \chapter{Klassenhierarchie}
 \label{chap:klassenhierarchie}
 
-In der objektorientierten Programmierung ermöglicht die Klassenhierarchie die Schaffung von Beziehungen zwischen Klassen, 
-wodurch Code-Wiederverwendung gefördert und eine logische Struktur aufgebaut wird. Dieses Kapitel erläutert die fundamentalen 
-Konzepte der Vererbung, Sichtbarkeitsmodifikatoren und Bindungsarten in Java.
+In der objektorientierten Programmierung ermöglicht die Klassenhierarchie die
+Schaffung von Beziehungen zwischen Klassen, wodurch Code-Wiederverwendung
+gefördert und eine logische Struktur aufgebaut wird. Dieses Kapitel erläutert
+die fundamentalen Konzepte der Vererbung, Sichtbarkeitsmodifikatoren und
+Bindungsarten in Java.
 
 \section{Vererbung: Das Fundament der Hierarchie}
 \label{sec:erben}
 
-Eine Klasse kann Eigenschaften und Methoden von einer anderen Klasse übernehmen. Dieser Mechanismus wird als Vererbung bezeichnet 
-und mit dem Schlüsselwort \texttt{extends} realisiert.
+Eine Klasse kann Eigenschaften und Methoden von einer anderen Klasse
+übernehmen. Dieser Mechanismus wird als Vererbung bezeichnet und mit dem
+Schlüsselwort \texttt{extends} realisiert.
 
 \paragraph{Syntax der Vererbung}
-Die grundlegende Syntax zur Definition einer Klasse, die von einer anderen erbt, ist wie folgt:
+Die grundlegende Syntax zur Definition einer Klasse, die von einer anderen
+erbt, ist wie folgt:
 \begin{lstlisting}[language=Java, caption={Deklaration einer abgeleiteten Klasse}]
 class Unterklasse extends Oberklasse {
     // Zusätzliche Attribute und Methoden der Unterklasse
     // oder überschriebene Methoden der Oberklasse
 }
 \end{lstlisting}
-In diesem Beispiel ist \texttt{Oberklasse} die direkte Superklasse (auch Elternklasse genannt) von \texttt{Unterklasse}. Umgekehrt ist 
-\texttt{Unterklasse} eine direkte Subklasse (auch Kindklasse genannt) von \texttt{Oberklasse}. Eine Klasse kann beliebig viele direkte 
-Unterklassen haben, jedoch stets nur \textbf{eine} direkte Oberklasse. Java unterstützt keine Mehrfachvererbung von Klassen. Die Kette 
-der Oberklassen bildet die Vererbungshierarchie.
+In diesem Beispiel ist \texttt{Oberklasse} die direkte Superklasse (auch
+Elternklasse genannt) von \texttt{Unterklasse}. Umgekehrt ist
+\texttt{Unterklasse} eine direkte Subklasse (auch Kindklasse genannt) von
+\texttt{Oberklasse}. Eine Klasse kann beliebig viele direkte Unterklassen
+haben, jedoch stets nur \textbf{eine} direkte Oberklasse. Java unterstützt
+keine Mehrfachvererbung von Klassen. Die Kette der Oberklassen bildet die
+Vererbungshierarchie.
 
 \paragraph{Was wird vererbt?}
 Eine Unterklasse erbt von ihrer Oberklasse:
 \begin{itemize}
-    \item Alle \texttt{public} und \texttt{protected} Instanzmethoden und Klassenmethoden (\texttt{static}).
-    \item Alle Instanzvariablen und Klassenvariablen (\texttt{static}). Auch \texttt{private} deklarierte Variablen der Oberklasse sind 
-    Teil des Speicherabbilds von Objekten der Unterklasse. Jedoch ist ein direkter Zugriff auf \texttt{private} Variablen der Oberklasse 
-    aus der Unterklasse heraus nicht möglich; dieser kann nur über geerbte \texttt{public} oder \texttt{protected} Methoden der Oberklasse 
-    erfolgen (Prinzip der Datenkapselung).
+  \item Alle \texttt{public} und \texttt{protected} Instanzmethoden und Klassenmethoden
+        (\texttt{static}).
+  \item Alle Instanzvariablen und Klassenvariablen (\texttt{static}). Auch
+        \texttt{private} deklarierte Variablen der Oberklasse sind Teil des
+        Speicherabbilds von Objekten der Unterklasse. Jedoch ist ein direkter Zugriff
+        auf \texttt{private} Variablen der Oberklasse aus der Unterklasse heraus nicht
+        möglich; dieser kann nur über geerbte \texttt{public} oder \texttt{protected}
+        Methoden der Oberklasse erfolgen (Prinzip der Datenkapselung).
 \end{itemize}
-Die Vererbung ist transitiv: Eine Klasse erbt auch die Member, die ihre Oberklasse bereits von deren Oberklasse geerbt hat. Geerbte Member 
+Die Vererbung ist transitiv: Eine Klasse erbt auch die Member, die ihre Oberklasse bereits von deren Oberklasse geerbt hat. Geerbte Member
 verhalten sich so, als wären sie in der Unterklasse selbst deklariert, sofern sie nicht überschrieben werden.
 
 \paragraph{Erweiterung und Spezialisierung durch die Unterklasse}
 Unterklassen können die geerbten Funktionalitäten erweitern und spezialisieren:
 \begin{itemize}
-    \item Sie können neue Methoden und Variablen definieren, die nur für die Unterklasse spezifisch sind.
-    \item Sie können geerbte (nicht-\texttt{final} und nicht-\texttt{private}) Instanzmethoden \textbf{überschreiben} (\texttt{@Override}), 
-    um eine spezifische Implementierung bereitzustellen.
+  \item Sie können neue Methoden und Variablen definieren, die nur für die Unterklasse
+        spezifisch sind.
+  \item Sie können geerbte (nicht-\texttt{final} und nicht-\texttt{private})
+        Instanzmethoden \textbf{überschreiben} (\texttt{@Override}), um eine
+        spezifische Implementierung bereitzustellen.
 \end{itemize}
 
 \paragraph{Nicht vererbte Elemente}
 Folgende Elemente werden \textbf{nicht} an Unterklassen vererbt:
 \begin{itemize}
-    \item \textbf{Konstruktoren:} Jede Klasse muss ihre eigenen Konstruktoren definieren oder den Default-Konstruktor verwenden. Der Konstruktor 
-    der Oberklasse kann jedoch mittels \texttt{super()} aufgerufen werden (siehe Abschnitt~\ref{sec:super}).
-    \item \textbf{Private Methoden:} Private Methoden der Oberklasse sind für die Unterklasse unsichtbar und werden daher nicht vererbt. Folglich 
-    können sie auch nicht im Sinne der Polymorphie überschrieben werden. Definiert eine Unterklasse eine Methode mit derselben Signatur wie eine 
-    private Methode der Oberklasse, so handelt es sich um eine vollkommen neue, unabhängige Methode. Es besteht keine polymorphe Beziehung zwischen 
-    diesen beiden Methoden; die Methode in der Unterklasse \textit{verdeckt} (shadows) lediglich die Methode der Oberklasse, falls diese z.B. über 
-    einen Cast auf den Oberklassentyp aufgerufen würde (was bei privaten Methoden aber ohnehin nicht direkt von außen geht).
+  \item \textbf{Konstruktoren:} Jede Klasse muss ihre eigenen Konstruktoren definieren oder den Default-Konstruktor verwenden. Der Konstruktor
+        der Oberklasse kann jedoch mittels \texttt{super()} aufgerufen werden (siehe Abschnitt~\ref{sec:super}).
+  \item \textbf{Private Methoden:} Private Methoden der Oberklasse sind für die Unterklasse unsichtbar und werden daher nicht vererbt. Folglich
+        können sie auch nicht im Sinne der Polymorphie überschrieben werden. Definiert eine Unterklasse eine Methode mit derselben Signatur wie eine
+        private Methode der Oberklasse, so handelt es sich um eine vollkommen neue, unabhängige Methode. Es besteht keine polymorphe Beziehung zwischen
+        diesen beiden Methoden; die Methode in der Unterklasse \textit{verdeckt} (shadows) lediglich die Methode der Oberklasse, falls diese z.B. über
+        einen Cast auf den Oberklassentyp aufgerufen würde (was bei privaten Methoden aber ohnehin nicht direkt von außen geht).
 \end{itemize}
 
 \subsection{Der Sichtbarkeitsmodifikator \texttt{protected}}
 \label{ssec:protected}
 
-Der Modifikator \texttt{protected} stellt eine Sichtbarkeitsstufe zwischen \texttt{public} und \texttt{private} dar. Mit \texttt{protected} deklarierte 
+Der Modifikator \texttt{protected} stellt eine Sichtbarkeitsstufe zwischen
+\texttt{public} und \texttt{private} dar. Mit \texttt{protected} deklarierte
 Member (Methoden oder Variablen) sind sichtbar:
 \begin{itemize}
-    \item Innerhalb der eigenen Klasse.
-    \item Innerhalb aller Unterklassen, auch wenn diese sich in anderen Paketen befinden.
-    \item Innerhalb aller anderen Klassen desselben Pakets.
+  \item Innerhalb der eigenen Klasse.
+  \item Innerhalb aller Unterklassen, auch wenn diese sich in anderen Paketen befinden.
+  \item Innerhalb aller anderen Klassen desselben Pakets.
 \end{itemize}
-Obwohl \texttt{protected} für Instanzvariablen in Vererbungsszenarien nützlich erscheinen mag, sollten Instanzvariablen aus Gründen der Kapselung 
-und Wartbarkeit in den meisten Fällen als \texttt{private} deklariert werden. Der Zugriff sollte dann über \texttt{public} oder \texttt{protected} 
+Obwohl \texttt{protected} für Instanzvariablen in Vererbungsszenarien nützlich erscheinen mag, sollten Instanzvariablen aus Gründen der Kapselung
+und Wartbarkeit in den meisten Fällen als \texttt{private} deklariert werden. Der Zugriff sollte dann über \texttt{public} oder \texttt{protected}
 Getter- und Setter-Methoden erfolgen.
 
 \subsection{Bindung von Methodenaufrufen: Statisch vs. Dynamisch}
 \label{ssec:bindungen}
 
-Die Bindung legt fest, welche konkrete Methodenimplementierung bei einem Aufruf ausgeführt wird.
+Die Bindung legt fest, welche konkrete Methodenimplementierung bei einem Aufruf
+ausgeführt wird.
 
 \paragraph{Statische Bindung (Early Binding)}
-Bei der statischen Bindung wird bereits zur Kompilierzeit festgelegt, welche Methodenimplementierung ausgeführt wird. Dies geschieht typischerweise für:
+Bei der statischen Bindung wird bereits zur Kompilierzeit festgelegt, welche
+Methodenimplementierung ausgeführt wird. Dies geschieht typischerweise für:
 \begin{itemize}
-    \item \texttt{private}-Methoden
-    \item \texttt{static}-Methoden
-    \item \texttt{final}-Instanzmethoden
-    \item Aufrufe mit \texttt{super.}
-    \item Aufrufe, bei denen der Compiler den exakten Objekttyp eindeutig bestimmen kann.
+  \item \texttt{private}-Methoden
+  \item \texttt{static}-Methoden
+  \item \texttt{final}-Instanzmethoden
+  \item Aufrufe mit \texttt{super.}
+  \item Aufrufe, bei denen der Compiler den exakten Objekttyp eindeutig bestimmen kann.
 \end{itemize}
 
 \begin{lstlisting}[language=Java, caption={Beispiele für statische Bindung}]
@@ -122,9 +137,11 @@ public class TestBinding {
 \end{lstlisting}
 
 \paragraph{Dynamische Bindung (Late Binding)}
-Bei der dynamischen Bindung wird erst zur Laufzeit entschieden, welche Methodenimplementierung ausgeführt wird. Dies ist 
-das Kernprinzip der Polymorphie und tritt bei überschriebenen Instanzmethoden auf. Der Java Virtual Machine (JVM) ermittelt 
-den tatsächlichen Typ des Objekts, auf dem die Methode aufgerufen wird, und wählt die entsprechende Implementierung aus.
+Bei der dynamischen Bindung wird erst zur Laufzeit entschieden, welche
+Methodenimplementierung ausgeführt wird. Dies ist das Kernprinzip der
+Polymorphie und tritt bei überschriebenen Instanzmethoden auf. Der Java Virtual
+Machine (JVM) ermittelt den tatsächlichen Typ des Objekts, auf dem die Methode
+aufgerufen wird, und wählt die entsprechende Implementierung aus.
 
 \begin{lstlisting}[language=Java, caption={Beispiel für dynamische Bindung}]
 class Animal {
@@ -167,23 +184,29 @@ public class Zoo {
   }
 }
 \end{lstlisting}
-Der Compiler prüft lediglich, ob eine Methode \texttt{say()} im deklarierten Typ \texttt{Animal} existiert. Welche konkrete 
-Implementierung dann ausgeführt wird, entscheidet die JVM basierend auf dem Laufzeittyp des Objekts in \texttt{aktuellesTier}.
+Der Compiler prüft lediglich, ob eine Methode \texttt{say()} im deklarierten
+Typ \texttt{Animal} existiert. Welche konkrete Implementierung dann ausgeführt
+wird, entscheidet die JVM basierend auf dem Laufzeittyp des Objekts in
+\texttt{aktuellesTier}.
 
 \section{Das Schlüsselwort \texttt{super} (Prüfungsrelevant!)}
 \label{sec:super}
 
-Das Schlüsselwort \texttt{super} hat in Java zwei primäre Verwendungszwecke im Kontext der Vererbung:
+Das Schlüsselwort \texttt{super} hat in Java zwei primäre Verwendungszwecke im
+Kontext der Vererbung:
 \begin{enumerate}
-    \item Aufruf des Konstruktors der direkten Oberklasse.
-    \item Zugriff auf Member (Methoden oder Variablen) der Oberklasse, die in der aktuellen Klasse möglicherweise überschrieben oder verdeckt wurden.
+  \item Aufruf des Konstruktors der direkten Oberklasse.
+  \item Zugriff auf Member (Methoden oder Variablen) der Oberklasse, die in der
+        aktuellen Klasse möglicherweise überschrieben oder verdeckt wurden.
 \end{enumerate}
 
 \paragraph{Aufruf des Oberklassen-Konstruktors mit \texttt{super()}}
 Der Aufruf \texttt{super()} dient dazu, einen Konstruktor der direkten Oberklasse explizit auszuführen.
 \begin{itemize}
-    \item Dieser Aufruf \textbf{muss}, falls vorhanden, die \textbf{erste Anweisung} im Konstruktor der Unterklasse sein.
-    \item Die Parameterliste von \texttt{super(...)} muss mit der Signatur eines Konstruktors der Oberklasse übereinstimmen.
+  \item Dieser Aufruf \textbf{muss}, falls vorhanden, die \textbf{erste Anweisung} im
+        Konstruktor der Unterklasse sein.
+  \item Die Parameterliste von \texttt{super(...)} muss mit der Signatur eines
+        Konstruktors der Oberklasse übereinstimmen.
 \end{itemize}
 
 \begin{lstlisting}[language=Java, caption={Expliziter Aufruf des Oberklassen-Konstruktors via \texttt{super()}}]
@@ -227,13 +250,15 @@ public class TestSuper {
 \end{lstlisting}
 
 \paragraph{Impliziter Aufruf von \texttt{super()}}
-Wenn im Konstruktor einer Unterklasse \textbf{kein expliziter Aufruf} von \texttt{super(...)} (oder \texttt{this(...)}, siehe unten) 
+Wenn im Konstruktor einer Unterklasse \textbf{kein expliziter Aufruf} von \texttt{super(...)} (oder \texttt{this(...)}, siehe unten)
 als erste Anweisung steht, fügt der Java-Compiler automatisch einen parameterlosen Aufruf \texttt{super();} ein.
 \begin{itemize}
-    \item Dies gilt auch für Klassen, die nicht explizit von einer anderen Klasse erben - diese erben implizit von der 
-    Klasse \texttt{Object}, die einen parameterlosen Konstruktor besitzt.
-    \item Wenn eine Klasse gar keinen Konstruktor definiert, fügt der Compiler einen öffentlichen, parameterlosen Default-Konstruktor 
-    ein, der ebenfalls implizit \texttt{super();} aufruft.
+  \item Dies gilt auch für Klassen, die nicht explizit von einer anderen Klasse erben -
+        diese erben implizit von der Klasse \texttt{Object}, die einen parameterlosen
+        Konstruktor besitzt.
+  \item Wenn eine Klasse gar keinen Konstruktor definiert, fügt der Compiler einen
+        öffentlichen, parameterlosen Default-Konstruktor ein, der ebenfalls implizit
+        \texttt{super();} aufruft.
 \end{itemize}
 
 \begin{lstlisting}[language=Java, caption={Impliziter Konstruktor und \texttt{super()}-Aufruf durch den Compiler}]
@@ -259,10 +284,14 @@ public class TestImplizit {
 \end{lstlisting}
 
 \paragraph{Kompilierfehler bei fehlendem passenden Oberklassen-Konstruktor}
-Der implizite \texttt{super();}-Aufruf (oder ein expliziter ohne Argumente) funktioniert nur, wenn die direkte Oberklasse einen 
-zugänglichen, parameterlosen Konstruktor besitzt. Ist dies nicht der Fall (z.B. weil die Oberklasse nur Konstruktoren mit Parametern definiert), 
-\textbf{muss} die Unterklasse in jedem ihrer Konstruktoren explizit einen passenden Konstruktor der Oberklasse mittels \texttt{super(...)} mit 
-den erforderlichen Argumenten aufrufen. Andernfalls entsteht ein Kompilierfehler. Der Compiler kann die benötigten Argumente nicht "erraten".
+Der implizite \texttt{super();}-Aufruf (oder ein expliziter ohne Argumente)
+funktioniert nur, wenn die direkte Oberklasse einen zugänglichen,
+parameterlosen Konstruktor besitzt. Ist dies nicht der Fall (z.B. weil die
+Oberklasse nur Konstruktoren mit Parametern definiert), \textbf{muss} die
+Unterklasse in jedem ihrer Konstruktoren explizit einen passenden Konstruktor
+der Oberklasse mittels \texttt{super(...)} mit den erforderlichen Argumenten
+aufrufen. Andernfalls entsteht ein Kompilierfehler. Der Compiler kann die
+benötigten Argumente nicht "erraten".
 
 \begin{lstlisting}[language=Java, caption={Kompilierfehler: \texttt{super()}-Aufruf scheitert bei parametrisiertem Superkonstruktor}]
 class Elternteil {
@@ -292,8 +321,8 @@ class KindError2 extends Elternteil {
 \end{lstlisting}
 
 \paragraph{Zugriff auf Member der Oberklasse mit \texttt{super.}}
-Mit \texttt{super.methodenName()} oder \texttt{super.variablenName} kann auf eine Methode oder Variable der Oberklasse zugegriffen werden, 
-selbst wenn diese in der aktuellen Klasse überschrieben (Methode) oder verdeckt (Variable) wurde. Dies ist nützlich, um die Funktionalität 
+Mit \texttt{super.methodenName()} oder \texttt{super.variablenName} kann auf eine Methode oder Variable der Oberklasse zugegriffen werden,
+selbst wenn diese in der aktuellen Klasse überschrieben (Methode) oder verdeckt (Variable) wurde. Dies ist nützlich, um die Funktionalität
 der Oberklasse zu erweitern, anstatt sie komplett zu ersetzen.
 
 \begin{lstlisting}[language=Java, caption={Zugriff auf überschriebene Methode der Oberklasse via \texttt{super.}}]
@@ -336,17 +365,21 @@ public class TestSuperMember {
 }
 \end{lstlisting}
 
-
 \section{Konstruktoraufrufe mit \texttt{this()}}
 \label{sec:this_konstruktor}
 
-Analog zum Aufruf eines Oberklassen-Konstruktors mit \texttt{super()} kann mit \texttt{this()} ein anderer Konstruktor derselben 
-Klasse aufgerufen werden. Dies wird als Konstruktorverkettung (constructor chaining) bezeichnet und dient dazu, Code-Duplizierung 
-innerhalb verschiedener Konstruktoren einer Klasse zu vermeiden.
+Analog zum Aufruf eines Oberklassen-Konstruktors mit \texttt{super()} kann mit
+\texttt{this()} ein anderer Konstruktor derselben Klasse aufgerufen werden.
+Dies wird als Konstruktorverkettung (constructor chaining) bezeichnet und dient
+dazu, Code-Duplizierung innerhalb verschiedener Konstruktoren einer Klasse zu
+vermeiden.
 \begin{itemize}
-    \item Der Aufruf \texttt{this(...)} \textbf{muss}, falls vorhanden, die \textbf{erste Anweisung} im Konstruktor sein.
-    \item Ein Konstruktor kann entweder einen \texttt{super(...)} oder einen \texttt{this(...)} Aufruf als erste Anweisung enthalten, aber nicht beide.
-    \item Mindestens ein Konstruktor in der Kette muss (implizit oder explizit) den Konstruktor der Oberklasse via \texttt{super(...)} aufrufen.
+  \item Der Aufruf \texttt{this(...)} \textbf{muss}, falls vorhanden, die \textbf{erste
+          Anweisung} im Konstruktor sein.
+  \item Ein Konstruktor kann entweder einen \texttt{super(...)} oder einen
+        \texttt{this(...)} Aufruf als erste Anweisung enthalten, aber nicht beide.
+  \item Mindestens ein Konstruktor in der Kette muss (implizit oder explizit) den
+        Konstruktor der Oberklasse via \texttt{super(...)} aufrufen.
 \end{itemize}
 
 \begin{lstlisting}[language=Java, caption={Aufruf eines anderen Konstruktors derselben Klasse via \texttt{this()}}]
@@ -388,10 +421,12 @@ public class TestThisKonstruktor {
 \section{Finale Klassen und Methoden}
 \label{sec:final}
 
-Das Schlüsselwort \texttt{final} hat im Kontext der Vererbung spezielle Bedeutungen:
+Das Schlüsselwort \texttt{final} hat im Kontext der Vererbung spezielle
+Bedeutungen:
 
 \paragraph{Finale Klassen}
-Eine mit \texttt{final} deklarierte Klasse \textbf{kann nicht erweitert werden}, d.h., es können keine Unterklassen von ihr abgeleitet werden.
+Eine mit \texttt{final} deklarierte Klasse \textbf{kann nicht erweitert
+  werden}, d.h., es können keine Unterklassen von ihr abgeleitet werden.
 \begin{lstlisting}[language=Java, caption={\texttt{final} Klasse}]
 public final class Unveraenderlich {
   // ...
@@ -399,10 +434,13 @@ public final class Unveraenderlich {
 
 // class VersuchAbleitung extends Unveraenderlich { } // KOMPILIERFEHLER!
 \end{lstlisting}
-Dies wird oft für Klassen verwendet, deren Implementierung als abgeschlossen und nicht für Erweiterungen vorgesehen gilt (z.B. \texttt{String} oder \texttt{Integer}).
+Dies wird oft für Klassen verwendet, deren Implementierung als abgeschlossen
+und nicht für Erweiterungen vorgesehen gilt (z.B. \texttt{String} oder
+\texttt{Integer}).
 
 \paragraph{Finale Methoden}
-Eine mit \texttt{final} deklarierte Methode \textbf{kann in Unterklassen nicht überschrieben werden}.
+Eine mit \texttt{final} deklarierte Methode \textbf{kann in Unterklassen nicht
+  überschrieben werden}.
 \begin{lstlisting}[language=Java, caption={\texttt{final} Methode}]
 class BasisMitFinal {
   public final void wichtigeOperation() {
@@ -423,6 +461,20 @@ class AbgeleitetVonFinal extends BasisMitFinal {
   }
 }
 \end{lstlisting}
-Finale Methoden garantieren, dass das Verhalten dieser spezifischen Methode in der gesamten Klassenhierarchie unterhalb 
-ihrer Definition konstant bleibt. Sie werden auch vom Compiler für Optimierungen herangezogen, da die Bindung statisch erfolgen kann.
+Finale Methoden garantieren, dass das Verhalten dieser spezifischen Methode in
+der gesamten Klassenhierarchie unterhalb ihrer Definition konstant bleibt. Sie
+werden auch vom Compiler für Optimierungen herangezogen, da die Bindung
+statisch erfolgen kann.
 
+\section{Abstrakte Klassen}
+
+Abstrakte Klassen definieren ein Verhalten, das von anderen Klassen
+implementiert werden muss.
+\begin{itemize}
+  \item Objekte abstrakter Klassen können nicht instanziiert werden.
+  \item Methoden können in abstrakten Klassen deklariert werden, wobei deren
+        Implementierung in ableitenden Klassen erforderlich ist.
+  \item Bereits implementierte Methoden können ebenfalls in abstrakten Klassen
+        enthalten sein, welche von abgeleiteten Klassen verwendet oder überschrieben
+        werden können.
+\end{itemize}

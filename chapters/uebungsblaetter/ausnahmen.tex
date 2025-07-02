@@ -1,0 +1,43 @@
+\chapter{Übung Ausnahmen}
+
+\section{Aufgabe 1}
+Ist es durch Code-Änderungen innerhalb der Klasse Fraction (Praktikumsaufgabe
+EPR) möglich, dafür zu sorgen, dass sich keine Objekte dieser Klasse mit Nenner
+0 erzeugen lassen? Wenn nein, warum nicht? Wenn ja, wie?
+
+Ja, indem eine Exception (wie z.B. eine \newline
+\lstinline{IllegalArgumentException}) geworfen wird, wenn dies der Fall ist.
+
+\section{Aufgabe 2}
+Realisieren Sie eine auf JUnit basierende Testmethode für folgenden Testfall:
+\begin{enumerate}
+    \item Eine ArrayList für ganze Zahlen als Komponenten erzeugen (passenden
+          Typparameter selbst wählen). \newline
+    \item Der Liste zwei beliebige Werte hinzufügen.
+    \item Mittels get-Methode versuchen, auf den Wert an Indexposition 3 zuzugreifen.
+    \item Für diesen Testablauf wird erwartet, dass eine Ausnahme der Klasse
+          IndexOutOfBoundsException mit der Meldung Index 3 out of bounds for length 2
+          geworfen wird.
+\end{enumerate}
+
+Sie können eines der beiden Realisierungsschemas verwenden, das wir in der
+Vorlesung kennengelernt haben, um das Auftreten erwarteter Ausnahmen zu
+testen. Das Schema, das auf JUnit 5 basiert, ist zwar noch ein bisschen
+geheimnisvoll, aber Sie kommen anhand des Code-Beispiels aus der Vorlesung
+bestimmt damit zurecht.
+
+\begin{lstlisting}
+@Test
+void testArrayList() {
+    ArrayList<Integer> list = new ArrayList<>(List.of(1, 2));
+    IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class, () -> list.get(3));
+    assertEquals(e.getMessage(), "Index 3 out of bounds for length 2");
+}
+\end{lstlisting}
+
+\section{Aufgabe 3}
+An welchen Stellen innerhalb der Klasse Parser (Praktikumsaufgabe `Arithmetic
+Expression') ist es sinnvoll, eine ParseException zu werfen, die einen Fehler
+in einem zu parsenden Ausdruck anzeigt?
+
+Immer dann wenn ein ungültiges Token gefunden wird.

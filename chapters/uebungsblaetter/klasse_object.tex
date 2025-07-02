@@ -1,0 +1,159 @@
+\chapter{Übung Klasse Object}
+
+\section{Aufgabe 1}
+Gegeben sei folgende Klasse Zeitspanne, deren Objekte Zeitspannen bestehend aus
+Stunden, Minuten und Sekunden repräsentieren.
+
+\begin{lstlisting}
+public class Zeitspanne {
+    private final int stunden;
+    private final int minuten;
+    private final int sekunden;
+
+    /**
+    * Erzeugt ein Objekt dieser Klasse. Die Parameter dürfen
+    * nicht negativ sind.
+    */
+    public Zeitspanne(int stunden, int minuten, int sekunden) {
+        this.stunden = stunden;
+        this.minuten = minuten;
+        this.sekunden = sekunden;
+    }
+}
+\end{lstlisting}
+
+\begin{itemize}
+    \item Erweitern Sie die Klasse derart, dass Objekte der Klasse mit beliebigen
+          Objekten auf Gleichheit getestet werden können. Ein Objekt der Klasse
+          Zeitspanne soll nur mit Objekten derselben Klasse gleich sein, und zwar genau
+          dann, wenn es sich real um dieselbe zeitliche Spanne handelt. \newline Bsp.: 2
+          Stunden, 17 Minuten und 10 Sekunden ist die gleiche Zeitspanne wie 0 Stunden,
+          135 Minuten und 130 Sekunden. \newline
+          \begin{lstlisting}
+@Override
+public boolean equals(Object obj) {
+    if (obj instanceof Zeitspanne z) {
+        return this.stunden * 3600 + this.minuten * 60 + this.sekunden == z.stunden * 3600 + z.minuten * 60 + this.sekunden;
+    }
+    return false;
+}
+\end{lstlisting}
+    \item Erweitern Sie die Klasse derart, dass durch den Methodenaufruf
+          \lstinline{System.out.print(z)} (z sei ein Ausdruck des Typs Zeitspanne) eine
+          textuelle Darstellung des übergebenen Objekts im Format h:mm:ss ausgegeben
+          wird. Hierbei soll der Minuten- und Sekundenanteil immer zweistellig und
+          kleiner als 60 sein. Der Stundenanteil wird mit so vielen Stellen dargestellt,
+          wie es erforderlich ist. \newline
+          \begin{lstlisting}
+@Override
+public String toString() {
+    int seconds = this.stunden * 3600 + this.minuten * 60 + this.sekunden;
+    int hours = seconds / 3600;
+    seconds = seconds % hours;
+    int minutes = seconds / 60;
+    seconds = seconds / minutes;
+    return "" + hours + ":" + (minutes > 10 ? "" : "0") + minutes + ":" + (seconds > 10 ? "" : "0") + seconds;
+}
+\end{lstlisting}
+\end{itemize}
+
+\section{Aufgabe 2}
+Jedes der folgenden Programmstücke enthält eine equals-Methode (und es kann
+noch andere Methoden enthalten). Beantworten Sie für jedes Programmstück
+folgende Fragen.
+
+\begin{enumerate}
+    \item Ist das Programmstück compilierbar? Falls nein, was ist der Fehler?
+    \item Falls es compilierbar ist, gibt es Anwendungen der Methode, die zu einem
+          Laufzeitfehler füh- ren?
+    \item Falls Anwendungen der Methode zu einem Laufzeitfehler führen, ist dies
+          `akzeptabel' oder sollte er durch Änderung der Methode vermieden werden?
+    \item Fällt Ihnen sonst noch etwas Bemerkenswertes an dem Programmstück auf?
+\end{enumerate}
+
+\begin{lstlisting}
+public class A {
+  private int b;
+
+  public boolean equals(Object obj) {
+    return this.b == ((A) obj).b;
+  }
+}
+\end{lstlisting}
+\begin{enumerate}
+    \item Ist das Programmstück compilierbar? Falls nein, was ist der Fehler? \newline
+          \textbf{Ja}
+    \item Falls es compilierbar ist, gibt es Anwendungen der Methode, die zu einem
+          Laufzeitfehler führen? \newline \textbf{Ja, wenn das Object keine A-Instnaz
+              ist}
+    \item Falls Anwendungen der Methode zu einem Laufzeitfehler führen, ist dies
+          `akzeptabel' oder sollte er durch Änderung der Methode vermieden
+          werden?\newline \textbf{Nein}
+    \item Fällt Ihnen sonst noch etwas Bemerkenswertes an dem Programmstück auf?\newline
+          \textbf{-}
+\end{enumerate}
+
+\begin{lstlisting}
+public class B {
+  private int b;
+
+  public boolean equals(B obj) {
+    return this.b == obj.b;
+  }
+}
+\end{lstlisting}
+\begin{enumerate}
+    \item Ist das Programmstück compilierbar? Falls nein, was ist der Fehler?\newline
+          \textbf{Ja}
+    \item Falls es compilierbar ist, gibt es Anwendungen der Methode, die zu einem
+          Laufzeitfehler führen? \newline \textbf{wenn obj == null}
+    \item Falls Anwendungen der Methode zu einem Laufzeitfehler führen, ist dies
+          `akzeptabel' oder sollte er durch Änderung der Methode vermieden
+          werden?\newline \textbf{Ja, die Anforderungen an die Methode sind nicht die
+              selben wie die Anforderungen an die Equals Methode aus der Object-Klasse}
+    \item Fällt Ihnen sonst noch etwas Bemerkenswertes an dem Programmstück auf?\newline
+          \textbf{Die Methode überschreibt nicht die equals Methode aus der
+              Object-Klasse}
+\end{enumerate}
+\pagebreak
+\begin{lstlisting}
+public class C {
+  private int b;
+
+  public void equals(Object obj) {
+  }
+}
+\end{lstlisting}
+\begin{enumerate}
+    \item Ist das Programmstück compilierbar? Falls nein, was ist der Fehler? \newline
+          \textbf{Nein, der Return Typ darf nicht geändert werden.}
+    \item Falls es compilierbar ist, gibt es Anwendungen der Methode, die zu einem
+          Laufzeitfehler führen? \newline\textbf{-}
+    \item Falls Anwendungen der Methode zu einem Laufzeitfehler führen, ist dies
+          `akzeptabel' oder sollte er durch Änderung der Methode vermieden werden?
+          \newline \textbf{-}
+    \item Fällt Ihnen sonst noch etwas Bemerkenswertes an dem Programmstück auf? \newline
+          \textbf{-}
+\end{enumerate}
+
+\begin{lstlisting}
+public class D {
+  private String s;
+
+  public boolean equals(Object obj) {
+    return obj.hashCode() == this.hashCode();
+  }
+}
+\end{lstlisting}
+\begin{enumerate}
+    \item Ist das Programmstück compilierbar? Falls nein, was ist der Fehler? \newline
+          \textbf{Ja}
+    \item Falls es compilierbar ist, gibt es Anwendungen der Methode, die zu einem
+          Laufzeitfehler führen? \newline\textbf{wenn obj == null}
+    \item Falls Anwendungen der Methode zu einem Laufzeitfehler führen, ist dies
+          `akzeptabel' oder sollte er durch Änderung der Methode vermieden
+          werden?\newline \textbf{Nein, weil die Anforderungen an die Equals 
+          Methode der Object-Klasse nicht erfüllt werden}
+    \item Fällt Ihnen sonst noch etwas Bemerkenswertes an dem Programmstück auf?\newline
+          \textbf{Gleicher HashCode muss nicht gleiches Objekt bedeuten.}
+\end{enumerate}

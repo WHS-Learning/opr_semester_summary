@@ -1,0 +1,179 @@
+\chapter{Übung Schnittstellen}
+
+\section{Aufgabe 1}
+Ist folgendes Code-Stück korrekt? Was ist ggfs.\ der Compile- oder
+Laufzeitfehler?
+
+\begin{lstlisting}
+public class C {
+  private Map<String, String> eineMap;
+
+  public C() {
+    eineMap = new HashMap<>();
+  }
+
+  public HashMap<String, String> m(String s) {
+    eineMap.put(s, s);
+    return eineMap;
+  }
+}
+\end{lstlisting}
+
+Das Code-Stück führt zu einem Compile-Fehler. Der Rückgabewert der Methode
+\lstinline{m} ist eine \lstinline{HashMap}, die Instanzvariable
+\lstinline{eineMap} ist allerdings eine \lstinline{Map}. Eine
+\lstinline{HashMap} ist zwar eine \lstinline{Map}, aber eine
+\lstinline{Map} ist nicht zwingend \lstinline{HashMap}
+
+\pagebreak
+
+\section{Aufgabe 2}
+
+Gegeben seien folgende Klassen:
+
+\begin{lstlisting}
+public class Kreis {
+  private double radius;
+
+  public Kreis(double radius) {
+    this.radius = radius;
+  }
+
+  public double gibUmfang() {
+    return 2 * radius * Math.PI;
+  }
+}
+
+public class Rechteck {
+  private double laenge;
+  private double breite;
+
+  public Rechteck(double laenge, double breite) {
+    this.laenge = laenge;
+    this.breite = breite;
+  }
+}
+\end{lstlisting}
+
+Definieren Sie eine Schnittstelle Geo und ergänzen Sie die oben stehenden
+Klassen, sodass folgender Programmcode compiliert und mit dem gewünschten
+Verhalten ausgeführt werden kann.
+
+\begin{lstlisting}
+Geo g = new Kreis(2.0);
+g = new Rechteck(2.0, 1.0);
+
+// Figur in alle Richtungen um Faktor 3 vergrößern
+g.skaliere(3);
+
+// erwartete Ausgabe: Umfang = 18.0
+System.out.println("Umfang = " + g.gibUmfang())
+\end{lstlisting}
+
+\begin{lstlisting}
+public interface Geo {
+    void skaliere(int i);
+    double gibUmfang();
+}
+
+public class Kreis implements Geo{
+  private double radius;
+
+  public Kreis(double radius) {
+    this.radius = radius;
+  }
+
+  public double gibUmfang() {
+    return 2 * radius * Math.PI;
+  }
+
+  public void skaliere(int i) {
+    this.radius *= i
+  } 
+}
+
+public class Rechteck implements Geo{
+  private double laenge;
+  private double breite;
+
+  public Rechteck(double laenge, double breite) {
+    this.laenge = laenge;
+    this.breite = breite;
+  }
+  public double gibUmfang() {
+    return 2 * laenge + 2 * breite;
+  }
+
+  public void skaliere(int i) {
+    this.laenge *= i;
+    this.breite *= i;
+  }
+}
+\end{lstlisting}
+
+\section{Aufgabe 3}
+Realisieren Sie eine auf JUnit basierende Testmethode für die Methode
+getHierarchy aus der Übung zu Collection-Klassen. Da wir mittlerweile
+Schnittstellen kennengelernt haben, gehen wir von folgender Definition der
+Methode aus:
+
+\begin{lstlisting}
+/**
+* Liefert aus den übergebenen Employees und allen 
+* Superiors, auf die darüber zugegriffen werden 
+* kann, eine Personalhierarchie. In der 
+* Personalhierarchie sind alle Personen 
+* enthalten, die oben genannt sind, und jeder 
+* Person sind ihre direkt untergebenen Personen  
+* zugeordnet.
+*
+* @param employees Mitarbeiter, von denen ausgehend 
+* die Hierarchieinformation ermittelt wird.
+*
+* @return die Personalhierarchie basierend auf den 
+* übergebenen Mitarbeitern. Die Schlüssel
+* der Zuordnung sind alle direkten und indirekten 
+* Vorgesetzten dieser Mitarbeiter.
+* Jedem Vorgesetzten sind als Wert die direkten 
+* Untergebenen zugeordnet.
+*/
+Map<Superior, Set<Employee>> getHierarchy(Collection<Employee> employees)
+\end{lstlisting}
+
+\pagebreak
+
+\begin{lstlisting}
+void testGetHierarchie() {
+    Superior kriegesmann = new Superior("kriegesmann");
+    Superior luis = new Superior("luis");
+    Employee urban = new Employee("urban");
+    Employee borsum = new Employee("borsum");
+    luis.setSuperior(kriegsmann);
+    urban.setSuperior(luis);
+    borsum.setSuperior(luis);
+
+    HashMap<Superior, ArrayList<Employee>> hierarchie = getHierarchy(List.of(kriegesmann, luis, urban, borsum));
+    
+    HashMap<Superior, ArrayList<Employee>> expectedHierarchie = new HashMap<>();
+    expectedHierarchie.put(kriegesmann, List.of(luis));
+    expectedHierarchie.put(luis, List.of(urban, borsum));
+    expectedHierarchie.put(urban, new ArrayList<>());
+    expectedHierarchie.put(borsum, new ArrayList<>());
+
+    assertEquals(expectedHierarchie, hierarchie);
+}
+\end{lstlisting}
+
+\section{Aufgabe 4}
+In welcher Klasse (oder welchen Klassen) der praktischen Aufgabe Number
+Sequence kann sinnvoll die Klasse PushBackSequence eingesetzt werden? Erläutern
+Sie, zu welchem Zweck die Klasse dort eingesetzt wird.
+
+MergeSequence und UniqueSequence
+
+\section{Aufgabe 5}
+An welchen Stellen innerhalb der Klassen der praktischen Aufgabe Number
+Sequence ist es erforderlich oder sinnvoll, eine NoSuchElementException zu
+erzeugen und zu werfen?
+
+in Allen endlichen NumberSequences bei der \lstinline{.getNext()} Methode.

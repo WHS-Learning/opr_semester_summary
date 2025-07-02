@@ -1,0 +1,30 @@
+\chapter{Übung Funktionale Schnittstellen}
+
+\section{Aufgabe 1}
+Schreiben Sie ein Code-Stück, um ein Objekt der Klasse
+\lstinline{TreeSet<Point>} zu erzeugen, bei dem die Punkte nach der folgenden
+Regel geordnet sind. Am Ende des Code-Stücks soll die Menge über die Variable
+points zugreifbar sein. Gehen Sie davon aus, dass es eine geeignete Klasse
+Point gibt.
+
+Sind p und q zwei Elemente der Menge, dann liegt p vor q, wenn gilt: Die
+x-Koordinate von p ist kleiner als die x-Koordinate von q, oder die
+x-Koordinaten beider Punkte sind gleich und die y-Koordinate von p ist kleiner
+als die y-Koordinate von q
+
+\begin{lstlisting}
+TreeSet<Point> points = new TreeSet<>((p, q) -> p.getX() - q.getY() == 0? p.getX() - q.getY() : p.getY() - q.getY());
+\end{lstlisting}
+
+\section{Aufgabe 2}
+Diese Aufgabe bezieht sich auf das Code-Beispiel „UserManagement“ der
+Vorlesung. Definieren Sie die Schnittstelle PasswordValidator derart, dass bei
+der Erzeugung eines UserManagement-Objekts ein PasswordValidator per
+Lambda-Ausdruck übergeben werden kann. Erzeugen Sie auf diese Weise ein
+UserManagement-Objekt, das Passwörter akzeptiert, die mit einer Ziffer beginnen
+und mindestens die Länge 12 haben.
+
+\begin{lstlisting}
+new UserManager(s -> s.charAt(0) >= '0' && s.charAt(0) <= '9' && p.length() >= 12);
+\end{lstlisting}
+

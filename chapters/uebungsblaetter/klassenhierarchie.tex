@@ -1,0 +1,94 @@
+\chapter{Übungsblatt Klassenhierarchie und Polymorphie}
+
+\section{Aufgabe 1}
+Bearbeiten Sie diese Aufgabe ohne Zuhilfenahme des Rechners. Betrachten Sie
+folgende Klassen A, B und C:
+
+\begin{lstlisting}
+public class A {
+  public A() {
+    System.out.println("A");
+  }
+
+  public A(int parameter) {
+    System.out.println("A2");
+  }
+}
+
+public class B extends A {
+}
+
+public class C extends B {
+  public C() {
+    System.out.println("C");
+  }
+
+  public C(int parameter) {
+    System.out.println("C2");
+  }
+}
+\end{lstlisting}
+
+Beantworten Sie nun folgende Fragen:
+
+\begin{enumerate}
+    \item Welche Ausgaben (Reihenfolge beachten!) erfolgen bei Auswertung der Ausdrücke
+          new C() und new C(5)?\newline \textit{Antwort:} \begin{itemize}
+              \item[new C()] AC
+              \item[new C(5)] AC2
+          \end{itemize} \pagebreak
+    \item Lassen sich noch alle Klassen A, B und C fehlerfrei compilieren, wenn in B
+          folgender Konstruk- tor hinzugefügt wird?
+          \begin{lstlisting}
+public B(int parameter) {
+    System.out.println("B");
+}
+            \end{lstlisting}
+          Falls ja, welche Ausgabe erfolgt bei Auswertung von new C(5)? Falls nein,
+          welche Klasse(n) lassen sich aus welchen Gründen nicht compilieren?\newline
+          \textit{Antwort:} Die Klasse C lässt sich nicht mehr compilieren.
+\end{enumerate}
+
+\section{Aufgabe 2}
+Bearbeiten Sie diese Aufgabe ohne Zuhilfenahme des Rechners. Gegeben seien die
+Klassen P, Q und R.
+
+\begin{lstlisting}
+public class P {
+  public String m1(P par) {
+    return "[Pm1" + par.m2(this) + "]";
+  }
+
+  public String m2(P par) {
+    return "(Pm2" + this.m3() + par.m3() + ")";
+  }
+
+  public String m3() {
+    return "Pm3";
+  }
+}
+
+public class Q extends P {
+  public String m1(P par) {
+    return "[Qm1" + super.m1(par) + "]";
+  }
+
+  public String m2(P par) {
+    return "(Qm2" + super.m2(par) + ")";
+  }
+
+  public String m3() {
+    return "Qm3";
+  }
+}
+
+public class R extends Q {
+  public String m3() {
+    return "Rm3";
+  }
+}
+\end{lstlisting}
+
+Welchen Wert hat der Ausdruck new R().m1(new Q())?
+
+[Qm1[Pm1(Qm2(Pm2Qm3Rm3))]]
