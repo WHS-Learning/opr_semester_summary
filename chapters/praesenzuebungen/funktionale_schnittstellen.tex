@@ -1,0 +1,28 @@
+\chapter{Präsenzübung Funktionale Schnittstellen}
+
+\section{Aufgabe 1}
+
+\begin{enumerate}
+    \item Überlegen Sie, durch welche Schnittstelle aus dem Paket java.util.function man die
+Schnittstelle Filter aus dem Codebeispiel dieses Kapitels ersetzen kann.
+Verändern Sie die Klasse FilteredSequence entsprechend.
+\item Schreiben Sie einen Ausdruck, um ein Objekt der Klasse FilteredSequence zu erzeugen,
+das aus einer zugrunde liegenden StringSequence alle Elemente ausfiltert, die eine unge-
+radzahlige Länge haben (sodass die Strings mit geradzahliger Länge durchkommen). Nehmen
+Sie an, dass sich die zugrunde liegende StringSequence in der Variablen seq befindet.
+\end{enumerate}
+
+\section{Aufgabe 2}
+
+Schreiben Sie einen Ausdruck, um ein TreeSet<String> zu erzeugen, sodass die Elemente bei
+der Iteration über die Menge in lexikographisch aufsteigender Reihenfolge durchlaufen werden. Da-
+bei soll jedoch nicht zwischen Groß- und Kleinschreibung unterschieden werden, und Leerzeichen
+zwischen den Wörtern der Strings sollen ignoriert werden.
+
+Beispiele:
+
+\begin{itemize}
+    \item Haus kommt vor hier
+    \item haus kommt vor Hier
+    \item hier kommt vor hi hi
+\end{itemize}

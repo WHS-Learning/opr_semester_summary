@@ -1,0 +1,24 @@
+\chapter{Präsenzübung Ein-/Ausgabe}
+
+\section{Aufgabe 1}
+
+\begin{enumerate}
+    \item Realisieren Sie eine Methode void onlyNumbers(Reader, Writer), die alle nicht-leeren
+Zeilen der übergebenen Datenquelle, die ausschließlich aus Ziffern bestehen, in die Datensen-
+ke schreibt.
+Hinweis: Sie können durch s.matches([0-9]+) prüfen, ob die Zeichenkette in s nicht leer
+ist und nur aus Ziffern besteht.
+\item Von welchen Klassen erzeugen Sie Objekte für JUnit-Tests der Methode onlyNumbers?
+\item Wird die Methode immer terminieren?
+\end{enumerate}
+
+\section{Aufgabe 2}
+\begin{enumerate}
+    \item Realisieren Sie eine Methode long lengthOfPart(Path, int), die die Datei zum ange-
+gebenen Pfad byte-orientiert durchläuft und zurückgibt, wieviele Bytes die Datei enthält bis
+zur Position, an der erstmals der übergebene Bytewert vorkommt. Diese Position soll nicht
+mitgezählt werden.
+\item Ist der Parametertyp der Methode gut gewählt, um die Methode mit JUnit zu testen?
+\item Überprüfen Sie, ob die Methode auch für größere Dateien effizient arbeitet. Ändern Sie ggfs.
+die Realisierung.
+\end{enumerate}

@@ -1,0 +1,41 @@
+\chapter{Präsenzübung Streams}
+
+\section{Aufgabe 1}
+
+Es sei s eine Variable des Typs Stream<String>.
+Schreiben Sie einen Ausdruck für den Stream aller Wörter von s, solange diese eine Länge ungleich
+100 haben. Der berechnete Stream endet somit mit demjenigen Wort aus s, auf das das erste Mal
+ein Wort der Länge 100 folgt.
+Schauen Sie sich dazu die Methode takeWhile in der Schnittstelle Stream an.
+
+\section{Aufgabe 2}
+
+Schreiben Sie einen Ausdruck des Typs LongStream, der den Stream der Zahlen 0, 1, 3, 7, 15, 31,
+... berechnet. Der Stream soll nur die positiven Zahlen enthalten.
+
+\section{Aufgabe 3}
+
+Die Methode count der Schnittstelle Stream berechnet die Anzahl der Elemente eines Streams.
+Schreiben Sie einen Ausdruck für die gleiche Berechnung (ohne count zu verwenden!).
+
+\section{Aufgabe 4}
+
+Die Folge $r: \mathbb{N}_0 \rightarrow \mathbb{R}$ konvergiert für $x \geq 0$ gegen $\sqrt{x}$. Sie kann als Grundlage für einen Algorithmus
+verwendet werden, um Quadratwurzeln näherungsweise zu berechnen. $r$ ist wie folgt definiert:
+
+\begin{align*}
+    r_0 = 1 \\
+    r_{n + 1} = \frac{1}{2} \cdot \left(r_n + \frac{x}{r_n}\right) \text{ für } n \geq 0
+\end{align*}
+
+Ergänzen Sie die folgende Methode sqrt zur näherungsweisen Berechnung der Quadratwurzel. Die
+Berechnung der Wurzel von x soll enden, wenn sich das Quadrat des Näherungswerts nur noch um
+weniger als 0.00001 von x unterscheidet.
+
+\begin{lstlisting}
+public static OptionalDouble sqrt(double x) {
+return x < 0
+? OptionalDouble.empty()
+:
+}
+\end{lstlisting}

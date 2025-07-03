@@ -1,0 +1,41 @@
+\chapter{Präsenzübung Klassenhierarchie}
+
+Ausgangspunkt dieser Aufgabe sind folgende Klassen A und B.
+
+\begin{lstlisting}
+public class B {
+  private double d;
+  public void setD(double v) {
+    d = v;
+  }
+  public String asText() {
+    return String.valueOf(d);
+  }
+}
+
+public class A {
+  private int n;
+  public A(int n) {
+    this.n = n;
+  }
+  public double m(int m) {
+    return (double) n / m;
+  }
+}
+\end{lstlisting}
+
+\begin{enumerate}
+    \item Ergänzen Sie den Quellcode, sodass A direkte Unterklasse von B ist.
+    \item Ist nun folgendes Codestück compilierbar? \lstinline{B b = new A(n);}
+    \item Ist dieses Codestück compilierbar? Wenn ja, was ist die Ausgabe? \newline
+    \begin{lstlisting}
+A a = new A(10);
+a.setD(5);
+System.out.println(a.asText());
+\end{lstlisting}
+\item Implementieren Sie eine Methode \lstinline{getD()}, die den Wert der Instanzvariablen d liefert. Die
+Methode soll aus allen Unterklassen von B aufrufbar sein, nicht jedoch aus allen Klassen überhaupt.
+\item Implementieren Sie in A eine Methode \lstinline{asText()}, die den gleich Wert liefert wie die gleichnamige Methode aus B, jedoch ergänzt um den Wert der Instanzvariablen n. Dies soll auch dann
+gelten, wenn die Implementierung von \lstinline{asText} in B geändert wird.
+\item Deklarieren Sie die Methode m so, dass sie in Unterklassen nicht überschrieben werden kann.
+\end{enumerate}

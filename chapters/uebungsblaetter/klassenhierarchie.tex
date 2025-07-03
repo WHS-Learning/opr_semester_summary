@@ -2,7 +2,7 @@
 
 \section{Aufgabe 1}
 Bearbeiten Sie diese Aufgabe ohne Zuhilfenahme des Rechners. Betrachten Sie
-folgende Klassen A, B und C:
+folgende Klassen \lstinline{A}, \lstinline{B} und \lstinline{C}:
 
 \begin{lstlisting}
 public class A {
@@ -33,25 +33,25 @@ Beantworten Sie nun folgende Fragen:
 
 \begin{enumerate}
     \item Welche Ausgaben (Reihenfolge beachten!) erfolgen bei Auswertung der Ausdrücke
-          new C() und new C(5)?\newline \textit{Antwort:} \begin{itemize}
-              \item[new C()] AC
-              \item[new C(5)] AC2
+          \lstinline{new C()} und \lstinline{new C(5)}?\newline \textit{Antwort:} \begin{itemize}
+              \item[\lstinline{new C()}] AC
+              \item[\lstinline{new C(5)}] AC2
           \end{itemize} \pagebreak
-    \item Lassen sich noch alle Klassen A, B und C fehlerfrei compilieren, wenn in B
-          folgender Konstruk- tor hinzugefügt wird?
+    \item Lassen sich noch alle Klassen \lstinline{A}, \lstinline{B} und \lstinline{C} fehlerfrei compilieren, wenn in \lstinline{B}
+          folgender Konstruktor hinzugefügt wird?
           \begin{lstlisting}
 public B(int parameter) {
     System.out.println("B");
 }
             \end{lstlisting}
-          Falls ja, welche Ausgabe erfolgt bei Auswertung von new C(5)? Falls nein,
+          Falls ja, welche Ausgabe erfolgt bei Auswertung von \lstinline{new C(5)}? Falls nein,
           welche Klasse(n) lassen sich aus welchen Gründen nicht compilieren?\newline
-          \textit{Antwort:} Die Klasse C lässt sich nicht mehr compilieren.
+          \textit{Antwort:} Die Klasse \lstinline{C} lässt sich nicht mehr compilieren.
 \end{enumerate}
 
 \section{Aufgabe 2}
 Bearbeiten Sie diese Aufgabe ohne Zuhilfenahme des Rechners. Gegeben seien die
-Klassen P, Q und R.
+Klassen \lstinline{P}, \lstinline{Q} und \lstinline{R}.
 
 \begin{lstlisting}
 public class P {
@@ -89,6 +89,6 @@ public class R extends Q {
 }
 \end{lstlisting}
 
-Welchen Wert hat der Ausdruck new R().m1(new Q())?
+Welchen Wert hat der Ausdruck \lstinline{new R().m1(new Q())}?
 
 [Qm1[Pm1(Qm2(Pm2Qm3Rm3))]]

@@ -29,7 +29,7 @@ while (b != -1) {
 }
 \end{lstlisting}
 
-Das einzelne Lesen von Bytes aus einen \lstinline{InputStream} ist sehr
+Das einzelne Lesen von einzelnen Bytes aus einen \lstinline{InputStream} ist für externe Datensenken sehr
 ineffizient. Dateien können sehr groß werden, schnell auch mehrere Gigabyte
 groß. Dies entspricht millionen von \lstinline{read()} aufrufen und damit
 millionen von \texttt{I/O}-Zugriffen. Aufgrunddessen ist die einfache
@@ -38,7 +38,7 @@ lösung. Abhilfe schafft hier die Klasse \lstinline{BufferedInputStream}.
 
 \subsection{BufferedInputStream}
 
-Der BufferedInputStream kapselt einen InputStream und liest intern aus diesen
+Der \lstinline{BufferedInputStream} kapselt einen \lstinline{InputStream} und liest intern aus diesen
 Blockweise über die Methode
 \lstinline{read(byte[])}. Hier ist die Methode \lstinline{read()} effizient und
 kann gut genutzt werden.
@@ -58,23 +58,23 @@ und reproduzierbar zu sein.
           Bedeutung als der von \lstinline{read()}
 \end{itemize}
 
-Auch hier ist die Methode \lstinline{read()} für relativ große Datenquellen
+Auch hier ist die Methode \lstinline{read()} für externe Datenquellen
 sehr ineffizient.
 
 \subsection{BufferedReader}
 
-Der BufferedReader kapselt einen Reader ein und liest intern auf diesem
+Der \lstinline{BufferedReader} kapselt einen \lstinline{Reader} ein und liest intern auf diesem
 blockweise. Die \lstinline{read()}-Methode ist in dieser Klasse durch das
 interne Puffern auch für einzelne Zeichenlesevorgänge effizient.
 
-Der BufferedReader enthält außerdem die Methode \lstinline{String readLine()}
+Der \lstinline{BufferedReader} enthält außerdem die Methode \lstinline{String readLine()}
 um eine ganze Zeile zu lesen. Dies kann auch der gesamte Inhalt der Datenquelle
 sein. Außerdem enthält er die Methode \lstinline{Stream<String> lines()} um
 einen Stream aller Zeilen zu erstellen.
 
 \subsection{StringReader}
 
-Die Klasse StringReader eignet sich sehr gut um Methoden mit Reader-Parametern
+Die Klasse \lstinline{StringReader} eignet sich sehr gut um Methoden mit \lstinline{Reader}-Parametern
 zu testen.
 
 \section{Codierung}
@@ -87,7 +87,7 @@ dargestellt. Alle anderen Zeichen durch 2 bis 4 Byte. In UTF-16 werden alle
 Zeichen durch mindestens zwei Byte dargestellt.
 
 Um die Codierung eines InputStreams anzugeben, hat sein Konstruktor einen
-zweiten Parameter. Über den \nameref{chap:aufzaehlungstypen}
+zweiten Parameter. Über den Aufzaehlungstypen
 \lstinline{StandardCharsets} kann hier dann die erwünschte Codierung angegeben
 werden.
 
@@ -139,16 +139,16 @@ String utf16EncodedString = new String(bytes, StandardCharsets.UTF_16);
 System.out.println(utf16EncodedString); 
 \end{lstlisting}
 
-Wenn bytes in einer Tabelle nicht gefunden werden, werden diese über ein ?
+Wenn bytes in einer Tabelle nicht gefunden werden, werden diese über ein \lstinline{?}
 repräsentiert. Wird eine falsche Codierung angewandt, so werden die Zeichen
-anders interpretiert. Die Methode \lstinline{getBytes()} übersetzt den String
+anders als erwartet interpretiert. Die Methode \lstinline{getBytes()} übersetzt den String
 standardmäßig in die Standardcodierung der JVM, welche in Deutschland idr.
 UTF-8 is. Diese Codierung kann allerdings über den Parameter explizit angegeben
 werden.
 
 \section{OutputStream}
 
-Der OutputStream ist die Oberklasse aller Byteorientierten Ausgabeströmen. Er
+Der \lstinline{OutputStream} ist die Oberklasse aller Byteorientierten Ausgabeströmen. Er
 besitzt zwei Methoden:
 \begin{itemize}
     \item \lstinline{write(int)}
@@ -156,7 +156,7 @@ besitzt zwei Methoden:
 \end{itemize}
 
 Die Methode \lstinline{write(int)} istbei externen Datensenken potentiell
-Ineffizient. Aufgrunddessen gibt es hier die Klasse BufferedOutputStream.
+Ineffizient. Aufgrunddessen gibt es hier die Klasse \lstinline{BufferedOutputStream}.
 
 \begin{lstlisting}[language=Java, caption={Beispiel für OutputStream}]
 OutputStream bs = new ByteArrayOutputStream();
@@ -170,11 +170,76 @@ for (byte b : bytes) {
 
 \subsection{BufferedOutputStream}
 
-Der BufferedOutputStream kapselt einen OutputStream und schreibt dort
+Der \lstinline{BufferedOutputStream} kapselt einen \lstinline{OutputStream} und schreibt dort
 blockweise hinen. Die \lstinline{write(int)} Methode dieser Klasse ist auch für
 externe Datensenken effizient.
 
 \subsection{ByteArrayOutputStream}
 
-der ByteArrayOutputStream eignet sich zum Testen von Methoden mit
-OutputStream-Parametern.
+der \lstinline{ByteArrayOutputStream} eignet sich zum Testen von Methoden mit
+\lstinline{OutputStream}-Parametern. Dieser besitzt unter anderem 
+die Instanzmethoden \lstinline{size()} um die Größe des 
+Buffers zu bekommen und \lstinline{toByteArray()} um den 
+Inhalt des \lstinline{OutputStream} als byte Array zu erhalten.
+
+\section{Writer}
+
+Der \lstinline{Writer} ist de Oberklasse aller Zeichenorientierten Ausgabeströme. 
+Er besitzt die Methoden:
+
+\begin{itemize}
+    \item \lstinline{write(int)}
+    \item \lstinline{write(char[])}
+\end{itemize}
+Das \lstinline{write(int)} ist auch hier bei Externen Datensenken 
+sehr ineffizient.
+
+\subsection{BufferedWriter}
+
+Der \lstinline{BufferedWriter} kapselt einen \lstinline{Writer} ein und 
+schreibt dort Blockweise hinen. Die Methode \lstinline{write(int)} ist 
+hier effizient.
+
+\subsection{PrintWriter}
+
+Der \lstinline{PrintWriter} kapselt einen \lstinline{Writer} und hat 
+die \lstinline{write()} Methode mit allen Primitiven Datentypen überladen.
+Über ihn kann komfortabler in den \lstinline{Writer} geschrieben werden.
+
+\subsection{StringWriter}
+
+Der \lstinline{StringWriter} eignet sich sehr gut zum Testen von Methoden mit \lstinline{Writer}-Parametern.
+
+\section{mit \texttt{I/O}-Strömen arbeiten}
+
+Der Zugriff auf \texttt{I/O}-Ströme ist durch die Außnahmen relativ komplitziert. Jeder kann beim Lesen/Schreiben eine \lstinline{IOException} werfen, welche möglichst behandelt werden sollte. Außerdem müssen \texttt{I/O}-Ströme immer geschlossen werden, wenn diese geöffnet wurden.
+
+\begin{lstlisting}[language=Java, caption={Kompletter beispielzugriff auf InputStream}]
+InputStream is = null;
+try {
+    is = new FileInputStream(path);
+    is.read();
+    ...
+} catch (IOException e) {
+    ...
+} finally {
+    try {
+        if (is != null) {
+            is.close();
+        }
+    } catch (IOException e) {
+        ...
+    }
+}
+\end{lstlisting}
+
+Um dies zu vereinfachen, gibt es seit Java 7 ein Try mit Ressourcen. Dieser schließt die Ressourcen automatisch.
+
+\begin{lstlisting}[language=Java, caption={Kompletter beispielzugriff auf InputStream}]
+try (InputStream is = new FileInputStream(path)) {
+    is.read();
+    ...
+} catch (Exception e) {
+    ...
+}
+\end{lstlisting}

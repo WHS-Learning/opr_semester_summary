@@ -1,1 +1,53 @@
 \chapter{Aufzählungstypen}\label{chap:aufzaehlungstypen}
+
+Sollen Konstanten definiert werden, ist dies über \lstinline{static final} Variablen möglich. Soll beispielsweise einer von vier Zuständen gespeichert werden, so bietet sich ein Aufzählungstyp mehr an. 
+
+\begin{lstlisting}[language=Java, caption={Beispiel für Aufzählungstypen}]
+public enumm Direction {
+    UP, DOWN, LEFT, RIGHT
+}
+\end{lstlisting}
+
+Durch diesen Aufzählungstypen kann nun die Richtung von etwas sehr einfach gespeichert werden.
+
+\begin{lstlisting}[language=Java, caption={Beispiel für Aufzählungstypen}]
+private Direction direction = Direction.LEFT;
+
+private void turnLeft() {
+    if (direction == Direction.LEFT) {
+        direction = Direction.DOWN;
+    }
+    else if (direction == Direction.DOWN) {
+        direction = Direction.RIGHT;
+    }
+    else if (direction == Direction.RIGHT) {
+        direction = Direction.UP;
+    }
+    else if (direction == Direction.UP) {
+        direction = Direction.LEFT;
+    }
+}
+\end{lstlisting}
+
+Aufzählungstypen können, wie primitive Datentypen, über die \lstinline{==} Operation auf gleichheit geprüft werden. Dies liegt daran, dass keine neuen Objekte erstellt werden, sondern jedes \lstinline{Direction.UP} die gleiche Identität besitzt.
+
+\section{Aufzählungstypen mit Konstruktor}
+
+Sollen in dem Aufzählungstypen noch einige weitere werte gespeichert werden, so kann ihm ein Konstruktor zugewiesen werden.
+
+\begin{lstlisting}[language=Java, caption={Beispiel für Aufzählungstypen}]
+public enumm Module {
+    OPR(false),
+    FPR(true)
+
+    private boolean isMasterModule;
+
+    public Module(isMasterModule boolean) {
+        this.isMasterModule = isMasterModule;
+    }
+
+    public boolean isMasterModule() {
+        return this.isMasterModule;
+    }
+}
+\end{lstlisting}

@@ -21,8 +21,8 @@ public static List<String> m1(Collection<String> woerter) {
 \end{lstlisting}
 
 \section{Aufgabe 2}
-Schauen Sie sich die API-Dokumentation der Klasse OptionalInt, insbesondere der
-Methode ifPresent an. Ändern Sie dann das folgende Code-Stück derart, dass es
+Schauen Sie sich die API-Dokumentation der Klasse \lstinline{OptionalInt}, insbesondere der
+Methode \lstinline{ifPresent} an. Ändern Sie dann das folgende Code-Stück derart, dass es
 bei gleichem Verhalten keine if-Anweisung mehr enthält. Die Variable is ist vom
 Typ IntStream.
 
@@ -30,43 +30,39 @@ Typ IntStream.
 OptionalInt zahlOpt = is
         .filter(n -> n % 2 == 0)
         .findAny();
-if(zahlOpt.
-
-isPresent()){
-int zahl = zahlOpt.getAsInt();
-System.out.
-
-println(zahl *zahl);
+if(zahlOpt.isPresent()){
+  int zahl = zahlOpt.getAsInt();
+  System.out.println(zahl *zahl);
 }
 \end{lstlisting}
 
 \section{Aufgabe 3}
-Schauen Sie sich die API-Dokumentation der Schnittstelle LongStream,
-insbesondere der Methode takeWhile an. Geben Sie unter Verwendung der Methode
-LongStream fibonaccis() aus dem Code-Beispiel der Vorlesung einen Ausdruck an,
+Schauen Sie sich die API-Dokumentation der Schnittstelle \lstinline{LongStream},
+insbesondere der Methode \lstinline{takeWhile} an. Geben Sie unter Verwendung der Methode
+\lstinline{LongStream fibonaccis()} aus dem Code-Beispiel der Vorlesung einen Ausdruck an,
 der den Stream aller Fibonacci-Zahlen liefert, die mathematisch korrekt
 berechnet werden (d. h. bei denen es zu keinen Überlauf kommt).
 
 \section{Aufgabe 4}
-Es sei s eine Variable des Typs Set<Integer>.
+Es sei s eine Variable des Typs \lstinline{Set<Integer>}.
 \begin{enumerate}
     \item Geben Sie einen Ausdruck an, der die Summe aller Elemente der Menge s
           berechnet, die geradzahlig sind.
-    \item Geben Sie einen Ausdruck des Typs IntStream an, der alle natürlichen Zahlen
+    \item Geben Sie einen Ausdruck des Typs \lstinline{IntStream} an, der alle natürlichen Zahlen
           enthält bis einschließlich 100, die nicht in der Menge s enthalten sind.
 \end{enumerate}
 
 \section{Aufgabe 5}
-Geben Sie einen Ausdruck des Typs IntStream an, der folgende Elemente enthält:
+Geben Sie einen Ausdruck des Typs \lstinline{IntStream} an, der folgende Elemente enthält:
 0, 1, 3, 7, 15, 31, ...
 
 \section{Aufgabe 6}
-Realisieren Sie eine Methode boolean istPalindrom(String s) ohne Verwendung von
-Schlei- fen, if-Anweisungen und Rekursion.
+Realisieren Sie eine Methode boolean \lstinline{istPalindrom(String s)} ohne Verwendung von
+Schleifen, if-Anweisungen und Rekursion.
 
 \section{Aufgabe 7}
 Gegeben sei das folgende Code-Stück? Die Variable zeilen ist vom Typ
-Stream<String>.
+\lstinline{Stream<String>}.
 
 \begin{lstlisting}
 zeilen
@@ -80,7 +76,7 @@ zeilen
 \begin{enumerate}
     \item Was berechnet der Ausdruck?
     \item Jemand behauptet, das Code-Stück sei völlig ineffizient und würde, wenn zeilen
-          einen un- endlichen Stream enthält, überhaupt nicht terminieren. Er begründet
+          einen unendlichen Stream enthält, überhaupt nicht terminieren. Er begründet
           dies damit, dass durch die erste Anwendung von map für alle Elemente des
           Streams zunächst ein StringTokenizer erzeugt wird. Ändern Sie das Code-Stück
           derart, dass durch Bildschirmausgaben dokumentiert wird, dass die Person
