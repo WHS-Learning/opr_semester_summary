@@ -1,47 +1,118 @@
 \chapter{Übung Ein-/Ausgabe}
 
 \section{Aufgabe 1}
-Byteorientierte Datenquellen (Oberklasse: \lstinline{InputStream}) und zeichenorientierte Datenquellen (Oberklasse: \lstinline{Reader}) bieten mit ihren beiden \lstinline{read}-Methoden die Möglichkeit, sequentiell auf ihre Inhalte
-zuzugreifen. Ein anderer als ein sequentieller Zugriff ist nicht möglich.
-Für manche Anwendungen kann es wünschenswert sein, Bytes oder Zeichen in die Datenquelle
-zurückschieben zu können, sodass diese beim nächsten read daraus gelesen werden.
-Skizzieren Sie die Realisierung einer Klasse \lstinline{PushBackReader} mit einem Konstruktor
-\lstinline{PushBackReader(Reader)}. Ein Objekt dieser Klasse ermöglicht den Zugriff auf den übergebenen
-Reader, bietet jedoch zusätzlich die Möglichkeit, Zeichen `zurückzuschreiben'. Das zuletzt zurückgeschriebene Zeichen ist dasjenige, was beim nächsten \lstinline{int read()} geliefert wird.
+Byteorientierte Datenquellen (Oberklasse:
+\lstinline{InputStream}) und zeichenorientierte Datenquellen (Oberklasse: \lstinline{Reader})
+bieten mit ihren beiden \lstinline{read}-Methoden die Möglichkeit, sequentiell
+auf ihre Inhalte zuzugreifen. Ein anderer als ein sequentieller Zugriff ist
+nicht möglich. Für manche Anwendungen kann es wünschenswert sein, Bytes oder
+Zeichen in die Datenquelle zurückschieben zu können, sodass diese beim nächsten
+read daraus gelesen werden. Skizzieren Sie die Realisierung einer Klasse
+\lstinline{PushBackReader} mit einem Konstruktor
+\lstinline{PushBackReader(Reader)}. Ein Objekt dieser Klasse ermöglicht den
+Zugriff auf den übergebenen Reader, bietet jedoch zusätzlich die Möglichkeit,
+Zeichen `zurückzuschreiben'. Das zuletzt zurückgeschriebene Zeichen ist
+dasjenige, was beim nächsten \lstinline{int read()} geliefert wird.
+
+\begin{lstlisting}
+public class PushBackReader {
+    private final Reader reader;
+    Deque<Character> lastChars;
+
+    public PushBackReader(Reader reader) {
+        this.reader = reader;
+        this.lastChars = new Deque<>();
+    }
+
+    public int read() {
+        if (lastChars.isEmpty()) {
+            return reader.read();
+        } else {
+            return lastChars.pop();
+        }
+    }
+
+    public void pushBack(char c) {
+        lastChars.push(c);
+    }
+}
+
+public class PushBackInputStream {
+    private final InputStream inputstream;
+    Deque<int> lastBytes
+
+    public PushBackReader(InputStream inputstream) {
+        this.inputstream = inputstream;
+        this.lastChars = new Deque<>();
+    }
+
+    public int read() {
+        if (lastBytes.isEmpty()) {
+            return inputstream.read();
+        } else {
+            return lastBytes.pop();
+        }
+    }
+
+    public void pushBack(int i) {
+        lastBytes.push(i);
+    }
+}
+\end{lstlisting}
 
 \section{Aufgabe 2}
 
-Schauen Sie sich die Dokumentation der Methode \lstinline{int available()} der Klasse \lstinline{InputStream}
-an. Gerne (und fälschlicherweise) wird diese Methode verwendet, um für einen erzeugten Stream
-auf die Anzahl der darin enthaltenen Bytes (= Größe des Streams) zuzugreifen. Bereits am Methodenkopf kann man erkennen, dass \lstinline{int available()} diese Aufgabe gar nicht erfüllen kann.
-Woran erkennen Sie es?
+Schauen Sie sich die Dokumentation der Methode
+\lstinline{int available()} der Klasse \lstinline{InputStream} an. Gerne (und
+fälschlicherweise) wird diese Methode verwendet, um für einen erzeugten Stream
+auf die Anzahl der darin enthaltenen Bytes (= Größe des Streams) zuzugreifen.
+Bereits am Methodenkopf kann man erkennen, dass \lstinline{int available()}
+diese Aufgabe gar nicht erfüllen kann. Woran erkennen Sie es?
+
+\textit{Der Rückgabewert ist \lstinline{int}. InputStreams können größer sein als der maximale Int-Wert. Außerdem können InputStreams unendlich sein, wodurch es unmöglich ist, eine \lstinline{length()} methode zu implementieren.}
 
 \section{Aufgabe 3}
 In einer Firma wurde in der Klasse \lstinline{QuickAndDirty} eine Methode
-\lstinline{long untersucheDateien(Path pfad1, Path pfad2)}
-geschrieben. Die Methode arbeitet byteorientiert auf zwei Dateien, deren Pfade durch Objekte des
-Typs \lstinline{java.nio.file.Path} übergeben werden.
-Leider hat die Firma bei der Entwicklung der Methode nicht daran gedacht, dass diese getestet werden muss (und dass man die Arbeit an den Methoden mit dem Schreiben der Tests hätte beginnen
-sollen).
-Was raten Sie der Firma? Wie würden Sie die JUnit-Tests für die Methode schreiben? Es geht insbesondere um die Bereitstellung der Testdaten für die Testfälle. Ziehen Sie auch in Betracht, die
-Schnittstelle der Methode zu ändern.
+\lstinline{long untersucheDateien(Path pfad1, Path pfad2)} geschrieben. Die
+Methode arbeitet byteorientiert auf zwei Dateien, deren Pfade durch Objekte des
+Typs \lstinline{java.nio.file.Path} übergeben werden. Leider hat die Firma bei
+der Entwicklung der Methode nicht daran gedacht, dass diese getestet werden
+muss (und dass man die Arbeit an den Methoden mit dem Schreiben der Tests hätte
+beginnen sollen). Was raten Sie der Firma? Wie würden Sie die JUnit-Tests für
+die Methode schreiben? Es geht insbesondere um die Bereitstellung der Testdaten
+für die Testfälle. Ziehen Sie auch in Betracht, die Schnittstelle der Methode
+zu ändern.
+
+\textit{Es ist nicht ohne weiteres Möglich einen sinnvollen Test für diese Datei zu schreiben. Die Parameter sollten InputStreams sein. Dadurch können Sinnvolle Tests geschrieben werden.}
+
+\pagebreak
 
 \section{Aufgabe 4}
-Wir möchten besser verstehen, was die Bedeutung der Codierungen zwischen Zeichen und Bytes
-ist.
-Skizzieren (oder programmieren) Sie eine Methode
-\ lstinline{byte[] inBytes(char, Charset)}
-die zu einem Zeichen die Bytefolge liefert, durch die das Zeichen in dem übergebenen Charset
-kodiert wird.
-Verwenden Sie keine Methoden der Klasse \lstinline{Charset}, sondern denken Sie an Ausgabeströme.
+Wir möchten besser verstehen, was die Bedeutung der Codierungen zwischen
+Zeichen und Bytes ist. Skizzieren (oder programmieren) Sie eine Methode \
+\lstinline{byte[] inBytes(char, Charset)} die zu einem Zeichen die Bytefolge
+liefert, durch die das Zeichen in dem übergebenen Charset kodiert wird.
+Verwenden Sie keine Methoden der Klasse \lstinline{Charset}, sondern denken Sie
+an Ausgabeströme.
+
+\begin{lstlisting}
+public byte[] intBytes(char chars, Charset charset) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    OutputStreamWriter osw = new OutputStreamWriter(baos, charset);
+    osw.write(chars);
+    osw.close();
+    baos.close();
+    return baos.toByteArray();
+}
+\end{lstlisting}
 
 \section{Aufgabe 5}
-Skizzieren (oder programmieren) Sie eine Methode
-\lstinline{IntStream chars(Reader)}
-die den Inhalt eines \lstinline{Readers} als Stream liefert. Die Werte des Streams sind die Codes der Zeichen.
-Hinweis: Hilfreich ist die Methode \lstinline{generate} der Klasse \lstinline{IntStream}. Hierdurch wird jedoch ein
-unendlicher Stream erzeugt. Schauen Sie sich deshalb auch die Methode \lstinline{takeWhile} an. Nützlich
-ist auch dieses Realisierungsmuster:
+Skizzieren (oder programmieren) Sie eine Methode 
+\lstinline{IntStream chars(Reader)} die den Inhalt eines \lstinline{Readers} als Stream liefert. Die
+Werte des Streams sind die Codes der Zeichen. Hinweis: Hilfreich ist die
+Methode \lstinline{generate} der Klasse \lstinline{IntStream}. Hierdurch wird
+jedoch ein unendlicher Stream erzeugt. Schauen Sie sich deshalb auch die
+Methode \lstinline{takeWhile} an. Nützlich ist auch dieses Realisierungsmuster:
 \begin{lstlisting}
 try {
     ...
@@ -49,6 +120,19 @@ try {
     throw new UncheckedIOException(e);
 }
 \end{lstlisting}
-Das Muster ist nützlich, wenn man eine Ausnahme nicht behandeln kann, jedoch auch nicht deklarieren kann, dass man sie weiterwirft. Dies ist z. B. der Fall, wenn die Checked Exception innerhalb
-eines Lambda-Ausdrucks auftritt. In diesem Fall wirft man anstelle der Checked eine Unchecked
-Exception.
+Das Muster ist nützlich, wenn man eine Ausnahme nicht behandeln kann, jedoch
+auch nicht deklarieren kann, dass man sie weiterwirft. Dies ist z. B. der Fall,
+wenn die Checked Exception innerhalb eines Lambda-Ausdrucks auftritt. In diesem
+Fall wirft man anstelle der Checked eine Unchecked Exception.
+
+\begin{lstlisting}
+public IntStream chars(Reader reader) {
+    return IntStream.generate(() -> {
+        try {
+        return reader.read();
+        } catch (IOException e) {
+        throw new UncheckedIOException(e);
+        }
+    }).takeWhile(i -> i != -1);
+}
+\end{lstlisting}

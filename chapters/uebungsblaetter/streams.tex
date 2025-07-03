@@ -20,11 +20,21 @@ public static List<String> m1(Collection<String> woerter) {
 }
 \end{lstlisting}
 
+\begin{lstlisting}
+public static List<String> m1(Collection<String> woerter) {
+  return woerter.stream()
+      .filter(s -> s.length() >= 5)
+      .map(s -> s.substring(s.length() / 2))
+      .filter(s -> s.charAt(0) >= 'a')
+      .toList();
+}
+\end{lstlisting}
+
 \section{Aufgabe 2}
-Schauen Sie sich die API-Dokumentation der Klasse \lstinline{OptionalInt}, insbesondere der
-Methode \lstinline{ifPresent} an. Ändern Sie dann das folgende Code-Stück derart, dass es
-bei gleichem Verhalten keine if-Anweisung mehr enthält. Die Variable is ist vom
-Typ IntStream.
+Schauen Sie sich die API-Dokumentation der Klasse \lstinline{OptionalInt},
+insbesondere der Methode \lstinline{ifPresent} an. Ändern Sie dann das folgende
+Code-Stück derart, dass es bei gleichem Verhalten keine if-Anweisung mehr
+enthält. Die Variable is ist vom Typ IntStream.
 
 \begin{lstlisting}
 OptionalInt zahlOpt = is
@@ -36,32 +46,76 @@ if(zahlOpt.isPresent()){
 }
 \end{lstlisting}
 
+\begin{lstlisting}
+is.filter(n -> n % 2 == 0)
+  .findAny()
+  .ifPresent(i -> System.out.println(i * i));
+\end{lstlisting}
+
 \section{Aufgabe 3}
-Schauen Sie sich die API-Dokumentation der Schnittstelle \lstinline{LongStream},
-insbesondere der Methode \lstinline{takeWhile} an. Geben Sie unter Verwendung der Methode
-\lstinline{LongStream fibonaccis()} aus dem Code-Beispiel der Vorlesung einen Ausdruck an,
-der den Stream aller Fibonacci-Zahlen liefert, die mathematisch korrekt
-berechnet werden (d. h. bei denen es zu keinen Überlauf kommt).
+Schauen Sie sich die API-Dokumentation der Schnittstelle
+\lstinline{LongStream}, insbesondere der Methode \lstinline{takeWhile} an.
+Geben Sie unter Verwendung der Methode \lstinline{LongStream fibonaccis()} aus
+dem Code-Beispiel der Vorlesung einen Ausdruck an, der den Stream aller
+Fibonacci-Zahlen liefert, die mathematisch korrekt berechnet werden (d. h. bei
+denen es zu keinen Überlauf kommt).
+
+\begin{lstlisting}
+fibonaccis().takeWhile(i -> i >= 0);
+\end{lstlisting}
 
 \section{Aufgabe 4}
 Es sei s eine Variable des Typs \lstinline{Set<Integer>}.
 \begin{enumerate}
-    \item Geben Sie einen Ausdruck an, der die Summe aller Elemente der Menge s
-          berechnet, die geradzahlig sind.
-    \item Geben Sie einen Ausdruck des Typs \lstinline{IntStream} an, der alle natürlichen Zahlen
-          enthält bis einschließlich 100, die nicht in der Menge s enthalten sind.
+  \item Geben Sie einen Ausdruck an, der die Summe aller Elemente der Menge s
+        berechnet, die geradzahlig sind.
+        \begin{lstlisting}
+s.filter(s -> s % 2 == 0)
+  .mapToInt(n -> n)
+  .sum();
+\end{lstlisting}
+  \item Geben Sie einen Ausdruck des Typs \lstinline{IntStream} an, der alle
+        natürlichen Zahlen enthält bis einschließlich 100, die nicht in der Menge s
+        enthalten sind.
+                \begin{lstlisting}
+IntStream().rangeClosed(1, 100)
+            .filter(i -> !s.contains(i));
+\end{lstlisting}
 \end{enumerate}
 
 \section{Aufgabe 5}
-Geben Sie einen Ausdruck des Typs \lstinline{IntStream} an, der folgende Elemente enthält:
-0, 1, 3, 7, 15, 31, ...
+Geben Sie einen Ausdruck des Typs \lstinline{IntStream} an, der folgende
+Elemente enthält: 0, 1, 3, 7, 15, 31, \dots
+
+\begin{lstlisting}
+IntStream().iterate(0, i -> i + i + 1)
+    .takeWhile(i -> i >= 0);
+\end{lstlisting}
 
 \section{Aufgabe 6}
-Realisieren Sie eine Methode boolean \lstinline{istPalindrom(String s)} ohne Verwendung von
-Schleifen, if-Anweisungen und Rekursion.
+Realisieren Sie eine Methode \lstinline{boolean istPalindrom(String s)} ohne
+Verwendung von Schleifen, if-Anweisungen und Rekursion.
+
+\begin{lstlisting}
+public boolean istPalindrom(String s) {
+  int[] chars = new int[s.length()];
+  int[] index = new int[]{s.length() - 1};
+  s.chars().forEach(i -> chars[index[0]--] = i);
+  return Arrays.equals(chars, s.chars().toArray());
+}
+\end{lstlisting}
+
+\textbf{Alternative, vernünftige Lösung}
+
+\begin{lstlisting}
+public static boolean istPalindrom(String s) {
+  return IntStream.range(0, s.length() / 2)
+          .allMatch(i -> s.charAt(i) == s.charAt(s.length() - 1 - i));
+}
+\end{lstlisting}
 
 \section{Aufgabe 7}
-Gegeben sei das folgende Code-Stück? Die Variable zeilen ist vom Typ
+Gegeben sei das folgende Code-Stück. Die Variable zeilen ist vom Typ
 \lstinline{Stream<String>}.
 
 \begin{lstlisting}
@@ -74,12 +128,25 @@ zeilen
 \end{lstlisting}
 
 \begin{enumerate}
-    \item Was berechnet der Ausdruck?
-    \item Jemand behauptet, das Code-Stück sei völlig ineffizient und würde, wenn zeilen
-          einen unendlichen Stream enthält, überhaupt nicht terminieren. Er begründet
-          dies damit, dass durch die erste Anwendung von map für alle Elemente des
-          Streams zunächst ein StringTokenizer erzeugt wird. Ändern Sie das Code-Stück
-          derart, dass durch Bildschirmausgaben dokumentiert wird, dass die Person
-          Unrecht hat und nur soviele StringTokenizer erzeugt werden, wie für die
-          Funktion des Code-Stücks benötigt werden.
+  \item Was berechnet der Ausdruck? \newline
+  \textit{Der Code gibt den ersten Token des Strings, der mehr als 4 buchstaben lang ist.}
+  \item Jemand behauptet, das Code-Stück sei völlig ineffizient und würde, wenn zeilen
+        einen unendlichen Stream enthält, überhaupt nicht terminieren. Er begründet
+        dies damit, dass durch die erste Anwendung von map für alle Elemente des
+        Streams zunächst ein StringTokenizer erzeugt wird. Ändern Sie das Code-Stück
+        derart, dass durch Bildschirmausgaben dokumentiert wird, dass die Person
+        Unrecht hat und nur soviele StringTokenizer erzeugt werden, wie für die
+        Funktion des Code-Stücks benötigt werden.
+\begin{lstlisting}
+zeilen
+    .map(w -> {
+      System.out.println(w);
+      return new StringTokenizer(w);
+    })
+    .filter(StringTokenizer::hasMoreTokens)
+    .map(StringTokenizer::nextToken)
+    .filter(s -> s.length() >= 5)
+    .findFirst();
+\end{lstlisting}
 \end{enumerate}
+
