@@ -1,37 +1,93 @@
-\chapter{Präsenzübung Collection Klassen 2}
+\chapter{Präsenzübung Collection \newline Klassen 2}
 
 \section{Aufgabe 1}
-Bei einer Umfrage gibt es für eine bestimmte Frage n vordefinierte Antwortmöglichkeiten. Jede
-Kombination dieser Antwortmöglichkeiten ist zulässig, einschließlich dem Ankreuzen keiner und
-dem Ankreuzen aller Möglichkeiten. Eine Antwort auf die Frage wird durch ein Objekt der Klasse
-Vote repräsentiert.
+Bei einer Umfrage gibt es für eine bestimmte Frage n vordefinierte
+Antwortmöglichkeiten. Jede Kombination dieser Antwortmöglichkeiten ist
+zulässig, einschließlich dem Ankreuzen keiner und dem Ankreuzen aller
+Möglichkeiten. Eine Antwort auf die Frage wird durch ein Objekt der Klasse Vote
+repräsentiert.
 
 \begin{lstlisting}
 public class Vote {
-private final int[] selectedOptions;
-public Vote(int... selectedOptions) {
-this.selectedOptions = selectedOptions;
-}
-...
+  private final int[] selectedOptions;
+
+  public Vote(int... selectedOptions) {
+    this.selectedOptions = selectedOptions;
+  }
+    ...
 }
 \end{lstlisting}
 
-Die Klasse Evaluation dient der Auswertung der Antworten auf eine Frage. Beim Erzeugen eines
-Evaluation-Objekts übergibt man eine Liste aller Antworten auf die Frage.
-Ergänzen Sie die Klasse Evaluation (und gerne auch Vote), sodass sich die Methode percentageOfVotes
-wie beschrieben verhält. Die Methode soll keine Iteration enthalten.
+Die Klasse Evaluation dient der Auswertung der Antworten auf eine Frage. Beim
+Erzeugen eines Evaluation-Objekts übergibt man eine Liste aller Antworten auf
+die Frage. Ergänzen Sie die Klasse Evaluation (und gerne auch Vote), sodass
+sich die Methode percentageOfVotes wie beschrieben verhält. Die Methode soll
+keine Iteration enthalten.
 
 \begin{lstlisting}
 public class Evaluation {
-public Evaluation(LinkedList<Vote> votes) {
-...
+  public Evaluation(LinkedList<Vote> votes) {
+    ...
+  }
+
+  /**
+   * Returns how often the given vote occurs among all votes.
+   *
+   * @return the relative quantity in percent
+   */
+  public double percentageOfVotes(Vote v) {
+    ...
+  }
 }
-/**
-* Returns how often the given vote occurs among all votes.
-* @return the relative quantity in percent
-*/
-public double percentageOfVotes(Vote v) {
-...
+\end{lstlisting}
+
+\begin{lstlisting}
+public class Vote {
+  private final int[] selectedOptions;
+
+  public Vote(int... selectedOptions) {
+    this.selectedOptions = selectedOptions;
+  }
+
+  @Overrite
+  public boolean equals(Object obj) {
+    if (obj instanceof Vote v) {
+        return Arrays.equals(v.selectedOptions, this.selectedOptions);
+    }
+    return false;
+  }
+
+  @Overrite
+  public int hashCode() {
+    int sum = 0;
+    for (int v : selectedOptions) {
+        sum += v;
+    }
+    return sum;
+  }
 }
+
+public class Evaluation {
+  private final LinkedList<Vote> votes;
+  HashMap<Vote, Integer> votePercentages;
+
+  public Evaluation(LinkedList<Vote> votes) {
+    votes = new LinkedList<>();
+    votePercentages = new HashMap<>();
+    for (Vote v : votes) {
+        votes.add(v);
+        int amount = votePercentages.getOrDefault(v, 0);
+        votePercentages.put(v, amount + 1);
+    }
+  }
+
+  /**
+   * Returns how often the given vote occurs among all votes.
+   *
+   * @return the relative quantity in percent
+   */
+  public double percentageOfVotes(Vote v) {
+    return votePercentages.getOrDefault(v, 0) / votes.size();
+  }
 }
 \end{lstlisting}

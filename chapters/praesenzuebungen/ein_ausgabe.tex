@@ -3,22 +3,64 @@
 \section{Aufgabe 1}
 
 \begin{enumerate}
-    \item Realisieren Sie eine Methode void onlyNumbers(Reader, Writer), die alle nicht-leeren
-Zeilen der übergebenen Datenquelle, die ausschließlich aus Ziffern bestehen, in die Datensen-
-ke schreibt.
-Hinweis: Sie können durch s.matches([0-9]+) prüfen, ob die Zeichenkette in s nicht leer
-ist und nur aus Ziffern besteht.
-\item Von welchen Klassen erzeugen Sie Objekte für JUnit-Tests der Methode onlyNumbers?
-\item Wird die Methode immer terminieren?
+    \item Realisieren Sie eine Methode \lstinline{void onlyNumbers(Reader, Writer)}, die
+          alle nicht-leeren Zeilen der übergebenen Datenquelle, die ausschließlich aus
+          Ziffern bestehen, in die Datensenke schreibt. Hinweis: Sie können durch
+          \lstinline{s.matches([0-9]+)} prüfen, ob die Zeichenkette in s nicht leer ist
+          und nur aus Ziffern besteht.
+          \begin{lstlisting}
+public void onlyNumbers(Reader reader, Writer writer) {
+    BufferedReader br = new BufferedReader(reader);
+    BufferedWriter bw = new BufferedWriter(writer);
+
+    String line = br.readLine();
+
+    while (line != null && line.matches("[0-9]+")) throws IOException{
+        bw.write(line);
+        line = br.readLine();
+    }
+    br.close();
+    bw.close();
+}
+\end{lstlisting}
+    \item Von welchen Klassen erzeugen Sie Objekte für JUnit-Tests der Methode
+          onlyNumbers? \newline \textbf{von StringReader und StringWriter}
+    \item Wird die Methode immer terminieren? \newline \textbf{Nein. Reader können
+              unendlich lange Daten beinhalten.}
 \end{enumerate}
+
+\pagebreak
 
 \section{Aufgabe 2}
 \begin{enumerate}
-    \item Realisieren Sie eine Methode long lengthOfPart(Path, int), die die Datei zum ange-
-gebenen Pfad byte-orientiert durchläuft und zurückgibt, wieviele Bytes die Datei enthält bis
-zur Position, an der erstmals der übergebene Bytewert vorkommt. Diese Position soll nicht
-mitgezählt werden.
-\item Ist der Parametertyp der Methode gut gewählt, um die Methode mit JUnit zu testen?
-\item Überprüfen Sie, ob die Methode auch für größere Dateien effizient arbeitet. Ändern Sie ggfs.
-die Realisierung.
+    \item Realisieren Sie eine Methode long lengthOfPart(Path, int), die die Datei zum
+          angegebenen Pfad byte-orientiert durchläuft und zurückgibt, wieviele Bytes
+          die Datei enthält bis zur Position, an der erstmals der übergebene Bytewert
+          vorkommt. Diese Position soll nicht mitgezählt werden.
+          \begin{lstlisting}
+public long lengthOfPart(Path path, int i) {
+    File f = path.toFile();
+    FileInputStream fis = new FileInputStream(f);
+    BufferedInputStream bis = new BufferedInputStream(fis);
+
+    int b = bis.read();
+    
+    int size = 0;
+
+    while (b != -1 && b != i) {
+        size++;
+        b = bis.read();
+    }
+
+    bis.close();
+    fis.close();
+
+    return size();
+}
+\end{lstlisting}
+    \item Ist der Parametertyp der Methode gut gewählt, um die Methode mit JUnit zu
+          testen? \newline 
+          \textbf{Nein, Teste sollten in sich geschlossen sein und nicht auf externe Daten basieren.}
+    \item Überprüfen Sie, ob die Methode auch für größere Dateien effizient arbeitet. Ändern Sie ggfs.
+          die Realisierung. \newline \textbf{Ja funktioniert gut wegen des BufferedInputStreams.}
 \end{enumerate}

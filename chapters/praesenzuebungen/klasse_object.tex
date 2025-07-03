@@ -4,13 +4,13 @@
 Realisieren Sie alles Notwendige, sodass:
 
 \begin{itemize}
-    \item Man kann Objekte der Klassen Point und Rectangle aus EPR mit beliebigen anderen Ob-
-jekten auf Gleichheit testen.
-Ein Point-Objekt soll nur mit Objekten der gleichen Klasse gleich sein, zudem sollen die Ko-
-ordinaten übereinstimmen.
-Ein Rectangle-Objekt soll nur mit Objekten der gleichen Klasse gleich sein, zudem sollen der
-Ursprung und die Abmessungen übereinstimmen.
-\item Alle Vorgaben, die in diesem Zusammenhang im JDK dokumentiert sind, werden eingehalten.
+    \item Man kann Objekte der Klassen Point und Rectangle aus EPR mit beliebigen anderen
+          Objekten auf Gleichheit testen. Ein Point-Objekt soll nur mit Objekten der
+          gleichen Klasse gleich sein, zudem sollen die Koordinaten übereinstimmen. Ein
+          Rectangle-Objekt soll nur mit Objekten der gleichen Klasse gleich sein, zudem
+          sollen der Ursprung und die Abmessungen übereinstimmen.
+    \item Alle Vorgaben, die in diesem Zusammenhang im JDK dokumentiert sind, werden
+          eingehalten.
 \end{itemize}
 
 Zur erinnerung:
@@ -18,3 +18,37 @@ Zur erinnerung:
     \item In Point gibt es die Instanzvariablen x und y.
     \item In Rectangle gibt es die Instanzvariablen origin, width und height.
 \end{itemize}
+
+\begin{lstlisting}
+public class Point {
+    ...
+    @Override 
+    public boolean equals(Object obj) {
+        if (obj instanceof Point p) {
+            return p.x == this.x && p.y == this.y;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.x + this.y;
+    }
+}
+
+public class Rectangle {
+    ...
+    @Override 
+    public boolean equals(Object obj) {
+        if (obj instanceof Rectangle r) {
+            return r.origin.equals(this.origin) && r.width == this.width && r.height == this.height;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.origin.hashCode() + this.width + this.height;
+    }
+}
+\end{lstlisting}

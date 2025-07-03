@@ -7,10 +7,27 @@ Methode keinen Sinn.
 Beschreiben Sie, wie man diese Methode ändern muss, sodass sie einem Aufrufer im Falle eines
 negativen Parameterwerts signalisiert, dass sie mit einem unsinnigen Wert aufgerufen wurde.
 
+\begin{lstlisting}
+public void setGeneralOrderLimit(int limit) {
+    if (limit < 0) {
+        throw new IllegalArgumentException("limit has to be at least 1.");
+    }
+    ...
+}
+\end{lstlisting}
+
 \section{Aufgabe 2}
 Realisieren Sie eine Methode Number parse(String), die ein Hüllobjekt der Klasse Integer
 liefert, wenn die Zeichenkette eine Zahl des Typs int repräsentiert. Wenn die Zeichenkette keinen
-int-Wert, jedoch einen double-Wert repräsentiert, liefert die Methode ein entsprechendes Hüllob-
-jekt der Klasse Double. Sonst wirft die Methode eine NumberFormatException.
-In der Klasse Integer gibt es die statische Methode int parseInt(String), in Double die Me-
-thode double parseDouble(String). Beide Klassen sind Unterklassen von java.lang.Number.
+int-Wert, jedoch einen double-Wert repräsentiert, liefert die Methode ein entsprechendes Hüllobjekt der Klasse Double. Sonst wirft die Methode eine NumberFormatException.
+In der Klasse Integer gibt es die statische Methode int parseInt(String), in Double die Methode double parseDouble(String). Beide Klassen sind Unterklassen von java.lang.Number.
+
+\begin{lstlisting}
+public Number parse(String s) {
+    try {
+        return Integer.parseInt(s);
+    } catch (NumberFormatException e) {
+        return Double.parseDouble(s);
+    }
+}
+\end{lstlisting}

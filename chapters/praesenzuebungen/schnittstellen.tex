@@ -2,13 +2,55 @@
 
 \section{Aufgabe 1}
 
-Das Carsharing-Unternehmen, für das in der praktischen Aufgabe Car Sharing die Klasse VehicleManager
-entwickelt wurde, möchte die Anwendung um eine Protokollfunktion erweitern. Die konkrete Form
-des Protokolls ist noch unklar und sie soll sich im Laufe der Zeit ändern können. Fest steht jedoch,
-dass sich die Protokollierung auf Buchungsversuche (Methode bookVehicle) bezieht und auf fol-
-genden Informationen beruhen soll: Name des Fahrzeugs, das versucht wurde zu buchen; gewünsch-
-ter Zeitraum; Kennzeichen, ob der Buchungsversuch erfolgreich war.
-Beschreiben Sie, was zusätzlich benötigt wird (Klassen und/oder Schnittstellen), um die Anforderung
-zu erfüllen und was an der Klasse VehicleManager geändert werden muss.
-Als Protokoll interessiert sich das Carsharing-Unternehmen anfangs für den Anteil der erfolgreichen
-Buchungen in Bezug auf alle Buchungsversuche. Beschreiben Sie, was dafür zu tun ist.
+Das Carsharing-Unternehmen, für das in der praktischen Aufgabe Car Sharing die
+Klasse VehicleManager entwickelt wurde, möchte die Anwendung um eine
+Protokollfunktion erweitern. Die konkrete Form des Protokolls ist noch unklar
+und sie soll sich im Laufe der Zeit ändern können. Fest steht jedoch, dass sich
+die Protokollierung auf Buchungsversuche (Methode bookVehicle) bezieht und auf
+folgenden Informationen beruhen soll: Name des Fahrzeugs, das versucht wurde zu
+buchen; gewünschter Zeitraum; Kennzeichen, ob der Buchungsversuch erfolgreich
+war. Beschreiben Sie, was zusätzlich benötigt wird (Klassen und/oder
+Schnittstellen), um die Anforderung zu erfüllen und was an der Klasse
+VehicleManager geändert werden muss. Als Protokoll interessiert sich das
+Carsharing-Unternehmen anfangs für den Anteil der erfolgreichen Buchungen in
+Bezug auf alle Buchungsversuche. Beschreiben Sie, was dafür zu tun ist.
+
+\begin{lstlisting}
+public interface Protocol {
+    void log(String name, TimeInterval ti, boolean successful);
+}
+
+public class SuccessProtocol implements Protocol{
+    private int successful;
+    private int general;
+    
+    public SuccessProtocol() {
+        this.successful = 0;
+        this.general = 0;
+    }
+
+    @Override
+    public void log(String name, TimeInterval ti, boolean successful) {
+        general++;
+        if (successful) {
+            this.successful++;
+        }
+    }
+}
+
+public class VehicleManager {
+    Protocol protocol;
+
+    ...
+
+    public VehicleManager() {
+        this.protocol = new SuccessProtocol();
+    }
+
+    public boolean bookVehicle(String name, String from, String to) {
+        TimeInterval ti = new TimeInterval(from, to)
+        boolean success = vehicles.get(name).book(TimeInterval, from);
+        this.protocol.log(name, ti, success);
+    }
+}
+\end{lstlisting}

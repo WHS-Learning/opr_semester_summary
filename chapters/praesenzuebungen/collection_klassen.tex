@@ -1,23 +1,68 @@
-\chapter{Präsenzübung Collection Klassen 1}
+\chapter{Präsenzübung Collection \newline Klassen 1}
 
 \section{Aufgabe 1}
-Die CatalogItem-Objekte des Code-Beispiels aus der Vorlesung sollen eine (alphanummerische)
-Artikelnummer erhalten und es soll möglich sein, mit der Methode CatalogItem getItem(String)
-einen Artikel des Katalogs gezielt anhand seiner Nummer auszuwählen.
-Skizzieren Sie die notwendigen Änderungen an den Klassen des Katalogbeispiels.
+Die CatalogItem-Objekte des Code-Beispiels aus der Vorlesung sollen eine
+(alphanummerische) Artikelnummer erhalten und es soll möglich sein, mit der
+Methode CatalogItem getItem(String) einen Artikel des Katalogs gezielt anhand
+seiner Nummer auszuwählen. Skizzieren Sie die notwendigen Änderungen an den
+Klassen des Katalogbeispiels.
+
+\begin{lstlisting}
+public abstract class CatalogItem {
+    ...
+    private final String id;
+
+    protected CatalogItem(float price, String id) {
+        this.id = id;
+        ...
+    }
+
+    public String getId() {
+        return this.id;
+    }
+}
+
+public class Catalog {
+    CatalogItem getItem(String id) {
+        for (CatalogItem item : items) {
+            if (item.getId().equals(id)) {
+                return item;
+            }
+        }
+
+        throw new NoSuchElementException("No item found with ID " + id);
+    }
+}
+\end{lstlisting}
 
 \section{Aufgabe 2}
-In der Klasse CatalogItem des Code-Beispiels aus der Vorlesung werden die Ausschlusswörter
-in einem Feld (Array) verwaltet. Mit unserem jetzigen Kenntnisstand ist das keine gute Wahl. Wel-
-che Klasse ist geeigneter, um die Ausschlusswörter zu verwalten? Was ändert sich dadurch am
-Quellcode der Methode boolean isSkipWord(String)?
+In der Klasse CatalogItem des Code-Beispiels aus der Vorlesung werden die
+Ausschlusswörter in einem Feld (Array) verwaltet. Mit unserem jetzigen
+Kenntnisstand ist das keine gute Wahl. Welche Klasse ist geeigneter, um die
+Ausschlusswörter zu verwalten? Was ändert sich dadurch am Quellcode der Methode
+\lstinline{boolean isSkipWord(String)}?
+
+\textbf{Die Ausschlusswörter sollten in einem \lstinline{HashSet} verwaltet werden. Um zu überprüfen, ob ein Wort ein SkipWord ist, kann dann die \lstinline{contains()} Methode verwendet werden.}
 
 \section{Aufgabe 3}
 Die Klasse Address besitzt Instanzvariablen street und city vom Typ String.
-Realisieren Sie in Address eine statische Methode
-... streetsByTown(ArrayList<Address>)
-die die Adressen der übergebenen Liste als Zuordnung liefert, bei der jeder Stadt die Straßen dieser
-Stadt zugeordnet sind. Wenn man über die Straßen der einzelnen Städte iteriert, sollen sie alphabe-
-tisch sortiert durchlaufen werden.
-Wählen Sie zuerst einen geeigneten Ergebnistyp der Methode.
+Realisieren Sie in Address eine statische Methode 
+\lstinline{... streetsByTown(ArrayList<Address>)} die die Adressen der übergebenen Liste als
+Zuordnung liefert, bei der jeder Stadt die Straßen dieser Stadt zugeordnet
+sind. Wenn man über die Straßen der einzelnen Städte iteriert, sollen sie
+alphabe- tisch sortiert durchlaufen werden. Wählen Sie zuerst einen geeigneten
+Ergebnistyp der Methode.
 
+\begin{lstlisting}
+HashMap<String, TreeSet<String>> streetsByTown(ArrayList<Address> addresses) {
+    HashMap<String, TreeSet<String>> streets = new HashMap<>();
+
+    for (Address address : addresses) {
+        TreeSet<String> st = streets.getOrDefault(address.city, new TreeSet<String>());
+        st.add(address.street);
+        streets.put(adress.city, st);
+    }
+
+    return streets;
+}
+\end{lstlisting}
