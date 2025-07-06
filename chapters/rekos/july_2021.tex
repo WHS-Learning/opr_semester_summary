@@ -1,0 +1,548 @@
+\chapter{Reko July 2021}
+
+\section{Aufgabe 1 (10 Punkte)}
+
+Die Klasse Zeichenobjekt2D soll die Oberklasse von Klassen sein, deren
+Instanzen Zeichenobjek- te einer zweidimensionalen Zeichenanwendung sind.
+Beispiele für solche Objekte sind Rechtecke, Kreise, Polygone und gruppierte
+Zeichenobjekte. Realisieren Sie die Klasse Zeichenobjekt2D so, dass folgende
+Forderungen erfüllt sind:
+
+\begin{enumerate}
+    \item Man kann keine Objekte der Klasse Zeichenobjekt2D erzeugen.
+    \item Die Klasse Zeichenobjekt2D enthält keine Instanzvariable.
+    \item Jedes Objekt einer Klasse, die von Zeichenobjekt2D abgeleitet ist, kann durch
+          die (Template-) Methode public String gibInfo() eine textuelle Information über
+          sich produzieren. Die In- formation ist dreizeilig und hat folgendes Format
+          (die konkreten Angaben sind nur Beispiele):
+          \begin{lstlisting}
+Gruppe
+Breite: 100
+Höhe: 25
+\end{lstlisting}
+          Die erste Zeile enthält die Art des Zeichenobjekts, die zweite und dritte seine
+          Breite bzw. Höhe.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public abstract class Zeichenobjekte2D {
+    public String gibInfo() {
+        return "Gruppe" + this.getGroup() 
+        + "\nBreite: " + this.getBreite() 
+        + "\nHoehe: " + this.getHoehe();
+    }
+
+    public abstract int getBreite();
+    public abstract int getHoehe();
+    public abstract String getGroup();
+}
+\end{lstlisting}
+
+\section{Aufgabe 2 (10 Punkte)}
+
+\begin{enumerate}
+    \item Schreiben Sie ein Codestück mit zwei Klassen A und B, wobei B direkte
+          Unterklasse von A ist und sich beide Klassen fehlerfrei übersetzen lassen
+    \item Ergänzen Sie den Programmcode von A um einen bestimmten Konstruktor, sodass es
+          in B zu einem Compilefehler kommt. Die Klasse A soll sich weiterhin fehlerfrei
+          übersetzen lassen.
+    \item Begründen Sie, warum sich B nach dem Einfügen des Konstruktors in A nicht mehr
+          fehlerfrei compilieren lässt.
+\end{enumerate}
+
+Notieren Sie die Lösung der Aufgabe wie in dieser Skizze dargestellt, sodass
+erkennbar ist, wie der Programmcode nach Schritt (1) aussieht und welcher Code
+in Schritt (2) hinzugefügt wird.
+
+\textbf{Antwort:}
+
+\textit{Nach schritt 1:}
+
+\begin{lstlisting}
+public class A {
+
+}
+
+public class B extends A {
+
+}
+\end{lstlisting}
+
+\textit{Nach schritt 2:}
+
+\begin{lstlisting}
+public class A {
+    public A(String s) {
+
+    }
+}
+
+public class B extends A {
+
+}
+\end{lstlisting}
+
+B lässt sich nicht mehr Compilen, da dieser implizit den Super-Aufruf ohne
+Parameter aufruft. Die Klasse A hat jedoch keinen Konstruktor ohne Parametern.
+
+\section{Aufgabe 3 (12 Punkte)}
+
+Gegeben sei die Klasse Geldbetrag, deren Objekte Geldbeträge in bestimmten
+Währungen reprä- sentieren.
+
+Beispiele: new Geldbetrag("EUR", 12.75) repräsentiert 12,75 Euro. new
+Geldbetrag("CHF", 20000) repräsentiert 20.000,- Schweizer Franken.
+
+\begin{lstlisting}
+public class Geldbetrag {
+    private String waehrung;
+    private double betrag;
+    public Geldbetrag(String waehrung, double betrag) {
+        this.waehrung = waehrung;
+        this.betrag = betrag;
+    }
+}
+\end{lstlisting}
+
+Realisieren Sie in der Klasse Geldbetrag eine statische Methode
+summiere(Collection<Geldbetrag>), die eine Ansammlung von Geldbeträgen
+zusammen- fasst. In der Zusammenfassung ist jeder vorkommenden Währung die
+Summe der Beträge in dieser Währung zugeordnet.
+
+Beispiel: Enthält die Ansammlung drei EUR-Beträge 12 EUR, 8 EUR und 30 EUR,
+dann enthält die Zusammenfassung einen Eintrag für die Währung EUR mit Wert 50.
+
+Iteriert man in der Zusammenfassung über die Währungen, sollen sie alphabetisch
+aufsteigend durchlaufen werden.
+
+Den Ergebnistyp der Methode müssen Sie nach dieser Beschreibung selbst
+festlegen.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public static Map<String, Double> summe(Collection<Geldbetrag> betraege) {
+    TreeMap<String, Double> map = new TreeMap<>();
+    for (Geldbetrag g : betraege) {
+        int v = map.getOrDefault(g.waehrung, 0);
+        map.put(g.waehrung, v + g.betrag);
+    }
+    return map;
+}
+\end{lstlisting}
+
+\section{Aufgabe 4 (12 Punkte)}
+
+Verändern und erweitern Sie die Klasse Geldbetrag, sodass folgende
+Anforderungen erfüllt sind:
+
+\begin{enumerate}
+    \item Es sollen sich Objekte der Klasse genau dann erzeugen lassen, wenn das
+          Währungskürzel die Länge 3 hat. \newline Beispiel: ISKR ist kein zulässiges
+          Währungskürzel, deshalb soll sich durch new Geldbetrag("ISKR", 100) kein Objekt
+          der Klasse erzeugen lassen.
+    \item Geldbeträge sollen als Schlüssel einer HashMap verwendbar sein. Geldbeträge
+          sind dann gleich, wenn sie den gleichen Betrag in der gleichen Währung haben.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public Geldbetrag (String waehrung, double betrag) {
+    if (waehrung.length() != 3) {
+        throw new IllegalArgumentException("Währung muss 3 Zeichen lang sein");
+    }
+
+    this.waehrung = waehrung;
+    this.betrag = betrag;
+}
+
+@Override
+public boolean equals(Object obj) {
+    if (obj instanceof Geldbetrag g) {
+        return g.waehrung.equals(this.waehrung)
+            && g.betrag == this.betrag;
+    }
+    return false;
+}
+
+@Override 
+public int hashCode() {
+    return this.waehrung.hashCode() + (int) this.betrag;
+}
+\end{lstlisting}
+
+\section{Aufgabe 5 (10 Punkte)}
+Realisieren Sie eine Methode boolean sindGleich(Reader, Reader, short), die
+angibt, ob zwei Zeichenfolgen in ihren ersten n Zeichen (3. Parameter)
+miteinander übereinstimmen. Ist min- destens eine der Zeichenfolgen kürzer als
+n, soll die Übereinstimmung auf dem kürzeren Anfangs- stück überprüft werden.
+
+Deklarieren Sie das Werfen von Ausnahmen, wenn Sie es für erforderlich halten.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public static boolean sindGleich(Reader r1, Reader r2, Short s) throws IOException {
+    boolean areEqual = true;
+    BufferedReader br1 = new BufferedReader(r1);
+    BufferedReader br2 = new BufferedReader(r2);
+
+    int lastChar1 = br1.read();
+    int lastChar2 = br2.read();
+
+    while (areEqual && lastChar1 != -1 && lastChar2 != -1) {
+        areEqual = lastChar1 == lastChar2;
+        lastChar1 = br1.read();
+        lastChar2 = br2.read();
+    }
+
+    return areEqual;
+}
+\end{lstlisting}
+
+\section{Aufgabe 6 (5 Punkte)}
+Realisieren Sie eine setUp-Methode, die sinnvoll zum Test der Methode
+sindGleich aus der vor- herigen Aufgabe verwendet werden kann. Ergänzen Sie
+dafür das unten stehende Codestück an den ...-Stellen.
+
+In der Methode sollen zwei Reader definiert werden, die folgende Eigenschaften
+besitzen:
+
+\begin{itemize}
+    \item Die Zeichenfolgen der Reader haben mindestens die Länge 10.
+    \item Das erwartete Ergebnis für den Vergleich der ersten 8 Zeichen ist true, für den
+          Vergleich der ersten 9 Zeichen false.
+\end{itemize}
+
+\begin{lstlisting}
+private Reader r1;
+private Reader r2;
+
+@Before
+public void setUp() {
+    r1 = ...
+    r2 = ...
+}
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+private Reader r1;
+private Reader r2;
+
+@Before
+public void setUp() {
+    r1 = new StringReader("ABCDEFGHIJ");
+    r2 = new StringReader("ABCDEFGHXX");
+}
+\end{lstlisting}
+
+\section{Aufgabe 7 (8 Punkte)}
+Gegeben sei die Klasse XYZ mit der Methode m:
+
+\begin{lstlisting}
+public class XYZ {
+    public XYZ() {
+    
+    }
+    public List<String> m(String s) {
+        ...
+    }
+}
+\end{lstlisting}
+
+Wenn man die Methode m mit Argument "Ich wünsche Ihnen viel Erfolg." auf ein
+Ob- jekt der Klasse XYZ anwendet, wird als Ergebnis eine Liste der Länge 4 mit
+den Werten "viel", "Erfolg", "Ich" und "Ihnen" erwartet (in dieser
+Reihenfolge).
+
+Realisieren Sie in der JUnit-Testklasse XYZTest eine Testmethode, die genau das
+überprüft.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class XYZTest {
+    private XYZ xyz;
+
+    @BeforeEach
+    public void setUp() {
+        this.xyz = new XYZ();
+    }
+
+    @Test
+    testM() {
+        assertEquals(List.of("viel", "Erfolg", "Ich", "Ihnen"), xyz.m("Ich Wünsche Ihnen viel Erfolg"));
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 8 (12 Punkte)}
+Eine Zuweisungsanweisung v = Ausdruck wird vom Compiler nur dann akzeptiert,
+wenn der Typ des Ausdrucks mit dem Typ der Variablen verträglich ist.
+
+Geben Sie für jede der folgenden Zuweisungsanweisungen an, ob
+Typverträglichkeit vorliegt und begründen Sie Ihre Entscheidung.
+
+Die ersten beiden Zuweisungen dienen als Beispiel.
+
+\begin{enumerate}
+    \item OutputStream os = new ByteArrayOutputStream()
+    \item long v = 12.5f
+    \item Float v = 12.5f
+    \item Object v = "Java".substring(3)
+    \item BufferedReader v = m() \newline Ergebnistyp der Methode m sei Reader.
+    \item HashSet<String> v = new HashMap<String, Integer>().keySet()
+    \item List<String> v = new LinkedList<String>()
+    \item Comparator<String> v = (s, t) -> s.length() - t.length()
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{enumerate}
+    \item verträglich: ByteArrayOutputStream ist Unterklasse von OutputStream.
+    \item nicht verträglich: der Ausdruck hat Typ float. Der Typ ist breiter als long.
+          Breitere Typen werden nicht implizit konvertiert.
+    \item verträglich: Der Compiler umhüllt den float zu einem Float.
+    \item verträglich: String ist Unterklasse von Object.
+    \item Nicht verträglich: Reader ist keine Unterklasse von BufferedReader.
+    \item Nicht verträglich: Der Ergebnistyp von keySet() ist ein Set. Set ist keine
+          Unterklasse von HashSet.
+    \item verträglich: LinkedList ist eine Unterklasse von List.
+    \item Comparator ist eine Funktionale Schnittstelle, welche nur die Methode int
+          compare(T type1, T type2) besitzt.
+\end{enumerate}
+
+\section{Aufgabe 9 (15 Punkte)}
+Gegeben sei der unvollständige Code der Klasse Flugportal, die Sie sich als
+zentrale Klasse einer Anwendung zur Suche und Buchung von Flügen vorstellen
+können. Durch die Methode
+
+List<Flug> sucheDirektfluege(String start, String ziel)
+
+erhält man alle Nonstop-Flugverbindungen, die zwischen einem Start- und
+Zielflughafen stattfinden. Nehmen Sie an, dass die Klasse Flug gegeben sind.
+Die Details dieser Klasse sind für diese Aufga- be nicht wichtig.
+
+\begin{lstlisting}
+public class Flugportal {
+    /**
+    * Liefert alle Direktflüge vom Start- zum Zielflughafen.
+    */
+    public List<Flug> sucheDirektfluege(String start, String ziel) {
+        List<Flug> verbindungen = ... // in Datenbestand suchen
+    }
+}
+\end{lstlisting}
+
+Das Flugportal soll nun so erweitert werden, dass zu statistischen Zwecken alle
+Suchanfragen und ihre Ergebnisse erfasst werden.
+
+Die Methode sucheDirektfluege soll deshalb für jede einzelne Suche den Start-
+und Zielflug- hafen sowie die gefundenen Ergebnisse protokollieren. Damit die
+Art des Protokolls variieren kann, bietet sich die Anwendung des
+Strategie-Entwurfsmusters unter Einsatz einer Schnittstelle an.
+
+\begin{enumerate}
+    \item Definieren Sie eine geeignete Schnittstelle Protokollierer. Die Methode der
+          Schnittstelle und die Anzahl und Typen ihrer Parameter ergeben sich aus der
+          obigen Beschreibung. Den Namen der Methode können Sie selbst wählen.
+          (Fortsetzung auf nächster Seite)
+    \item Ergänzen Sie den vorgegebenen Programmcode der Klasse Flugportal, sodass ein
+          Objekt dieser Klasse zusammen mit jedem beliebigen Protokollierer-Objekt
+          verwendet werden kann. Hierzu reicht es, nur den zusätzlichen Code anzugeben.
+          Machen Sie geeignet kenntlich, wo er eingefügt werden soll. Die Signatur und
+          der Ergebnistyp der Methode sucheDirektfluege sollen unverändert bleiben.
+    \item Realisieren Sie eine Klasse Wunschziele, die diese Schnittstelle implementiert.
+          Ein Objekt dieser Klasse verwaltet bezogen auf einen einzelnen Startflughafen
+          alle Ziele, zu denen die Suchanfrage keine Direktverbindungen finden konnte,
+          und liefert diese über die Methode Set<String> gibWunschziele(). Im Konstruktor
+          von Wunschziele wird der Startflughafen übergeben, auf den sich diese Pro-
+          tokollierung bezieht.
+    \item Ergänzen Sie das folgende Codestück, sodass nach den vielen Suchanfragen
+          ausgegeben wird, welche Wunschziele es für Flüge ab Münster gibt.
+          \begin{lstlisting}
+/*
+* Objekt der Klasse Wunschziele erzeugen. Hier etwas ergänzen.
+*/
+
+/*
+* Flugportal erzeugen. Hier etwas ergänzen.
+*/
+
+Flugportal portal = new Flugportal
+
+/*
+* Es folgen viele Aufrufe der Methode sucheDirektfluege. Hier nichts ergänzen.
+*/
+
+portal.sucheDirektfluege(...);
+...
+portal.sucheDirektfluege(...);
+
+/*
+* Wunschziele für Startflughafen Münster ausgeben. Hier etwas ergänzen.
+*/
+System.out.println("Wunschziele ab Münster: " +);
+\end{lstlisting}
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public interface Protokollierer {
+    void log(String start, String end, List<Flug> fluege);
+}
+
+public class Flugportal {
+    private Protokoller p;
+
+    public Flugportal(Protokoller p) {
+        this.p = p;
+    }
+
+    /**
+    * Liefert alle Direktflüge vom Start- zum Zielflughafen.
+    */
+    public List<Flug> sucheDirektfluege(String start, String ziel) {
+        List<Flug> verbindungen = ... // in Datenbestand suchen
+        p.log(start, ziel, verbindungen);    
+        return verbindungen;
+    }
+}
+
+public class Wunschziele implements Protokoller {
+    private HashSet<String> destinations;
+    private String start;
+
+    public Wunschziele(String start) {
+        this.start = start;
+        this.destinations = new HashSet<>();
+    }
+
+    @Override
+    public void Log(String start, String end, List<Flug> fluege) {
+        if (this.start.equals(start) && fluege.isEmpty()) {
+            destinations.add(end);
+        }
+    }
+
+    public Set<String> gibWunschziele() {
+        return fluege;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}
+/*
+* Objekt der Klasse Wunschziele erzeugen. Hier etwas ergänzen.
+*/
+
+Wunschziele ws = new Wunschziele("Münster");
+
+/*
+* Flugportal erzeugen. Hier etwas ergänzen.
+*/
+
+Flugportal portal = new Flugportal(ws);
+
+/*
+* Es folgen viele Aufrufe der Methode sucheDirektfluege. Hier nichts ergänzen.
+*/
+
+portal.sucheDirektfluege(...);
+...
+portal.sucheDirektfluege(...);
+
+/*
+* Wunschziele für Startflughafen Münster ausgeben. Hier etwas ergänzen.
+*/
+System.out.println("Wunschziele ab Münster: " + String.join(ws.gibWunschziele(), ", "));
+\end{lstlisting}
+
+\section{Aufgabe 10 (7 + 3 Punkte)}
+Implementieren Sie einen Aufzählungstyp Zeiteinheit. Wenn der Aufzählungstyp
+die erste und zweite Eigenschaft korrekt erfüllt, erhalten Sie 7 Punkte. Wenn
+er alle drei Eigenschaften korrekt erfüllt, erhalten Sie 10 Punkte.
+
+Eigenschaften:
+
+\begin{enumerate}
+    \item Der Aufzählungstyp enthält Werte mit den Namen TAG, STUNDE, MINUTE und SEKUNDE.
+    \item Der Aufzählungstyp besitzt eine Instanzmethode int sekunden(), durch die eine
+          Zeitein- heit angeben kann, welcher Anzahl Sekunden sie entspricht. Der
+          Ausdruck STUNDE.sekunden() soll z. B. den Wert 3600 liefern. Die Methode
+          enthält keine Fallunterscheidung.
+    \item Der Aufzählungstyp besitzt eine Instanzmethode double in(Zeiteinheit), durch
+          die ei- ne Zeiteinheit angeben kann, wie groß sie in der übergebenen Einheit
+          ist. Der Ausdruck STUNDE.in(MINUTE) soll z. B. den Wert 60.0 liefern. Der
+          Ausdruck MINUTE.in(STUNDE) soll 0.01666667 liefern, denn eine Minute ist 1/60
+          einer Stunde. Die Methode enthält keine Fall- unterscheidung.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public enum Zeiteinheit {
+    TAG(60*60*60*24), STUNDE(3600), MINUTE(60), SEKUNDE(1);
+
+    private final int seconds;
+    
+    private Zeiteinheit(int seconds) {
+        this.seconds = seconds;
+    }
+
+    public int sekunden() {
+        return this.seconds;
+    }
+
+    public double in (Zeiteinheit z) {
+        return (double) this.seconds / (double) z.seconds;
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 11 (16 Punkte)}
+Die Methode Stream<String> lines() der Klasse BufferedReader liefert die Zeilen
+einer zeichenorientierten Datenquelle als Stream. Die Variablen r und l, auf
+die unten Bezug genommen wird, seien wie folgt deklariert:
+
+\begin{lstlisting}
+    BufferedReader r;
+    List<Integer> l;
+\end{lstlisting}
+
+\begin{enumerate}
+    \item Realisieren Sie unter Verwendung von Streams einen Ausdruck, der die erste
+          Zeile der Daten- quelle in r liefert, deren Länge größer als 40 ist. Geben Sie
+          den Typ des Ausdrucks an.
+    \item Realisieren Sie unter Verwendung von Streams einen Ausdruck, der angibt, ob
+          alle Zeilen von r eine Länge >= 10 haben.
+    \item Realisieren Sie unter Verwendung von Streams ein Codestück, das die Menge aller
+          geradzah- ligen Elemente von l bildet.
+    \item Realisieren Sie unter Verwendung von LongStream.iterate einen Stream mit den
+          Zahlen 0, 1, 3, 7, 15, 31, 63, . . .. Ignorieren Sie, dass es irgendwann einen
+          Überlauf gibt.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{enumerate}
+    \item \begin{lstlisting}
+    r.lines().filter(s -> s.length() > 40).findFirst();
+\end{lstlisting} \textit{Der Typ ist Optional<String>}
+    \item \begin{lstlisting}
+r.lines().allMatch(s -> s.length() >= 10);
+\end{lstlisting}
+    \item \begin{lstlisting}
+l.stream().filter(i -> i % 2 == 0).toSet();
+\end{lstlisting}
+    \item \begin{lstlisting}
+LongStream.iterate(0, i -> i + i + 1);
+\end{lstlisting}
+\end{enumerate}
+

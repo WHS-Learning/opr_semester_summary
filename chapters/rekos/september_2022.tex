@@ -1,0 +1,108 @@
+\chapter{Reko September 2022}
+
+\section{Aufgabe 1 (18 Punkte)}
+
+Klasse Zeichenobjekt soll Oberklasse von Klassen sein, deren Instanzen
+geometrische Objekte einer zweidimensionalen Zeichenanwendung sind (Rechtecke,
+Kreise..).
+
+Realisieren Sie eine Klasse Zeichenobjekt welche folgende Forderungen erfüllt:
+
+\begin{enumerate}
+    \item Es sind keine Objekte von Klasse Zeichenobjekt erzeugbar
+    \item Klasse Zeichenobjekt enthält keine Instanzvariablen
+    \item Jedes Objekt von Zeichenobjekt kann durch eine Template-Methode „public String
+          gibText()“ eine textuelle Information über sich liefern wie „F=<Fläche>,
+          U=<Umfang>“
+\end{enumerate}
+
+Gegeben:
+\begin{lstlisting}
+________________________{ //Klassenkopf ausfüllen
+    public final String gibText(){
+        …..
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 2 (8 Punkte)}
+
+Gegeben:
+
+\begin{lstlisting}
+public class A {
+    public int m(int n){
+        return 5 * n;
+    }
+}
+\end{lstlisting}
+
+Eine Anwendung der Klasse A sehen Sie im folgenden Code-Stück. Die Ausgabe an
+Stelle (1) ist 50:
+
+\begin{lstlisting}
+A a;
+A = new A();
+System.out.println(a.m(10)); (1)
+
+a =
+System.out.println(a.m(10)); (2)
+\end{lstlisting}
+
+Ist eine weitere Zuweisung an die Variable a möglich, sodass
+\begin{itemize}
+    \item an der Stelle (2) 60 ausgegeben wird
+    \item und auch, wenn die Zahl 5 in der Klasse A durch eine andere Zahl ersetzt wird,
+          die Ausgabe an der Stelle (2) grundsätzlich um 10 größer ist als die Ausgabe an
+          der Stelle (1)?
+\end{itemize}
+
+Wenn ja, dann Code-Stück ergänzen und weiteren Code schreiben. Klasse A darf
+nicht verändert werden.
+
+\section{Aufgabe 3 (12 + 3 Punkte)}
+
+Schreiben Sie eine statische Methode ereignisseNachJahren (Map<String,
+Integer>) mit folgenden Anforderungen:
+
+\begin{itemize}
+    \item Der Parameter ist eine Zuordnung, in der den Ereignissen der Zeitgeschichte das
+          Jahr dieser Ereignisse zugeordnet wird
+    \item Methode ereignisseNachJahren soll als Ergebnis eine Zuordnung liefern, in der
+          diese Ereignisse nach Jahren gruppiert sind
+    \item Den Jahren (als Schlüsse/Key) sollen die Ereignisse der jeweiligen Jahre als
+          Wert (Value) zugeordnet sein
+    \item Es kann mehrere Ereignisse pro Jahr geben
+    \item Ergebnistyp der Methode muss selber definiert werden
+    \item Zusatzpunkte, wenn Methode so realisiert wird, dass die Iteration über die
+          Ereignisse der einzelnen Jahre in alphabetischer Ordnung erfolgt
+\end{itemize}
+
+Gegeben:
+\begin{lstlisting}
+public static _______ereignisseNachJahren(Map<String, Integer> ereignisse){
+}
+\end{lstlisting}
+
+\section{Aufgabe 4 (14 Punkte)}
+
+Es ist eine Klasse Rechteck gegeben:
+
+\begin{itemize}
+    \item Der Parameter ist eine Zuordnung, in der den Ereignissen der Zeitgeschichte das
+          Jahr dieser Ereignisse zugeordnet wird
+    \item Methode ereignisseNachJahren soll als Ergebnis eine Zuordnung liefern, in der
+          diese Ereignisse nach Jahren gruppiert sind
+    \item Den Jahren (als Schlüsse/Key) sollen die Ereignisse der jeweiligen Jahre als
+          Wert (Value) zugeordnet sein
+    \item Es kann mehrere Ereignisse pro Jahr geben
+    \item Ergebnistyp der Methode muss selber definiert werden
+    \item Zusatzpunkte, wenn Methode so realisiert wird, dass die Iteration über die
+          Ereignisse der einzelnen Jahre in alphabetischer Ordnung erfolgt
+\end{itemize}
+
+Gegeben:
+\begin{lstlisting}
+public static _______ereignisseNachJahren(Map<String, Integer> ereignisse){
+}
+\end{lstlisting}

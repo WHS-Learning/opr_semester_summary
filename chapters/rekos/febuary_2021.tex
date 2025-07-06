@@ -1,0 +1,440 @@
+\chapter{Reko Februar 2021}
+
+\section{Aufgabe 1 (10 Punkte)}
+
+Die Klasse Zeichenobjekt soll die Oberklasse von Klassen sein, deren Instanzen
+geometrische Objekte einer zweidimensionalen Zeichenanwendung sind. Beispiele
+für solche Objekte sind Recht- ecke, Kreise und Polygone. Realisieren Sie die
+Klasse Zeichenobjekt so, dass folgende Forderun- gen erfüllt sind:
+
+\begin{enumerate}
+    \item Man kann keine Objekte der Klasse Zeichenobjekt erzeugen.
+    \item Die Klasse Zeichenobjekt enthält keine Instanzvariable.
+    \item Jedes Objekt einer von Zeichenobjekt abgeleiteten Klasse kann durch die Methode
+          \begin{lstlisting}
+public boolean istGroesser(Zeichenobjekt)
+\end{lstlisting}
+          angeben, ob es eine echt größere Fläche als das übergebene Zeichenobjekt
+          besitzt.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public abstract class Zeichenobject {
+    public abstract double area();
+    public boolean istGroesser(Zeichenobject z) {
+        return this.area() > z.area();
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 2 (6 Punkte)}
+
+Gegeben sei die Klasse A. Muss man in einer direkten Unterklasse von A einen
+Konstruktor implementieren? Begründen Sie Ihre Antwort. Ohne Begründung wird
+die Antwort nicht gewertet.
+
+\begin{lstlisting}
+public class A {
+    private int a;
+    public A(int a) {
+        this.a = a;
+    }
+    protected int quadrat() {
+        return a * a;
+    }
+}
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+Ja, weil A keinen Parameterlosen Konstruktor besitzt. Besitzt eine Klasse
+keinen Konstruktor, so wird der Konstruktor ohne Parameter mit dem Super-Aufruf
+ohne Parameter vom Compiler eingefügt. Da der Konstruktor von Klasse A jedoch
+einen Parameter besitzt, führt der Super-Aufruf ohne Parameter in direkten
+Unterklassen von A zu einen Compilefehler.
+
+\section{Aufgabe 3 (12 Punkte)}
+
+Realisieren Sie eine statische Methode erzeugeIndex, die zu einem Feld von
+Zeichenketten eine Zuordnung erzeugt.
+
+Die Schlüssel der Zuordnung sind die Anfangszeichen der in dem Feld
+vorkommenden Zeichenket- ten.
+
+Als Werte sind den Schlüsseln Collections derjenigen Wörter zugeordnet, die mit
+dem jeweiligen An- fangsbuchstaben beginnen. Die Collections dürfen kein Wort
+doppelt enthalten. Auf die Reihenfolge der Wörter in den Collections kommt es
+nicht an.
+
+Sie dürfen davon ausgehen, dass alle Zeichenketten des Felds mindestens die
+Länge 1 besitzen.
+
+Vervollständigen Sie auch die Typangabe im Kopf der Methode.
+
+Beispiel: Das Feld enthält die sechs Zeichenketten:
+
+\begin{itemize}
+    \item Fahrrad
+    \item 123 Abflussreinigung
+    \item Fahrstuhl
+    \item frische Blumen
+    \item Fahrrad
+    \item Pfirsich
+\end{itemize}
+
+Dann enthält die resultierende Zuordnung folgende Einträge:
+
+\begin{itemize}
+    \item F → [Fahrstuhl, Fahrrad]
+    \item 1 → [123 Abflussreinigung]
+    \item f → [frische Blumen]
+    \item P → [Pfirsich]
+\end{itemize}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public static Map<Character, Collection<String>> erzeugeIndex(String[] woerter) {
+    HashMap<Character, Collection<String>> map = new HashMap<>();
+
+    for (String s : woerter) {
+        HashSet<String> list = map.getOrDefault(s.charAt(0), new HashSet<String>());
+
+        list.add(s);
+
+        map.put(s.charAt(0), list);
+    }
+
+    return map;
+}
+\end{lstlisting}
+
+\section{Aufgabe 4 (12 Punkte)}
+
+Realisieren Sie eine Klasse Zeitdauer. Die Klasse soll einen Konstruktor
+Zeitdauer(int, int) besitzen, um ein Objekt der Klasse durch Angabe einer
+Anzahl Stunden (1. Parameter) und einer Anzahl Minuten (2. Parameter) zu
+erzeugen.
+
+Die Klasse soll folgende Anforderungen erfüllen:
+
+\begin{enumerate}
+    \item Es sollen sich Objekte genau dann erzeugen lassen, wenn die Werte beider
+          Parameter größer oder gleich 0 sind.
+    \item Ein HashSet<Zeitdauer> enthält niemals zwei Objekte, die die gleiche Zeitdauer
+          repräsen- tieren. Beispiel: 1 Stunde und 100 Minuten sind die gleiche Zeitdauer
+          wie 2 Stunden und 40 Minuten.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class Zeitdauer {
+    private final int h;
+    private final int m;
+
+    public Zeitdauer(int h, int m) {
+        if (h < 0 || m < 0) {
+            throw new IllegalArgumentException("Hours and Minutes has to be at least 0");
+        }
+
+        this.h = h;
+        this.m = m;
+    }
+
+    @Override 
+    public boolean equals(Object obj) {
+        if (obj instanceof Zeitdauer z) {
+            return z.h * 60 + z.m == this.h * 60 + this.m;
+        }
+        return false;
+    }
+
+    @Override 
+    public int hashCode() {
+        return this.h + this.m;
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 5 (6 Punkte)}
+
+Die Methode hashCode einer Klasse K ist so implementiert, dass sie für alle
+Objekte dieser Klasse denselben Hash-Code liefert. Entscheiden Sie sich für
+eine der folgenden Antworten und begründen Sie sie.
+
+Wenn Sie sich für die erste Antwort entscheiden, müssen Sie klar begründen, was
+in diesen Fall nicht funktioniert oder welcher Fehler auftritt.
+
+Wenn Sie sich für die zweite Antwort entscheiden, müssen Sie klar begründen,
+worin sich der Nach- teil dieser Implementierung zeigt.
+
+\textbf{Antwort:}
+
+Die Implementierung ist zulässig, aber ungünsitg.
+
+Der Hash-Code zweier Objekte muss immer gleich sein, wenn diese Objekte auch
+inhaltlich gleich sind. Dies ist hier der Fall, da immer der selbe Hash-Code
+gegeben ist.
+
+Gleichzeitig ist es Empfehlenswert hashCode() möglichst so zu implementieren,
+das bei inhaltlicher Ungleichheit der Objekte der hashCode() wahrscheinlich
+auch ungleich ist. Dies ist hier nie der Fall, da immer der selbe Hash-Code
+gegeben ist. Z.B. werden dadurch Collection-Klassen, wie HashMap und HashSet
+beinträchtigt. Diese nutzen Hash-Codes, um Objekte schnell zu finden. Ist
+hashCode immer gleich, kann dies nicht geschehen, da sich auf Unterschiede im
+hashCode verlassen wird.
+
+\section{Aufgabe 6 (6 Punkte)}
+
+Realisieren Sie eine Methode boolean enthaelt(InputStream, Set<Byte>), die
+angibt, ob der übergebene Eingabestrom alle byte-Werte aus der übergebenen
+Menge enthält. Deklarieren Sie das Werfen von Ausnahmen, wenn Sie es für
+erforderlich halten.
+
+Hinweis: Ist der übergebene Eingabestrom unendlich lang, kann die Methode
+entweder true liefern (falls alle byte-Werte im Eingabestrom vorkommen) oder
+endlos laufen. Für einen unendlich langen Eingabestrom ist die Antwort false
+nicht möglich.
+
+Hinweis: Es ist zulässig, die übergebene Menge zu verändern, z. B. indem Sie
+daraus im Laufe der Verarbeitung byte-Werte entfernen.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public static boolean enthaelt(InputStream is, Set<Byte> bytes) throws IOException {
+    BufferedInputStream bis = new BufferedInputStream(is);    
+    int b = bis.read();
+
+    while (bytes.isEmpty() && b != -1) {
+        if (bytes.contains((byte) b)) {
+            bytes.remove((byte) b);
+        }
+
+        b = bis.read();
+    }
+
+    return bytes.isEmpty();
+}
+\end{lstlisting}
+
+\section{Aufgabe 7 (10 Punkte)}
+
+Gegeben sei folgende Klasse:
+
+\begin{lstlisting}
+/**
+* Ein ReaderTokenizer zerlegt den Inhalt einer endlichen, zeichen-
+* orientierten Datenquelle in einzelne Wörter. Die Zerlegung erfolgt
+* anhand der Trennzeichen, die im Konstruktor dieser Klasse übergeben werden.
+*/
+public class ReaderTokenizer {
+    ...
+    /**
+    * Erzeugt ein Objekt dieser Klasse für den übergebenen Reader und
+    * die übergebenen Trennzeichen.
+    * @param r Reader, dessen Zeichenstrom in Wörter zerlegt wird.
+    * Es wird vorausgesetzt, dass der Zeichenstrom endlich ist.
+    * @param trennzeichen Jedes Zeichen dieser Zeichenkette ist ein
+    * Trenner (analog zu Trennzeichen bei StringTokenizer).
+    */
+    public ReaderTokenizer(Reader r, String trennzeichen) {
+        ...
+    }
+
+    /**
+    * Liefert die Wörter des Zeichenstroms.
+    */
+    public Set<String> gibWoerter() {
+        ...
+    }
+}
+\end{lstlisting}
+
+Realisieren Sie eine Testklasse ReaderTokenizerTest mit zwei Testfällen für die
+Methode gibWoerter. Für beide Testfälle soll der Reader den Zeichenstrom Viel
+Erfolg bei OPR.\ enthalten.
+
+Im ersten Testfall sind die Trenner `. ' (Punkt und Leerzeichen). Erwartet
+werden die vier Wörter des Textes.
+
+Im zweiten Testfall sind die Trenner `.,!'. Das Leerzeichen ist somit kein
+Trenner.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class ReaderTokenizerTest {
+    private StringReader sr;
+
+    @BeforeEach
+    void setUp() {
+        this.sr = new StringReader("Viel Erfolg bei OPR.");
+    }
+
+    @AfterEach
+    void tearDown() {
+        this.sr.close();
+    }
+
+    @Test
+    void testGibWoerter1() {
+        ReaderTokenizer rt = new ReaderTokenizer(sr, ". ");
+        assertEquals(Set.of("Viel", "Erfolg", "bei", "OPR"), rt.gibWoerter());
+    }
+
+    @Test
+    void testGibWoerter2() {
+        ReaderTokenizer rt = new ReaderTokenizer(sr, ".,!");
+        assertEquals(Set.of("Viel Erfolg bei OPR", rt.gibWoerter()));
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 8 (6 Punkte)}
+
+Bei Auswertung des Ausdrucks "Haus".charAt(4) kommt es zu einer
+StringIndexOutOfBoundsException. Die Meldung dieser Ausnahme ist String index
+out of range: 4.
+
+Realisieren Sie einen JUnit-Testfall (d. h. eine Testmethode), der genau das
+überprüft. Der Testfall soll erfolgreich sein, wenn bei Auswertung des
+Ausdrucks die Ausnahme mit der angegebenen Meldung auftritt. Der Testfall soll
+scheitern, wenn dies nicht der Fall ist. Sie können sich in dieser Aufgabe rein
+auf die Testmethode konzentrieren. Das public class ... drum herum denken wir
+uns.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+@Test
+void testCharAt() {
+    StringIndexOutOfBoundsException e = assertThrows(StringIndexOutOfBoundsException.class, () -> "Haus".charAt(4));
+    assertEquals("String index out of Range 4", e.getMessage());
+}
+\end{lstlisting}
+
+\section{Aufgabe 9 (10 + 2 Punkte)}
+
+Ergänzen Sie die Klasse Rechteck, sodass durch
+
+Collections.sort(rechtecke)
+
+eine Liste
+
+List<Rechteck> rechtecke;
+
+wie folgt sortiert wird:
+
+\begin{itemize}
+    \item Rechtecke größerer Höhe stehen vor Rechtecken mit kleinerer Höhe.
+    \item Bei Rechtecken mit gleicher Höhe stehen die mit kleinerer Breite vor denen mit
+          größerer Breite.
+\end{itemize}
+
+Beispiel: $(b \times h)$ bezeichnet ein Rechteck der Breite b und Höhe h. Die
+Rechtecke würden so sortiert: $(1 \times 8), (3 \times 8), (2 \times 6), (4
+    \times 5), (6 \times 5)$
+
+Sie erhalten zwei Zusatzpunkte, wenn auch folgende Anforderung erfüllt ist:
+Erzeugt man ein TreeSet<Rechtec durch new TreeSet<Rechteck>(), dann wird es
+niemals zwei Rechtecke mit gleicher Breite und Höhe enthalten.
+
+\begin{lstlisting}
+public class Rechteck                            {
+    private int breite;
+    private int hoehe;
+
+    public Rechteck(int breite, int hoehe) {
+        this.breite = breite;
+        this.hoehe = hoehe;
+    }
+}
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class Rechteck implements Comparable<Rechteck> {
+    private int breite;
+    private int hoehe;
+
+    public Rechteck(int breite, int hoehe) {
+        this.breite = breite;
+        this.hoehe = hoehe;
+    }
+
+    @Override
+    public int compareTo(Rechteck r) {
+        return return r.hoehe == hoehe 
+                ? breite - r.breite
+                : r.hoehe - hoehe;
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 10 (12 Punkte)}
+
+Betrachten Sie folgende Klasse mit der statischen Methode
+
+\begin{lstlisting}
+List<String> filter(List<String>, char).
+
+public class Listenfilter {
+    public static List<String> filter(List<String> elemente, char anfang) {
+        ArrayList<String> gefilterteElemente = new ArrayList<>();
+        for (String element : elemente) {
+            if (!element.isEmpty() && element.charAt(0) == anfang) {
+                gefilterteElemente.add(element);
+            }
+        }
+        return gefilterteElemente;
+    }
+}
+\end{lstlisting}
+
+Wendet man die Methode auf eine Liste von Zeichenketten und ein Zeichen an,
+liefert die Methode eine Liste mit allen Elementen aus der übergebenen Liste,
+die mit dem angegebenen Zeichen begin- nen. Die Filtermethode lässt also alle
+Werte durch, die mit dem angegebenen Zeichen beginnen.
+
+Möchte man Listen nach anderen Kriterien filtern, z. B. `lasse alle
+Zeichenketten mit ungerader Länge durch' oder `lasse alle Zeichenketten durch,
+die nur aus Großbuchstaben bestehen', könnte man zusätzliche Filter-Methoden
+definieren.
+
+Besser ist es jedoch, genau eine Filtermethode zu definieren, der man neben der
+Liste auch das `Durchlass-Kriterium' als Parameter übergibt. Hierfür eignet
+sich eine Schnittstelle.
+
+\begin{itemize}
+    \item Definieren Sie eine Schnittstelle Filterkriterium mit einer geeigneten Methode.
+          Ein Filterkriterium soll entscheiden, ob ein Wert durchkommt oder nicht.
+    \item Definieren Sie eine statische Methode List<String> filter(List<String>,
+          Filterkriterium), die eine Liste aller Ele- mente aus der übergebenen Liste
+          liefert, die vom Filterkriterium durchgelassen werden.
+    \item Realisieren Sie eine Klasse, die Filterkriterium implementiert und die alle
+          Zeichenketten durchlässt, deren Länge echt größer als 10 ist.
+\end{itemize}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public interface Filterkriterium {
+    boolean filter (String s);
+}
+
+public static List<String> filter(List<String> strings, Filterkriterium f) {
+    return strings.stream().filter(f::filter).toList();
+}
+
+public class LengthFilter implements Filterkriterium {
+    @Override
+    public boolean filter(String s) {
+        return s.length() < 10;
+    }
+}
+\end{lstlisting}
