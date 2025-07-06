@@ -20,8 +20,21 @@ Gegeben:
 \begin{lstlisting}
 ________________________{ //Klassenkopf ausfüllen
     public final String gibText(){
-        …..
+        ...
     }
+}
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public abstract class Zeichenobject {
+    public final String gibText(){
+        return "F=" + this.getArea() + ", U=" + this.getCircumference();
+    }
+
+    public abstract double getArea();
+    public abstract double getCircumference();
 }
 \end{lstlisting}
 
@@ -42,7 +55,7 @@ Stelle (1) ist 50:
 
 \begin{lstlisting}
 A a;
-A = new A();
+a = new A();
 System.out.println(a.m(10)); (1)
 
 a =
@@ -59,6 +72,24 @@ Ist eine weitere Zuweisung an die Variable a möglich, sodass
 
 Wenn ja, dann Code-Stück ergänzen und weiteren Code schreiben. Klasse A darf
 nicht verändert werden.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class B extends A {
+    @Override
+    public int m(int n) {
+        return super.m(n) + 10;
+    }
+}
+
+A a;
+a = new A();
+System.out.println(a.m(10)); (1) // 50
+
+a = new B();
+System.out.println(a.m(10)); (2) // 60
+\end{lstlisting}
 
 \section{Aufgabe 3 (12 + 3 Punkte)}
 
@@ -80,7 +111,36 @@ Integer>) mit folgenden Anforderungen:
 
 Gegeben:
 \begin{lstlisting}
-public static _______ereignisseNachJahren(Map<String, Integer> ereignisse){
+public static ____________ereignisseNachJahren(Map<String, Integer> ereignisse){
+    HashMap<Integer, Set<String>> map = new HashMap<Integer, TreeSet<String>>();
+
+    for (String ereignis : ereignisse.keySet()) {
+        int year = ereignisse.get(ereignis);
+
+        Set<String> set = map.getOrDefault(year, new TreeSet<String>);
+        set.add(ereignis);
+        map.put(year, set);
+    }
+
+    return map;
+}
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public static Map<Integer, Set<String>> ereignisseNachJahren(Map<String, Integer> ereignisse){
+    HashMap<Integer, Set<String>> map = new HashMap<Integer, Set<String>>();
+
+    for (String ereignis : ereignisse.keySet()) {
+        int year = ereignisse.get(ereignis);
+
+        Set<String> set = map.getOrDefault(year, new TreeSet<String>());
+        set.add(ereignis);
+        map.put(year, set);
+    }
+
+    return map;
 }
 \end{lstlisting}
 
@@ -88,21 +148,282 @@ public static _______ereignisseNachJahren(Map<String, Integer> ereignisse){
 
 Es ist eine Klasse Rechteck gegeben:
 
+\begin{lstlisting}
+public class Rechteck {
+    private int breite;
+    private int laenge;
+    public Rechteck(int breite, int laenge){
+        this.breite = breite;
+        this. Laenge = laenge;
+    }
+}
+\end{lstlisting}
+
 \begin{itemize}
-    \item Der Parameter ist eine Zuordnung, in der den Ereignissen der Zeitgeschichte das
-          Jahr dieser Ereignisse zugeordnet wird
-    \item Methode ereignisseNachJahren soll als Ergebnis eine Zuordnung liefern, in der
-          diese Ereignisse nach Jahren gruppiert sind
-    \item Den Jahren (als Schlüsse/Key) sollen die Ereignisse der jeweiligen Jahre als
-          Wert (Value) zugeordnet sein
-    \item Es kann mehrere Ereignisse pro Jahr geben
-    \item Ergebnistyp der Methode muss selber definiert werden
-    \item Zusatzpunkte, wenn Methode so realisiert wird, dass die Iteration über die
-          Ereignisse der einzelnen Jahre in alphabetischer Ordnung erfolgt
+    \item Klasse Rechteck soll so erweitert werden, sodass Hashset<Rechteck> keine 2
+          Rechtecke enthält, die in ihren Flächen gleich sind.
+    \item Wenn man über Mengen des Typs iteriert, in welcher Reihenfolge werden die
+          Rechtecke durchlaufen? (ankreuzen)
+          \begin{itemize}
+              \item Keine spez. Reihenfolge
+              \item In der Reihenfolge, in der die Rechtecke den jeweiligen Mengen hinzugefügt
+                    worden sind
+              \item Reihenfolge aufsteigender Flächen
+              \item Reihenfolge absteigender Flächen
+          \end{itemize}
+    \item Ist es möglich dafür zu sorgen, dass kein Objekt erzeugt wird, wenn der
+          Kontruktor von Rechteck mit einem oder zwei negativen Parametern aufgerufen
+          wird? Wenn ja, den Konstruktor dementsprechend erweitern, wenn nein begründen
+          warum.
+\end{itemize}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class Rechteck {
+    private int breite;
+    private int laenge;
+    public Rechteck(int breite, int laenge){
+        if (breite < 0 || laenge < 0) {
+            throw new IllegalArgumentException("Breite und Länge muss mindestens 0 sein.");
+        }
+        this.breite = breite;
+        this. Laenge = laenge;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Rechteck r) {
+            return r.breite == this.breite && r.laenge == this.laenge;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.laenge + this.breite;
+    }
+}
+\end{lstlisting}
+
+Die Rechtecke sind in keiner Spezifischen Reihenfolge sortiert.
+
+\section{Aufgabe 5 (18 Punkte)}
+
+Aufgabe ist leider zu ungenau um sie zu bearbeiten.
+
+(Ungenau) Klasse Textverarbeiter gegeben mit den Methoden verarbeite und lies.
+Methode verarbeite hat einen Datenstrom bekommen, welcher dann innerhalb der Methode jeweils
+Zeilen mit Wörtern an die zweite Methode weitergereicht hat. Die lies-Methode hat immer nur
+zeilenweise Wörter bekommen und innerhalb dieser Methode wurde ein StringTokenizer benutzt um
+einzelne Wörter zu bekommen. Die einzelnen Wörter sollten weiter verarbeitet werden, dafür sollte
+ein Entwurfsmuster genutzt und eine Schnittstelle Wortverarbeiter mit einer passenden Methode
+implementiert werden. Zusätzlich sollte dann eine Klasse geschrieben werden, die diese Schnittstelle
+implementiert und die Anzahl der Wörter von der längsten Zeile ausgibt.
+
+\section{Aufgabe 6 (15 Punkte)}
+
+Schreiben Sie Ausdrücke.
+
+\begin{enumerate}
+    \item br ist eine Variable vom Typ BufferedReader Aufgabe: Wahrheitswert berechnen,
+          ob alle Zeilen der Datenquelle aus mindestens 5 Wörtern bestehen, Worttrenner
+          sind nur Leerzeichen. Hinweis: Methode int countTokens() d. Klasse
+          StringTokenizer gibt an, wie viele Tokens der StringTokenizer noch liefern
+          kann.
+    \item buecher ist Variable des Typs List<Buch>. Aufgabe: Das erste Buch ermitteln,
+          dessen Preis unterhalb von 10€ liegt. Gehen Sie davon aus, dass es eine Klasse
+          Buch \& darin eine Methode float gibPreisInEuro() gibt.
+    \item buecher wie in 2. Definiert Aufgabe: Summe der Preise aller Bücher berechnen,
+          die mehr als 10€ kosten.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+br.lines().allMatch(s -> s.split(" ").length >= 5);
+
+buecher.stream().filter(b -> b.gibPreisInEuro() < 10.0f).findFirst()
+
+buecher.stream().filter(b -> b.gibPreisInEuro() > 10.0f).mapToDouble(b -> b.gibPreisInEuro()).sum();
+\end{lstlisting}
+
+\section{Aufgabe 7 (10 Punkte)}
+
+Methode boolean hatMindestlaenge(InputStream, long) realisieren, die true
+liefert, wenn der übergebene Eingabestrom mindestens die angegebene Länge hat.
+
+Die Methode soll auch für externe Datenquellen effizient arbeiten.
+
+Hinweis: Datenquellen können von unendlicher Länge sein und das Zählen der
+Bytes des Eingabestroms ohne Rücksicht auf die übergebene Mindestlänge ist
+deshalb kein sinnvoller Ansatz. Sie können das Werfen von Ausnahmen deklarieren
+wenn notwendig.
+
+Gegeben:
+
+\begin{lstlisting}
+public static boolean hatMindestlaenge(InputStream is, long mindestLaenge){
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public static boolean hatMindestlaenge(InputStream is, long mindestLaenge) throws IOException {
+    long length = 0;
+    BufferedInputStream bis = new BufferedInputStream(is);
+    int lastByte = bis.read();
+
+    while (lastByte != -1 || mindestLaenge >= length) {
+        length++;
+        lastByte = bis.read();
+    }
+
+    return length >= mindestLaenge;
+}
+\end{lstlisting}
+
+\section{Aufgabe 8 (8 Punkte)}
+
+Anfang der Klasse FilteredInputStream gegeben.
+
+\begin{itemize}
+    \item Der Stream basiert auf einen InputStream und ermöglicht einen gefilterten
+          Zugriff auf Bytes dieses Eingabestroms
+    \item Das Filterkriterium soll durch IntPredicate übergeben werden (funktionale
+          Schnittstelle der Methode)
+    \item Realisieren Sie eine Methode int read()
+\end{itemize}
+
+Gegeben:
+
+\begin{lstlisting}
+public class FilteredInputStream{
+    private final InputStream is;
+    private final IntPredicate filter;
+    public FilteredInputStream (InputStream is, IntPredicate filter){
+        this.is = is;
+        this.filter = filter;
+    }
+
+    /*Liefert nächsten Bytewert des Eingabestroms für den das
+    Filterkriterium erfüllt ist. Wenn Kriterium nicht erfüllt oder kein
+    Wert, dann ist die Ausgabe -1.*/
+    public int read() throws IOException{
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class FilteredInputStream{
+    private final InputStream is;
+    private final IntPredicate filter;
+    public FilteredInputStream (InputStream is, IntPredicate filter){
+        this.is = is;
+        this.filter = filter;
+    }
+
+    /*Liefert nächsten Bytewert des Eingabestroms für den das
+    Filterkriterium erfüllt ist. Wenn Kriterium nicht erfüllt oder kein
+    Wert, dann ist die Ausgabe -1.*/
+    public int read() throws IOException{
+        int lb = is.read();
+        while (lb != -1 && !filter(lb)) {
+            lb = is.read();
+        }
+        return lb;
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 9 (6 Punkte)}
+Testmethode von boolean hatMindestLaenge(InputStream, long) aus Aufg. 7
+realisieren.
+
+\begin{itemize}
+    \item Testfall realisieren: Anwendung hatMindestlaenge auf einen InputStream soll
+          true liefern, wenn der 2. Parameter 6 ist
+    \item setUp-Methode wird nicht benötigt
+    \item Die statische Methode hat Mindestlaenge darf ohne Qualifizierung aufgerufen
+          werden
+\end{itemize}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+@Test
+void testHatMindestLaenge1() {
+    ByteArrayInputStream bais = new ByteArrayInputStream(new byte[]{1, 2, 3, 4, 5, 6, 7, 8});
+    assertTrue(hatMindestLaenge(bais, 6))
+}
+\end{lstlisting}
+
+\section{Aufgabe 10 (6 Punkte)}
+
+Testklasse StringTokenizerTest realisieren:
+
+\begin{itemize}
+    \item StringTokenizer für Zeichenkette „E-Bike“ \& Trennzeichen „-„
+    \item Bei 3x Anwendung der Methode nextToken wird erwartet, dass
+          NoSuchElementException geworfen wird
 \end{itemize}
 
 Gegeben:
 \begin{lstlisting}
-public static _______ereignisseNachJahren(Map<String, Integer> ereignisse){
+public class StringTokenizerTest {
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class StringTokenizerTest {
+    @Test
+    void testNextToken1() {
+        StringTokenizer st = new StringTokenizer("E-Bike", "-");
+        assertEquals("E", st.nextToken());
+        assertEquals("Bike", st.nextToken());
+        assertThrows(NoSuchElementException.class, () -> st.nextToken());
+    }
 }
 \end{lstlisting}
+
+\section{Aufgabe 11 (10 Punkte)}
+
+Aufzählungstyp Studiengang mit IN\_BA, WI\_BA, WI\_DUAL, MI\_MA schreiben.
+
+\begin{itemize}
+    \item Instanzmethode boolean istBachelorstudiengang() schreiben, die angibt ob es
+          sich um einen Bachelorstudiengang handelt (Für alle außer MI\_MA der Fall)
+    \item Instanzmethode int regelstudienzeit() schreiben, die die Regelstudienzeit der
+          Studiengänge angibt (6 Semester bei Bachelor und 4 Semester bei Master)
+    \item Wird Aufzählungstyp um zusätzliche Studiengänge erweitert, funktionieren
+          istBachelorstudiengang() und regelstudienzeit() ohne jede Codeänderung auch
+          sinnvoll für die neuen Studiengänge?
+\end{itemize}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public enum Studieng {
+    IN_BA(true, 6), WI_BA(true, 6), WI_DUAL(true, 6), MI_MA(false, 4);
+
+    private boolean isBachelor;
+    private int normalTime;
+
+    private Module(boolean isBachelor, int normalTime) {
+        this.isBachelor = isBachelor;
+        this.normalTime = normalTime;
+    }
+
+    public istBachelorstudiengang() {
+        return this.isBachelor;
+    }
+
+    public regelstudienzeit() {
+        return this.normalTime;
+    }
+}
+\end{lstlisting}
+
+Für neue Studiengänge funktioniert der Code auch ohne weitere Codeänderung, die
+Studiengänge müssen einfach mit den korrekten Parametern eingefügt werden.

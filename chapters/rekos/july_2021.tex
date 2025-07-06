@@ -531,18 +531,16 @@ die unten Bezug genommen wird, seien wie folgt deklariert:
 
 \textbf{Antwort:}
 
-\begin{enumerate}
-    \item \begin{lstlisting}
+\begin{lstlisting}
     r.lines().filter(s -> s.length() > 40).findFirst();
 \end{lstlisting} \textit{Der Typ ist Optional<String>}
-    \item \begin{lstlisting}
+\begin{lstlisting}
 r.lines().allMatch(s -> s.length() >= 10);
 \end{lstlisting}
-    \item \begin{lstlisting}
+\begin{lstlisting}
 l.stream().filter(i -> i % 2 == 0).toSet();
 \end{lstlisting}
-    \item \begin{lstlisting}
+\begin{lstlisting}
 LongStream.iterate(0, i -> i + i + 1);
 \end{lstlisting}
-\end{enumerate}
 

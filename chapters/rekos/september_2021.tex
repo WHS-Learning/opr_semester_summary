@@ -1,0 +1,526 @@
+\chapter{Reko September 2021}
+
+\section{Aufgabe 1 (8 Punkte)}
+
+Gegeben sei die folgende Klasse A.
+
+\begin{lstlisting}
+public class A {
+    public final int m(int a) {
+        return a * this.n(a);
+    }
+
+    public int n(int a) {
+        return 2 * a;
+    }
+}
+\end{lstlisting}
+
+Schreiben Sie zusätzlichen Programmcode, sodass sich das Codestück
+
+\begin{lstlisting}
+A a = new B();
+System.out.println(a.m(10));
+\end{lstlisting}
+
+compilieren lässt und bei Ausführung die Ausgabe 300 erscheint. Die Klasse A
+soll unverändert bleiben. Hinweis: durch den Modifikator final in der obigen
+Methode m ist diese Methode nicht überschreibbar.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class B extends A {
+    @Override
+    public int n(int n) {
+        return 3 * n;
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 2 (10 Punkte)}
+
+Betrachten Sie folgende Klasse:
+
+\begin{lstlisting}
+public class Buch extends Katalogartikel {
+    private String titel;
+    private String autor;
+    private int jahr;
+    public Buch(String titel, String autor, int jahr) {
+        this.titel = titel;
+        this.autor = autor;
+        this.jahr = jahr;
+    }
+}
+\end{lstlisting}
+
+Beantworten Sie die folgenden beiden Fragen mit ja oder nein und begründen Sie
+Ihre Antworten. Ohne Begründungen werden die Antworten nicht gewertet. Die
+Antworten müssen insbesondere darauf eingehen, in welcher Beziehung die
+Konstruktoren, über die Sie sprechen, zueinander ste- hen.
+
+\begin{enumerate}
+    \item Lässt sich die Klasse Buch fehlerfrei compilieren, wenn in der Klasse
+          Katalogartikel kein Konstruktor definiert ist?
+    \item Ist es möglich, dass in der Klasse Katalogartikel ein Konstruktor definiert ist
+          und sich die Klasse Buch nicht fehlerfrei compilieren lässt?
+\end{enumerate}
+
+\textbf{Antwort:}
+
+Ja, die Klasse lässt sich Fehlerfrei compilieren, da standardmäßig der
+Super-Aufruf ohne Parameter eingefügt wird. Dieser ruft den Konstruktor ohne
+Parameter der direkten Oberklasse auf.
+
+Ja, wenn in der direkten Oberklasse kein Konstruktor ohne Parameter (auch nicht
+impliztit) definiert ist, lassen die Unterklassen nicht compilieren, wenn sie
+keinen Expliziten, korrekt genutzen, Super-Aufruf besitzen.
+
+\section{Aufgabe 3 (15 Punkte)}
+
+Gegeben seien die Klassen Temperatur und Temperaturverwaltung.
+
+\begin{lstlisting}
+public class Temperatur {
+    private final float t;
+    public Temperatur(float t) {
+        this.t = t;
+    }
+    public float wert() {
+        return t;
+    }
+}
+
+public class Temperaturverwaltung {
+    private final LinkedList<Temperatur> temperaturen;
+    public Temperaturverwaltung() {
+        temperaturen = new LinkedList<>();
+    }
+    public int fuegeHinzu(Temperatur t) {
+        Iterator<Temperatur> ts = temperaturen.iterator();
+        boolean schonEnthalten = false;
+        while (ts.hasNext() && !schonEnthalten) {
+            schonEnthalten = ts.next().wert() == t.wert();
+        }
+        if (!schonEnthalten) {
+            temperaturen.add(t);
+        }
+        return temperaturen.size();
+    }
+}
+\end{lstlisting}
+
+\begin{itemize}
+    \item Ändern Sie die Implementierung der Klasse Temperaturverwaltung, sodass sich die Effizienz
+          der Methode fuegeHinzu verbessert, insbesondere wenn die Collection der Temperaturen
+          (temperaturen) viele Elemente enthält. Sie dürfen dafür auch die Implementierung der
+          Klasse Temperatur ergänzen.
+          Das äußere Verhalten der Klasse Temperaturverwaltung soll unverändert bleiben, d. h. die
+          Werte, die vor der Codeänderung bei Aufrufen von fuegeHinzu zurückgegeben werden, sol-
+          len auch nach der Änderung zurückgegeben werden.
+    \item Es existieren keine Temperaturen, die unterhalb von -273, 15 Grad Celsius
+          liegen (sog. absoluter Nullpunkt). Ändern Sie die Klasse Temperatur derart,
+          dass keine Objekte der Klasse für Argumente erzeugt werden können, die kleiner
+          als dieser Wert sind.
+\end{itemize}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public class Temperatur {
+    private final float t;
+    public Temperatur(float t) {
+        if (t < -273.15f) {
+            throw new IllegalArgumentException("The temperature is below absolute zero.");
+        }
+        this.t = t;
+    }
+    public float wert() {
+        return t;
+    }
+
+    @Override 
+    public boolean equals(Object obj) {
+        if (obj instanceof Temperatur t) {
+            return t.t == this.t;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) this.t;
+    }
+}
+
+public class Temperaturverwaltung {
+    private final HashSet<Temperatur> temperaturen;
+    public Temperaturverwaltung() {
+        temperaturen = new HashSet<>();
+    }
+    public int fuegeHinzu(Temperatur t) {
+        temperaturen.add(t);
+
+        return temperaturen.size();
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 4 (6 Punkte)}
+
+Das folgende Codestück lässt sich durch Streichen von Code vereinfachen, ohne
+dass sich dadurch seine Funktion ändert. Geben Sie diese Stelle an und
+begründen Sie, warum sie entfernt werden kann.
+
+Es geht hier nur um das Vereinfachen durch Entfernen von Code, nicht um andere
+Möglichkeiten der Vereinfachung. Das Entfernen von Leerzeichen, Klammern, usw.
+ist keine Vereinfachung.
+
+\begin{lstlisting}
+public void fuegeHinzu(String schluessel, int zahl) {
+    ArrayList<Integer> l = hm.get(schluessel);
+    if (l != null) {
+        l.add(zahl);
+        hm.put(schluessel, l);
+    }
+}
+\end{lstlisting}
+
+Die Variable hm sei hierbei vom Typ TreeMap<String, ArrayList<Integer>>.
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public void fuegeHinzu(String schluessel, int zahl) {
+    ArrayList<Integer> l = hm.get(schluessel);
+    if (l != null) {
+        l.add(zahl);
+    }
+}
+\end{lstlisting}
+
+Es wird ein Wert immer nur dann eingefügt, wenn der Schlüssel noch nicht in der
+TreeMap Existert. Aufgrunddessen kann die putIfAbsent Methode verwendet werden,
+um das Key-Value Paar nur dann einzufügen, wenn dieses noch nicht existiert.
+
+\section{Aufgabe 5 (12 Punkte)}
+
+Realisieren Sie eine Methode boolean minLaengeUndZeichen(Reader, short, short),
+die ge- nau dann true liefert, wenn die übergebene zeichenorientierte
+Datenquelle mindestens l Zeichen (2. Parameter) enthält, und diese l Zeichen
+aus mindestens n verschiedenen Zeichen (3. Parameter) bestehen.
+
+Beispiel: Die Datenquelle enthält die Zeichen a5a55ba5ba@bb. Der Aufruf der
+Methode für l = 10 und n = 4 liefert false, weil die ersten 10 Zeichen nur aus
+3 verschiedenen Zeichen bestehen. Bei l = 11 und n = 4 würde sie true liefern.
+
+Deklarieren Sie das Werfen von Ausnahmen, wenn Sie es für erforderlich halten.
+
+Ein Tipp: Ich habe mit Absicht den Parametertyp short gewählt, weil dadurch
+gesichert ist, dass die aktuellen Parameterwerte nicht allzu groß sein können.
+
+public static boolean minLaengeUndZeichen(Reader r, short l, short n) {
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public static boolean minLaengeUndZeichen(Reader r, short l, short n) throws IOException {
+    BufferedReader br = new BufferedReader(r);
+
+    HashSet<Integer> uniqueChars = new HashSet<>();
+    int c = 0;
+    int lastChar = br.read();
+
+    while (n > l && lastChar != -1 && uniqueSymbols.size() <= n && c <= l) {
+        c++;
+        uniqueSymbols.add(lastChar);
+        lastChar = br.read();
+    }
+
+    return uniqueSymbols.size() >= n && c >= l;
+}
+\end{lstlisting}
+
+\section{Aufgabe 6 (5 Punkte)}
+
+Realisieren Sie eine setUp-Methode, die sinnvoll zum Test der Methode
+minLaengeUndZeichen aus der vorherigen Aufgabe verwendet werden kann. Ergänzen
+Sie dafür das unten stehende Code- stück an der ...-Stelle. Sie müssen keine
+Testmethode realisieren
+
+In der Methode soll ein Reader definiert werden, die folgende Eigenschaften
+besitzen:
+
+\begin{itemize}
+    \item Die Zeichenfolge des Reader hat mindestens die Länge 10.
+    \item Das erwartete Ergebnis bei Aufruf von minLaengeUndZeichen(r, 8, 3) ist false.
+    \item Das erwartete Ergebnis bei Aufruf von minLaengeUndZeichen(r, 9, 3) ist true.
+\end{itemize}
+
+\begin{lstlisting}
+private Reader r;
+@Before
+public void setUp() {
+    r = ...
+}
+\end{lstlisting}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+private Reader r;
+@Before
+public void setUp() {
+    r = new StringReader("aaaaaaabcd");
+}
+\end{lstlisting}
+
+\section{Aufgabe 7 (16 Punkte)}
+
+Gegeben sei der unvollständige Code der Klasse Messwerteleser. Ein Objekt der
+Klasse verarbei- tet eine Datenquelle, die Temperatur-Messwerte von
+Messstationen enthält. Die Datenquelle wird im Konstruktor übergeben. Das
+Einlesen der Messwerte erfolgt in der Methode lies()
+
+\begin{lstlisting}
+public class Messwerteleser {
+    private Reader r;
+    public Messwerteleser(Reader r) {
+        this.r = r;
+    }
+    ... // hier befinden sich weitere Methoden
+    public void lies() {
+        while (this.gibtEsWeiterenMesswert()) {
+            Messwert wert = this.gibNaechstenMesswert();
+        }
+    }
+}
+\end{lstlisting}
+
+Objekte der Klasse Messwert repräsentieren einzelne Messwerte bestehend aus Ort
+der Messung, Zeitpunkt der Messung und gemessener Temperatur.
+
+\begin{lstlisting}
+public class Messwert {
+    ...
+    public String gibOrt() {...}
+    public Datum gibZeitpunkt() {...}
+    public float gibTemperatur() {...}
+}
+\end{lstlisting}
+
+Die Methode lies führt derzeit (abgesehen vom Einlesen) keine Verarbeitung der
+Messwerte durch. Dies soll nun geändert werden. Damit die Art der Verarbeitung
+flexibel festgelegt werden kann, bietet sich die Anwendung des
+Strategie-Entwurfsmusters unter Einsatz einer Schnittstelle an.
+
+\begin{itemize}
+    \item Definieren Sie eine geeignete Schnittstelle Messwertverarbeiter. Ein
+          Messwertverarbei- ter soll durch Aufruf einer Methode einen Messwert
+          verarbeiten können. Den Namen der Methode können Sie selbst wählen.
+    \item Ergänzen Sie den vorgegebenen Programmcode der Klasse Messwerteleser, sodass
+          ein Objekt dieser Klasse mit jedem beliebigen Messwertverarbeiter-Objekt
+          verwendet wer- den kann und ihm die einzelnen Messwerte zur weiteren
+          Verarbeitung übergeben kann.
+    \item Realisieren Sie eine Klasse HitzeOrt, die diese Schnittstelle implementiert.
+          Ein Objekt die- ser Klasse zählt bezogen auf einen einzelnen Ort, wieviele
+          Temperaturwerte oberhalb eines bestimmten Schwellwerts liegen
+
+          Im Konstruktor von HitzeOrt wird der Ort und der Schwellwert übergeben. Sie
+          benötigen natürlich auch eine Zugriffsmethode für den Zählwert.
+    \item Ergänzen Sie das folgende Codestück, sodass aus den Messwerten der Datenquelle
+          ermittelt wird, wieviele Temperaturwerte in Bonn oberhalb von 38 Grad liegen
+          \begin{lstlisting}
+/*
+* Reader mit Messwerten; wir nehmen an, die Datenquelle ist endlich.
+*/
+Reader r = ...;
+Messwerteleser leser = new Messwerteleser
+leser.lies();
+System.out.println("Hitze-Messwerte in Bonn: " +
+\end{lstlisting}
+\end{itemize}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public interface Messwertverarbeiter {
+    void compute(Messwert m);
+}
+
+public class Messwerteleser{
+    private Reader r;
+    private messwertverarbeiter mv;
+
+    public Messwerteleser(Reader r, Messwertverarbeiter mv) {
+        this.r = r;
+        this.mv = mv;
+    }
+    ... // hier befinden sich weitere Methoden
+    public void lies() {
+        while (this.gibtEsWeiterenMesswert()) {
+            Messwert wert = this.gibNaechstenMesswert();
+            mv.compute(wert);
+        }
+    }
+}
+
+public class HitzeOrt implements Messwertverarbeiter {
+    private final String ort;
+    private final float minTemperature;
+    private int temperaturesAboveMin;
+
+    public HitzeOrt(String ort, float minTemperature) {
+        this.minTemperature = minTemperature;
+        this.temperaturesAboveMin = 0;
+    }
+
+    @Override
+    public void compute(Messwert m) {
+        if (m.gibOrt().equals(ort) && m.gibTemperatur() > minTemperature) {
+            temperaturesAboveMin++;
+        }
+    }
+
+    public int getTemperaturesAboveMin() {
+        return this.temperaturesAboveMin;
+    }
+}
+
+/*
+* Reader mit Messwerten; wir nehmen an, die Datenquelle ist endlich.
+*/
+Reader r = ...;
+Messwertverarbeiter mv = new Messwertverarbeiter("Bonn", 38);
+
+Messwerteleser leser = new HitzeOrt(r, mv);
+leser.lies();
+System.out.println("Hitze-Messwerte in Bonn: " + ((HitzeOrt) mv).getTemperaturesAboveMin());
+\end{lstlisting}
+
+\section{Aufgabe 8 (12 Punkte)}
+
+Implementieren Sie einen Aufzählungstyp Einheit, dessen Werte die
+Längeneinheiten $\mu$m, mm, cm, dm, m und km repräsentieren. Der Aufzählungstyp
+soll folgende Eigenschaften erfüllen
+
+\begin{enumerate}
+    \item Der Aufzählungstyp enthält Werte mit den Namen MUM, MM, CM und DM, M und KM
+    \item Der Aufzählungstyp besitzt eine Instanzmethode Einheit geeigneteEinheit(long),
+          de- ren Verhalten sich am besten an Beispielen erklären lässt.
+          \begin{itemize}
+              \item Die Länge 12000 cm lässt sich besser als 120 m darstellen, weil die Maßzahl 120
+                    kürzer und lesbarer als 12000 ist. Die geeignetere Einheit für diese Länge ist
+                    also m. Der Aufruf CM.geeigneteEinheit(12000) soll deshalb M liefern.
+              \item Die Länge 2.000.000 mm lässt sich besser als 2 km darstellen. Die geeignetere
+                    Einheit für diese Länge ist also km. Der Aufruf
+                    MM.geeigneteEinheit(2\_000\_000) soll deshalb KM liefern.
+          \end{itemize}
+          Gesucht ist also diejenige Einheit, sodass die Länge mit möglichst kleiner, ganzzahliger Maß-
+          zahl dargestellt werden kann
+\end{enumerate}
+
+Zwei Hilfestellungen für diese Aufgabe:
+
+\begin{enumerate}
+    \item Für diese Aufgabe muss man die Umrechnungsfaktoren zwischen den Einheiten
+          kennen. Zur Erinnerung: 1 mm = 1000 $\mu$m, 1 dm = 10 cm, 1 m = 10 dm.
+    \item Sinnvoll ist es, wenn jede Einheit ihren Umrechnungsfaktor zur nächstgrößeren
+          Einheit kennt. Diese Faktoren können Sie in den Objekten des Aufzählungstyps
+          verwalten. Wenn Sie bis hierhin kommen (und das richtig machen), erhalten Sie
+          schon die Hälfte der Punkte.
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+public enum Einheit {
+    MUM(1000), MM(10), CM(10), DM(10), M(1000), KM(-1);
+
+    private final long toNextBigger;
+
+    private Einheit(long toNextBigger) {
+        this.toNextBigger = toNextBigger;
+    }
+
+    public Einheit geeigneteEinheit(long l) {
+        int v = l;
+        Einheit e = this;
+
+        while (e.toNextBigger != -1 && v > e.toNextBigger && v % e.toNextBigger == 0) {
+            v /= e.toNextBigger;
+            e = Einheit.values[e.ordinal() + 1];
+        }
+
+        return e;
+    }
+}
+\end{lstlisting}
+
+\section{Aufgabe 9 (8 Punkte)}
+
+Gegeben sei die Funktionale Schnittstelle PINregel
+
+\begin{lstlisting}
+@FunctionalInterface
+public interface PINregel {
+    boolean istZulaessig(String pin);
+}
+\end{lstlisting}
+
+Die Schnittstelle spezifiziert eine Regel für die Zulässigkeit von PINs. Sie
+wird innerhalb einer Online- Banking-Anwendung verwendet, um festzulegen,
+welche Anforderungen die PINs der Bankkunden erfüllen müssen. Zur Übergabe der
+Regel dient die Methode setzePINregel
+
+\begin{lstlisting}
+public class OnlineBanking {
+    private PINregel regel;
+    ...
+    public void setzePINregel(PINregel regel) {
+        this.regel = regel;
+    }
+    ...
+}
+\end{lstlisting}
+
+\begin{enumerate}
+    \item Ergänzen Sie das folgende Codestück derart, dass für das OnlineBanking-Objekt
+          die Regel festgelegt wird, dass eine PIN genau dann zulässig ist, wenn sie
+          mindestens die Länge 5 hat und das erste und letzte Zeichen ungleich sind.
+          Verwenden Sie dafür einen Lambda-Ausdruck OnlineBanking ob = new
+          OnlineBanking();
+    \item Zu Testzwecken soll nun festgelegt werden, dass jede PIN unzulässig ist.
+          Ergänzen Sie das folgende Codestück um eine entsprechende Regel. Verwenden Sie
+          dafür einen Lambda-Ausdruck. OnlineBanking ob = new OnlineBanking();
+\end{enumerate}
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+OnlineBanking ob = new OnlineBanking.setzePINregel((s) -> s.length() >= 5 && s.charAt(0) != s.charAt(s.length() - 1));
+
+OnlineBanking ob = new OnlineBanking.setzePINregel((s) -> false);
+\end{lstlisting}
+
+\section{Aufgabe 10 (8 Punkte)}
+
+Es sei r eine Variable des Typs Reader. Realisieren Sie einen Ausdruck, der
+prüft, ob es unter den Zeilen der Datenquelle, die mit @ beginnen, mindestens
+eine gibt, die bis auf Leerzeichen am Ende mit "aha" endet (in beliebiger
+Groß-/Kleinschreibung).
+
+Beispiel: Enthält die Datenquelle eine Zeile "@Erdbeertörtchen␣123␣aHa␣␣␣",
+dann liefert der Aus- druck true.
+
+Verwenden Sie keine Schleifen und keine if-Anweisungen. Hilfreich sind
+eventuell diese Methoden:
+
+lines() in Klasse BufferedReader endsWith() und stripTrailing() in Klasse
+String
+
+\textbf{Antwort:}
+
+\begin{lstlisting}
+r.lines().filter(s -> s.length() >= 1 && s.charAt(0) == '@').anyMatch(s -> s.stripTrailing().toUpperCase().endsWith("AHA"))
+\end{lstlisting}
